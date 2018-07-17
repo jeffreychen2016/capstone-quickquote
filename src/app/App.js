@@ -11,6 +11,8 @@ import OrderDetail from '../components/OrderDetail/OrderDetail';
 import OrderForm from '../components/OrderForm/OrderForm';
 import Register from '../components/Register/Register';
 import SupplierProfile from '../components/SupplierProfile/SupplierProfile';
+import Home from '../components/Home/Home';
+import Chart from '../components/Chart/Chart';
 import {Route, BrowserRouter, Redirect, Switch} from 'react-router-dom';
 
 fbConnection();
@@ -63,12 +65,11 @@ class App extends Component {
           <div>
             <Navbar
               authed={this.state.authed}
-              runAway={this.runAway}
             />
             <div className="container">
               <div className="row">
                 <Switch>
-                  <Route path="/" exact component={Login}/>
+                  <Route path="/home" exact component={Home}/>
                   <PrivateRoute
                     path="/myorder"
                     authed={this.state.authed}
@@ -93,6 +94,11 @@ class App extends Component {
                     path="/buyerprofile"
                     authed={this.state.authed}
                     component={BuyerProfile}
+                  />
+                  <PrivateRoute
+                    path="/chart"
+                    authed={this.state.authed}
+                    component={Chart}
                   />
                   <PublicRoute
                     path="/login"
