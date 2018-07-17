@@ -12,6 +12,7 @@ import OrderForm from '../components/OrderForm/OrderForm';
 import Register from '../components/Register/Register';
 import SupplierProfile from '../components/SupplierProfile/SupplierProfile';
 import Home from '../components/Home/Home';
+import Chart from '../components/Chart/Chart';
 import {Route, BrowserRouter, Redirect, Switch} from 'react-router-dom';
 
 fbConnection();
@@ -51,7 +52,7 @@ const PublicRoute = ({ component: Component, authed, ...rest}) => {
 
 class App extends Component {
   state = {
-    authed: false,
+    authed: true,
   };
 
   render () {
@@ -93,6 +94,11 @@ class App extends Component {
                     path="/buyerprofile"
                     authed={this.state.authed}
                     component={BuyerProfile}
+                  />
+                  <PrivateRoute
+                    path="/chart"
+                    authed={this.state.authed}
+                    component={Chart}
                   />
                   <PublicRoute
                     path="/login"
