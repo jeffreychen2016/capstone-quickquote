@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import firebase from 'firebase';
 import fbConnection from '../firebaseRequests/connection';
+import BuyerProfile from '../components/BuyerProfile/BuyerProfile';
+import Login from '../components/Login/Login';
+import MyOrder from '../components/MyOrder/MyOrder';
+import Navbar from '../components/Navbar/Navbar';
+import OrderDetail from '../components/OrderDetail/OrderDetail';
+import OrderForm from '../components/OrderForm/OrderForm';
+import Register from '../components/Register/Register';
+import SupplierProfile from '../components/SupplierProfile/SupplierProfile';
 
 fbConnection();
 class App extends Component {
@@ -12,14 +20,14 @@ class App extends Component {
     };
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button className="btn btn-danger">Bootstrap?</button>
+        <BuyerProfile />
+        <Login />
+        <MyOrder />
+        <Navbar />
+        <OrderDetail />
+        <OrderForm />
+        <Register />
+        <SupplierProfile />
       </div>
     );
   }
