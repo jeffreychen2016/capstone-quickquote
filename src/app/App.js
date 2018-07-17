@@ -11,6 +11,7 @@ import OrderDetail from '../components/OrderDetail/OrderDetail';
 import OrderForm from '../components/OrderForm/OrderForm';
 import Register from '../components/Register/Register';
 import SupplierProfile from '../components/SupplierProfile/SupplierProfile';
+import Home from '../components/Home/Home';
 import {Route, BrowserRouter, Redirect, Switch} from 'react-router-dom';
 
 fbConnection();
@@ -68,7 +69,7 @@ class App extends Component {
             <div className="container">
               <div className="row">
                 <Switch>
-                  <Route path="/" exact component={Login}/>
+                  <Route path="/" exact component={Home}/>
                   <PrivateRoute
                     path="/myorder"
                     authed={this.state.authed}
