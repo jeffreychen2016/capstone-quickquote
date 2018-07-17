@@ -51,7 +51,7 @@ const PublicRoute = ({ component: Component, authed, ...rest}) => {
 
 class App extends Component {
   state = {
-    authed: true,
+    authed: false,
   };
 
   render () {
@@ -64,7 +64,6 @@ class App extends Component {
           <div>
             <Navbar
               authed={this.state.authed}
-              runAway={this.runAway}
             />
             <div className="container">
               <div className="row">
