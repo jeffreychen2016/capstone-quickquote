@@ -1,0 +1,24 @@
+{
+	"company1": {
+    "name": "Seller Company",
+    "address": "123 Street",
+    "city": "Nashville",
+    "state": "TN",
+    "zip": "37211",
+    "authCode": "AC123",
+    "phoneNumber": "336-986-2510",
+    "faxNumber": "336-986-2510",
+    "isSupplier": 1
+  },
+  "company2": {
+    "name": "Buyer Company",
+    "address": "123 Street",
+    "city": "Nashville",
+    "state": "TN",
+    "zip": "37211",
+    "authCode": "AC123",
+    "phoneNumber": "336-986-2510",
+    "faxNumber": "336-986-2510",
+    "isSupplier": 0
+	}
+}

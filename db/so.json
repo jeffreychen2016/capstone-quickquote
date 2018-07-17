@@ -1,0 +1,20 @@
+{
+	"so1": {
+    "dateCreated": "2018-01-01",
+    "status": "estimate",
+    "userId": "xxxx",
+    "companyId": "company1"
+  },
+  "so2": {
+    "dateCreated": "2018-01-01",
+    "status": "order",
+    "userId": "xxxx",
+    "companyId": "company1"
+  },
+  "so3": {
+    "dateCreated": "2018-01-01",
+    "status": "order",
+    "userId": "xxxx",
+    "companyId": "company2"
+  }
+}
