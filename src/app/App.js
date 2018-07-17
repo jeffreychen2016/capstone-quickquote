@@ -9,7 +9,6 @@ import MyOrder from '../components/MyOrder/MyOrder';
 import Navbar from '../components/Navbar/Navbar';
 import OrderDetail from '../components/OrderDetail/OrderDetail';
 import OrderForm from '../components/OrderForm/OrderForm';
-import Register from '../components/Register/Register';
 import SupplierProfile from '../components/SupplierProfile/SupplierProfile';
 import Home from '../components/Home/Home';
 import Chart from '../components/Chart/Chart';
@@ -52,13 +51,25 @@ const PublicRoute = ({ component: Component, authed, ...rest}) => {
 
 class App extends Component {
   state = {
-    authed: true,
+    authed: false,
   };
 
+  componentDidMount () {
+    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({authed: true});
+      } else {
+        this.setState({authed: false});
+      };
+    });
+  };
+
+  componentWillUnmount () {
+    this.removeListener();
+  }
+
   render () {
-    if (firebase.apps.length) {
-      console.error('Firebase Initialized!');
-    };
+    console.error(this.state);
     return (
       <div className="App">
         <BrowserRouter>
@@ -104,11 +115,6 @@ class App extends Component {
                     path="/login"
                     authed={this.state.authed}
                     component={Login}
-                  />
-                  <PublicRoute
-                    path="/register"
-                    authed={this.state.authed}
-                    component={Register}
                   />
                 </Switch>
               </div>
