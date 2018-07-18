@@ -1,3 +1,16 @@
-.BuyerProfile {
-  background-color: green;
+#buyer-profile-container {
+  border-top: 2px solid black;
+
+  #ship-to-checkbox-container {
+    text-align: left;
+    margin-top: 25px;
+    margin-left: 0px;
+    input {
+      transform: scale(2);
+      margin-left: 10px;
+    };
+    label {
+      margin-left: 10px;
+    }
+  }
 }
