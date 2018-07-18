@@ -21,7 +21,7 @@ class SupplierProfile extends React.Component {
   render () {
     const supplierProfileComponent = this.state.supplierProfiles.map((supplierProfile) => {
       return (
-        <div id="supplier-profile-container" className="col-sm-12">
+        <div id="supplier-profile-container" className="col-sm-12" key={supplierProfile.id}>
           <div className="col-sm-6 left-panel">
             <form className="form-horizontal col-sm-12">
               <div className="form-group">
