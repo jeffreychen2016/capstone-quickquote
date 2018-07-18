@@ -68,14 +68,19 @@ class App extends Component {
     this.removeListener();
   }
 
+  logout = () => {
+    this.setState({authed: false});
+  };
+
   render () {
-    console.error(this.state);
+
     return (
       <div className="App">
         <BrowserRouter>
           <div>
             <Navbar
               authed={this.state.authed}
+              logout={this.logout}
             />
             <div className="container">
               <div className="row">
