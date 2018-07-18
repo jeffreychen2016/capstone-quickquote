@@ -1,6 +1,7 @@
 import React from 'react';
 import './SupplierProfile.css';
 import supplierProfileRequests from '../../firebaseRequests/supplierProfile';
+import moment from 'moment';
 
 class SupplierProfile extends React.Component {
   state = {
@@ -108,6 +109,8 @@ class SupplierProfile extends React.Component {
                 <input
                   type="text"
                   className="form-control"
+                  value={moment().format('YYYY-MM-DD h:m:s a')}
+                  disabled
                 />
               </div>
             </div>
