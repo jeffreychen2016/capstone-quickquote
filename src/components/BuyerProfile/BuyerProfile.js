@@ -1,8 +1,10 @@
 import React from 'react';
 import './BuyerProfile.css';
+import authRequests from '../../firebaseRequests/auth';
 
 class BuyerProfile extends React.Component {
   render () {
+    console.error(authRequests.getUserId());
     return (
       <div id="buyer-profile-container" className="col-sm-12">
         <div className="col-sm-6 left-panel">
