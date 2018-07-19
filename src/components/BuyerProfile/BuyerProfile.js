@@ -8,6 +8,16 @@ class BuyerProfile extends React.Component {
   state = {
     buyerProfiles: [],
     companies: [],
+    shipTo: {
+      companyName: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      phoneNumber: '',
+      faxNumber: '',
+      contact: '',
+    },
   };
 
   // Get the current user info
@@ -27,10 +37,38 @@ class BuyerProfile extends React.Component {
       });
   };
 
+  sameAsAboveClick = (e) => {
+    if (e.target.checked) {
+      const buyerCompany = this.state.companies[0];
+      const tempShipTo = {...this.state.shipTo};
+      tempShipTo.companyName = buyerCompany.name;
+      tempShipTo.address = buyerCompany.address;
+      tempShipTo.state = buyerCompany.state;
+      tempShipTo.city = buyerCompany.city;
+      tempShipTo.zip = buyerCompany.zip;
+      tempShipTo.phoneNumber = buyerCompany.phoneNumber;
+      tempShipTo.faxNumber = buyerCompany.faxNumber;
+      tempShipTo.contact = this.state.buyerProfiles[0].firstName + ' ' + this.state.buyerProfiles[0].lastName;
+      this.setState({shipTo: tempShipTo});
+    } else {
+      const tempShipTo = {...this.state.shipTo};
+      tempShipTo.companyName = '';
+      tempShipTo.companyName = '';
+      tempShipTo.address = '';
+      tempShipTo.state = '';
+      tempShipTo.city = '';
+      tempShipTo.zip = '';
+      tempShipTo.phoneNumber = '';
+      tempShipTo.faxNumber = '';
+      tempShipTo.contact = '';
+      this.setState({shipTo: tempShipTo});
+    };
+  };
+
   render () {
     const buyerProfileComponent = this.state.buyerProfiles.map((buyerProfile) => {
       return (
-        <div id="buyer-profile-container" className="col-sm-12">
+        <div id="buyer-profile-container" className="col-sm-12" key={buyerProfile.id}>
           <div className="col-sm-6 left-panel">
             <h2 className="col-sm-4">Order By</h2>
             <form className="form-horizontal col-sm-12">
@@ -197,7 +235,11 @@ class BuyerProfile extends React.Component {
           <div className="col-sm-6 right-panel">
             <h2 className="col-sm-4">Ship To</h2>
             <div className="col-sm-6" id="ship-to-checkbox-container">
-              <input type="checkbox" id="ship-to-checkbox"/>
+              <input
+                type="checkbox"
+                id="ship-to-checkbox"
+                onChange={this.sameAsAboveClick}
+              />
               <label htmlFor="ship-to-checkbox">Same as above</label>
             </div>
             <form className="form-horizontal col-sm-12">
@@ -209,7 +251,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={supplierProfile.name}
+                    value={this.state.shipTo.companyName}
                     disabled
                   />
                 </div>
@@ -222,7 +264,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={supplierProfile.address}
+                    value={this.state.shipTo.address}
                     disabled
                   />
                 </div>
@@ -232,7 +274,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={supplierProfile.city}
+                    value={this.state.shipTo.city}
                     disabled
                   />
                 </div>
@@ -240,7 +282,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={supplierProfile.state}
+                    value={this.state.shipTo.state}
                     disabled
                   />
                 </div>
@@ -248,7 +290,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={supplierProfile.zip}
+                    value={this.state.shipTo.zip}
                     disabled
                   />
                 </div>
@@ -261,7 +303,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={supplierProfile.phoneNumber}
+                    value={this.state.shipTo.phoneNumber}
                     disabled
                   />
                 </div>
@@ -274,7 +316,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={supplierProfile.faxNumber}
+                    value={this.state.shipTo.faxNumber}
                     disabled
                   />
                 </div>
@@ -287,7 +329,7 @@ class BuyerProfile extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    // value={moment().format('YYYY-MM-DD h:m:s a')}
+                    value={this.state.shipTo.contact}
                     disabled
                   />
                 </div>
