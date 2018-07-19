@@ -19,7 +19,7 @@ class BuyerProfile extends React.Component {
         this.setState({buyerProfiles});
         companyRequests.getCurrentUserCompanyInfo(this.state.buyerProfiles[0].companyId)
           .then((companies) => {
-            console.error(companies);
+            this.setState({companies});
           });
       })
       .catch((err) => {
@@ -29,7 +29,6 @@ class BuyerProfile extends React.Component {
 
   render () {
     const buyerProfileComponent = this.state.buyerProfiles.map((buyerProfile) => {
-      console.error(this.state.buyerProfiles);
       return (
         <div id="buyer-profile-container" className="col-sm-12">
           <div className="col-sm-6 left-panel">
@@ -40,12 +39,25 @@ class BuyerProfile extends React.Component {
                   Company:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    // value={supplierProfile.name}
-                    disabled
-                  />
+                  {/* first time component gets rendered, the companies array in the state will be empty,
+                  this.state.companies[0].name will throw an error. In order to solve that,
+                  add this conditional statement.
+                  */}
+                  {this.state.companies[0] ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={this.state.companies[0].name}
+                      disabled
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value=""
+                      disabled
+                    />
+                  )}
                 </div>
               </div>
               <div className="form-group">
@@ -53,38 +65,74 @@ class BuyerProfile extends React.Component {
                   Address:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    // value={supplierProfile.address}
-                    disabled
-                  />
+                  {this.state.companies[0] ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={this.state.companies[0].address}
+                      disabled
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value=""
+                      disabled
+                    />
+                  )}
                 </div>
               </div>
               <div className="form-group">
                 <div className="col-sm-3 col-sm-offset-4">
-                  <input
-                    type="text"
-                    className="form-control"
-                    // value={supplierProfile.city}
-                    disabled
-                  />
+                  {this.state.companies[0] ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={this.state.companies[0].city}
+                      disabled
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value=""
+                      disabled
+                    />
+                  )}
                 </div>
                 <div className="col-sm-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    // value={supplierProfile.state}
-                    disabled
-                  />
+                  {this.state.companies[0] ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={this.state.companies[0].state}
+                      disabled
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value=""
+                      disabled
+                    />
+                  )}
                 </div>
                 <div className="col-sm-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    // value={supplierProfile.zip}
-                    disabled
-                  />
+                  {this.state.companies[0] ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={this.state.companies[0].zip}
+                      disabled
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value=""
+                      disabled
+                    />
+                  )}
                 </div>
               </div>
               <div className="form-group">
@@ -92,12 +140,21 @@ class BuyerProfile extends React.Component {
                   Phone Number:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    // value={supplierProfile.phoneNumber}
-                    disabled
-                  />
+                  {this.state.companies[0] ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={this.state.companies[0].phoneNumber}
+                      disabled
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value=""
+                      disabled
+                    />
+                  )}
                 </div>
               </div>
               <div className="form-group">
@@ -105,12 +162,21 @@ class BuyerProfile extends React.Component {
                   Fax Number:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    // value={supplierProfile.faxNumber}
-                    disabled
-                  />
+                  {this.state.companies[0] ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={this.state.companies[0].faxNumber}
+                      disabled
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value=""
+                      disabled
+                    />
+                  )}
                 </div>
               </div>
               <div className="form-group">
