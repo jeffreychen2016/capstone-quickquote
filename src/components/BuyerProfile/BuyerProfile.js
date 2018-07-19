@@ -1,10 +1,26 @@
 import React from 'react';
 import './BuyerProfile.css';
 import authRequests from '../../firebaseRequests/auth';
+import buyerProfileRequests from '../../firebaseRequests/buyerProfile';
 
 class BuyerProfile extends React.Component {
+  state = {
+    buyerProfiles: [],
+  };
+
+  componentDidMount () {
+    buyerProfileRequests
+      .getUserInfoRequest(authRequests.getUserId())
+      .then((buyerProfiles) => {
+        this.setState({buyerProfiles});
+      })
+      .catch((err) => {
+        console.error('Error with getting user data:', err);
+      });
+  };
+
   render () {
-    console.error(authRequests.getUserId());
+    console.error(this.state.buyerProfiles);
     return (
       <div id="buyer-profile-container" className="col-sm-12">
         <div className="col-sm-6 left-panel">
