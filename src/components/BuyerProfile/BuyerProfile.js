@@ -40,8 +40,8 @@ class BuyerProfile extends React.Component {
 
   updateIsCheckStatus = () => {
     this.state.isChecked ?
-      (this.setState({isChecked : false})) : (
-        this.setState({isChecked : true})
+      (this.setState({isChecked: false})) : (
+        this.setState({isChecked: true})
       );
   };
 
@@ -62,7 +62,6 @@ class BuyerProfile extends React.Component {
     } else {
       const tempShipTo = {...this.state.shipTo};
       tempShipTo.companyName = '';
-      tempShipTo.companyName = '';
       tempShipTo.address = '';
       tempShipTo.state = '';
       tempShipTo.city = '';
@@ -73,6 +72,54 @@ class BuyerProfile extends React.Component {
       this.setState({shipTo: tempShipTo});
       this.updateIsCheckStatus();
     };
+  };
+
+  companyChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.companyName = e.target.value;
+    this.setState({shipTo: tempShipTo});
+  };
+
+  addressChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.address = e.target.value;
+    this.setState({shipTo: tempShipTo});
+  };
+
+  cityChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.city = e.target.value;
+    this.setState({shipTo: tempShipTo});
+  };
+
+  stateChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.state = e.target.value;
+    this.setState({shipTo: tempShipTo});
+  };
+
+  zipChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.zip = e.target.value;
+    this.setState({shipTo: tempShipTo});
+  };
+
+  phoneNumberChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.phoneNumber = e.target.value;
+    this.setState({shipTo: tempShipTo});
+  };
+
+  faxNumberChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.faxNumber = e.target.value;
+    this.setState({shipTo: tempShipTo});
+  };
+
+  contactChange = (e) => {
+    const tempShipTo = {...this.state.shipTo};
+    tempShipTo.contact = e.target.value;
+    this.setState({shipTo: tempShipTo});
   };
 
   render () {
@@ -263,12 +310,14 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.companyName}
+                      onChange={this.companyChange}
                       disabled
                     />
                     ) : (
                       <input
                         type="text"
                         className="form-control"
+                        onChange={this.companyChange}
                         value={this.state.shipTo.companyName}
                       />
                     )
@@ -285,12 +334,14 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.address}
+                      onChange={this.addressChange}
                       disabled
                     />
                     ) : (
                       <input
                         type="text"
                         className="form-control"
+                        onChange={this.addressChange}
                         value={this.state.shipTo.address}
                       />
                     )
@@ -304,6 +355,7 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.city}
+                      onChange={this.cityChange}
                       disabled
                     />
                     ) : (
@@ -311,6 +363,7 @@ class BuyerProfile extends React.Component {
                         type="text"
                         className="form-control"
                         value={this.state.shipTo.city}
+                        onChange={this.cityChange}
                       />
                     )
                   }
@@ -321,6 +374,7 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.state}
+                      onChange={this.stateChange}
                       disabled
                     />
                     ) : (
@@ -328,6 +382,7 @@ class BuyerProfile extends React.Component {
                         type="text"
                         className="form-control"
                         value={this.state.shipTo.state}
+                        onChange={this.stateChange}
                       />
                     )
                   }
@@ -338,6 +393,7 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.zip}
+                      onChange={this.zipChange}
                       disabled
                     />
                     ) : (
@@ -345,6 +401,7 @@ class BuyerProfile extends React.Component {
                         type="text"
                         className="form-control"
                         value={this.state.shipTo.zip}
+                        onChange={this.zipChange}
                       />
                     )
                   }
@@ -360,6 +417,7 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.phoneNumber}
+                      onChange={this.phoneNumberChange}
                       disabled
                     />
                     ) : (
@@ -367,6 +425,7 @@ class BuyerProfile extends React.Component {
                         type="text"
                         className="form-control"
                         value={this.state.shipTo.phoneNumber}
+                        onChange={this.phoneNumberChange}
                       />
                     )
                   }
@@ -382,6 +441,7 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.faxNumber}
+                      onChange={this.faxNumberChange}
                       disabled
                     />
                     ) : (
@@ -389,6 +449,7 @@ class BuyerProfile extends React.Component {
                         type="text"
                         className="form-control"
                         value={this.state.shipTo.faxNumber}
+                        onChange={this.faxNumberChange}
                       />
                     )
                   }
@@ -404,6 +465,7 @@ class BuyerProfile extends React.Component {
                       type="text"
                       className="form-control"
                       value={this.state.shipTo.contact}
+                      onChange={this.contactChange}
                       disabled
                     />
                     ) : (
@@ -411,6 +473,7 @@ class BuyerProfile extends React.Component {
                         type="text"
                         className="form-control"
                         value={this.state.shipTo.contact}
+                        onChange={this.contactChange}
                       />
                     )
                   }
