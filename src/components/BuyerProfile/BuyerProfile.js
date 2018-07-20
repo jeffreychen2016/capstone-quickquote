@@ -18,6 +18,7 @@ class BuyerProfile extends React.Component {
       faxNumber: '',
       contact: '',
     },
+    isChecked: false,
   };
 
   // Get the current user info
@@ -37,6 +38,13 @@ class BuyerProfile extends React.Component {
       });
   };
 
+  updateIsCheckStatus = () => {
+    this.state.isChecked ?
+      (this.setState({isChecked : false})) : (
+        this.setState({isChecked : true})
+      );
+  };
+
   sameAsAboveClick = (e) => {
     if (e.target.checked) {
       const buyerCompany = this.state.companies[0];
@@ -50,6 +58,7 @@ class BuyerProfile extends React.Component {
       tempShipTo.faxNumber = buyerCompany.faxNumber;
       tempShipTo.contact = this.state.buyerProfiles[0].firstName + ' ' + this.state.buyerProfiles[0].lastName;
       this.setState({shipTo: tempShipTo});
+      this.updateIsCheckStatus();
     } else {
       const tempShipTo = {...this.state.shipTo};
       tempShipTo.companyName = '';
@@ -62,6 +71,7 @@ class BuyerProfile extends React.Component {
       tempShipTo.faxNumber = '';
       tempShipTo.contact = '';
       this.setState({shipTo: tempShipTo});
+      this.updateIsCheckStatus();
     };
   };
 
@@ -248,12 +258,21 @@ class BuyerProfile extends React.Component {
                   Company:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.companyName}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.companyName}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.companyName}
+                      />
+                    )
+                  }
                 </div>
               </div>
               <div className="form-group">
@@ -261,38 +280,74 @@ class BuyerProfile extends React.Component {
                   Address:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.address}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.address}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.address}
+                      />
+                    )
+                  }
                 </div>
               </div>
               <div className="form-group">
                 <div className="col-sm-3 col-sm-offset-4">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.city}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.city}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.city}
+                      />
+                    )
+                  }
                 </div>
                 <div className="col-sm-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.state}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.state}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.state}
+                      />
+                    )
+                  }
                 </div>
                 <div className="col-sm-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.zip}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.zip}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.zip}
+                      />
+                    )
+                  }
                 </div>
               </div>
               <div className="form-group">
@@ -300,12 +355,21 @@ class BuyerProfile extends React.Component {
                   Phone Number:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.phoneNumber}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.phoneNumber}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.phoneNumber}
+                      />
+                    )
+                  }
                 </div>
               </div>
               <div className="form-group">
@@ -313,12 +377,21 @@ class BuyerProfile extends React.Component {
                   Fax Number:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.faxNumber}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.faxNumber}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.faxNumber}
+                      />
+                    )
+                  }
                 </div>
               </div>
               <div className="form-group">
@@ -326,12 +399,21 @@ class BuyerProfile extends React.Component {
                   Contact:
                 </label>
                 <div className="col-sm-8">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.shipTo.contact}
-                    disabled
-                  />
+                  { this.state.isChecked ?
+                    (<input
+                      type="text"
+                      className="form-control"
+                      value={this.state.shipTo.contact}
+                      disabled
+                    />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={this.state.shipTo.contact}
+                      />
+                    )
+                  }
                 </div>
               </div>
             </form>
