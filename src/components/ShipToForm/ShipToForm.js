@@ -11,7 +11,7 @@ class ShipToForm extends React.Component {
             <input
               type="checkbox"
               id="ship-to-checkbox"
-              onChange={this.sameAsAboveClick}
+              onChange={this.props.sameAsAboveClick}
             />
             <label htmlFor="ship-to-checkbox">Same as above</label>
           </div>
@@ -21,20 +21,20 @@ class ShipToForm extends React.Component {
                 Company:
               </label>
               <div className="col-sm-8">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.companyName}
-                    onChange={this.companyChange}
+                    value={this.props.shipTo.companyName}
+                    onChange={this.props.companyChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      onChange={this.companyChange}
-                      value={this.state.shipTo.companyName}
+                      onChange={this.props.companyChange}
+                      value={this.props.shipTo.companyName}
                     />
                   )
                 }
@@ -45,20 +45,20 @@ class ShipToForm extends React.Component {
                 Address:
               </label>
               <div className="col-sm-8">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.address}
-                    onChange={this.addressChange}
+                    value={this.props.shipTo.address}
+                    onChange={this.props.addressChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      onChange={this.addressChange}
-                      value={this.state.shipTo.address}
+                      onChange={this.props.addressChange}
+                      value={this.props.shipTo.address}
                     />
                   )
                 }
@@ -66,58 +66,58 @@ class ShipToForm extends React.Component {
             </div>
             <div className="form-group">
               <div className="col-sm-3 col-sm-offset-4">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.city}
-                    onChange={this.cityChange}
+                    value={this.props.shipTo.city}
+                    onChange={this.props.cityChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      value={this.state.shipTo.city}
-                      onChange={this.cityChange}
+                      value={this.props.shipTo.city}
+                      onChange={this.props.cityChange}
                     />
                   )
                 }
               </div>
               <div className="col-sm-2">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.state}
-                    onChange={this.stateChange}
+                    value={this.props.shipTo.state}
+                    onChange={this.props.stateChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      value={this.state.shipTo.state}
-                      onChange={this.stateChange}
+                      value={this.props.shipTo.state}
+                      onChange={this.props.stateChange}
                     />
                   )
                 }
               </div>
               <div className="col-sm-3">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.zip}
-                    onChange={this.zipChange}
+                    value={this.props.shipTo.zip}
+                    onChange={this.props.zipChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      value={this.state.shipTo.zip}
-                      onChange={this.zipChange}
+                      value={this.props.shipTo.zip}
+                      onChange={this.props.zipChange}
                     />
                   )
                 }
@@ -128,20 +128,20 @@ class ShipToForm extends React.Component {
                 Phone Number:
               </label>
               <div className="col-sm-8">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.phoneNumber}
-                    onChange={this.phoneNumberChange}
+                    value={this.props.shipTo.phoneNumber}
+                    onChange={this.props.phoneNumberChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      value={this.state.shipTo.phoneNumber}
-                      onChange={this.phoneNumberChange}
+                      value={this.props.shipTo.phoneNumber}
+                      onChange={this.props.phoneNumberChange}
                     />
                   )
                 }
@@ -152,20 +152,20 @@ class ShipToForm extends React.Component {
                 Fax Number:
               </label>
               <div className="col-sm-8">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.faxNumber}
-                    onChange={this.faxNumberChange}
+                    value={this.props.shipTo.faxNumber}
+                    onChange={this.props.faxNumberChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      value={this.state.shipTo.faxNumber}
-                      onChange={this.faxNumberChange}
+                      value={this.props.shipTo.faxNumber}
+                      onChange={this.props.faxNumberChange}
                     />
                   )
                 }
@@ -176,20 +176,20 @@ class ShipToForm extends React.Component {
                 Contact:
               </label>
               <div className="col-sm-8">
-                {this.state.isChecked ?
+                {this.props.isChecked ?
                   (<input
                     type="text"
                     className="form-control"
-                    value={this.state.shipTo.contact}
-                    onChange={this.contactChange}
+                    value={this.props.shipTo.contact}
+                    onChange={this.props.contactChange}
                     disabled
                   />
                   ) : (
                     <input
                       type="text"
                       className="form-control"
-                      value={this.state.shipTo.contact}
-                      onChange={this.contactChange}
+                      value={this.props.shipTo.contact}
+                      onChange={this.props.contactChange}
                     />
                   )
                 }

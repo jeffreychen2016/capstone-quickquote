@@ -3,7 +3,7 @@ import './BuyerProfile.css';
 import authRequests from '../../firebaseRequests/auth';
 import buyerProfileRequests from '../../firebaseRequests/buyerProfile';
 import companyRequests from '../../firebaseRequests/company';
-// import ShipToForm from '../ShipToForm/ShipToForm';
+import ShipToForm from '../ShipToForm/ShipToForm';
 import OrderByForm from '../OrderByForm/OrderByForm';
 
 class BuyerProfile extends React.Component {
@@ -126,13 +126,26 @@ class BuyerProfile extends React.Component {
 
   render () {
     return (
-      <OrderByForm
-        buyerProfiles={this.state.buyerProfiles}
-        companies={this.state.companies}
-      />
-      // <ShipToForm
-      //   shipTo={this.state.shipTo}
-      // />
+      <div>
+        <OrderByForm
+          buyerProfiles={this.state.buyerProfiles}
+          companies={this.state.companies}
+        />
+        <ShipToForm
+          shipTo={this.state.shipTo}
+          isChecked={this.state.isChecked}
+          updateIsCheckStatus={this.updateIsCheckStatus}
+          sameAsAboveClick={this.sameAsAboveClick}
+          companyChange={this.companyChange}
+          addressChange={this.addressChange}
+          cityChange={this.cityChange}
+          stateChange={this.stateChange}
+          zipChange={this.zipChange}
+          phoneNumberChange={this.phoneNumberChange}
+          faxNumberChange={this.faxNumberChange}
+          contactChange={this.contactChange}
+        />
+      </div>
     );
   }
 };
