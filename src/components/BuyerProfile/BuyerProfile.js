@@ -126,25 +126,29 @@ class BuyerProfile extends React.Component {
 
   render () {
     return (
-      <div>
-        <OrderByForm
-          buyerProfiles={this.state.buyerProfiles}
-          companies={this.state.companies}
-        />
-        <ShipToForm
-          shipTo={this.state.shipTo}
-          isChecked={this.state.isChecked}
-          updateIsCheckStatus={this.updateIsCheckStatus}
-          sameAsAboveClick={this.sameAsAboveClick}
-          companyChange={this.companyChange}
-          addressChange={this.addressChange}
-          cityChange={this.cityChange}
-          stateChange={this.stateChange}
-          zipChange={this.zipChange}
-          phoneNumberChange={this.phoneNumberChange}
-          faxNumberChange={this.faxNumberChange}
-          contactChange={this.contactChange}
-        />
+      <div id="buyer-profile-container" className="col-sm-12">
+        <div className="col-sm-6 left-panel">
+          <OrderByForm
+            buyerProfiles={this.state.buyerProfiles}
+            companies={this.state.companies}
+          />
+        </div>
+        <div className="col-sm-6 right-panel">
+          <ShipToForm
+            shipTo={this.state.shipTo}
+            isChecked={this.state.isChecked}
+            updateIsCheckStatus={this.updateIsCheckStatus}
+            sameAsAboveClick={this.sameAsAboveClick}
+            companyChange={this.companyChange}
+            addressChange={this.addressChange}
+            cityChange={this.cityChange}
+            stateChange={this.stateChange}
+            zipChange={this.zipChange}
+            phoneNumberChange={this.phoneNumberChange}
+            faxNumberChange={this.faxNumberChange}
+            contactChange={this.contactChange}
+          />
+        </div>
       </div>
     );
   }
