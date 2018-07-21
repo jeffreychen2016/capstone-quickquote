@@ -4,22 +4,40 @@ import {Table} from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 
 class OrderTable extends React.Component {
+  state = {
+    tableRows: [],
+  }
+
+  componentDidMount () {
+    this.createRows();
+  };
+
+  // save dynamically generated rows into state for delete function later
+  // can not do string += '<tr></tr>' here, instead, rows have to be saved into an array
   createRows = () => {
     const rows = [];
     for (let tr = 0; tr < 10; tr++) {
       rows.push(
-        <tr>
-          <td>1</td>
+        <tr id={'row-' + (tr + 1)} key={(tr + 1)}>
           <td>{<AutoComplete />}</td>
           <td>Table cell</td>
           <td>Table cell</td>
           <td>Table cell</td>
           <td>Table cell</td>
-          <td>Table cell</td>
+          <td onClick={this.deleteRow} id={'td-' + (tr + 1)} key={(tr + 1)}>Delete</td>
         </tr>);
     };
-    return rows;
+    this.setState({tableRows: rows});
   }
+
+  deleteRow = (e) => {
+    const rowNumber = e.target.id.split('-').pop();
+    const tempTableRows = [...this.state.tableRows];
+    // table row id starts with 1, tempTableRows obejct index starts with 0.
+    delete tempTableRows[(rowNumber - 1)];
+    this.setState({tableRows: tempTableRows});
+  };
+
   render () {
     return (
       <div className="OrderTable">
@@ -27,7 +45,6 @@ class OrderTable extends React.Component {
         <Table responsive id="order-table">
           <thead>
             <tr>
-              <th>#</th>
               <th>Item</th>
               <th>Description</th>
               <th>Quantity</th>
@@ -37,9 +54,9 @@ class OrderTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.createRows()};
+            {this.state.tableRows}
           </tbody>
-        </Table>;
+        </Table>
       </div>
     );
   }
