@@ -4,6 +4,22 @@ import {Table} from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 
 class OrderTable extends React.Component {
+  createRows = () => {
+    const rows = [];
+    for (let tr = 0; tr < 10; tr++) {
+      rows.push(
+        <tr>
+          <td>1</td>
+          <td>{<AutoComplete />}</td>
+          <td>Table cell</td>
+          <td>Table cell</td>
+          <td>Table cell</td>
+          <td>Table cell</td>
+          <td>Table cell</td>
+        </tr>);
+    };
+    return rows;
+  }
   render () {
     return (
       <div className="OrderTable">
@@ -21,33 +37,7 @@ class OrderTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td><AutoComplete /></td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
+            {this.createRows()};
           </tbody>
         </Table>;
       </div>
