@@ -1,6 +1,7 @@
 import React from 'react';
 import './OrderTable.css';
 import {Table} from 'react-bootstrap';
+import AutoComplete from '../../components/AutoComplete/AutoComplete';
 
 class OrderTable extends React.Component {
   render () {
@@ -22,7 +23,7 @@ class OrderTable extends React.Component {
           <tbody>
             <tr>
               <td>1</td>
-              <td>Table cell</td>
+              <td><AutoComplete /></td>
               <td>Table cell</td>
               <td>Table cell</td>
               <td>Table cell</td>
