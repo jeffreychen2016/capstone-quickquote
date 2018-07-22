@@ -50,7 +50,7 @@ class OrderTable extends React.Component {
 
   matchProductDescription = (selectedOption,id) => {
     const products = this.state.products;
-    products.map((product) => {
+    products.map((product, i) => {
       if (selectedOption.label === product.code) {
         const tempOnOrder = [...this.state.onOrder];
         tempOnOrder[id].description = product.description;
@@ -95,6 +95,15 @@ class OrderTable extends React.Component {
     this.setState({onOrder: tempOnOrder});
   };
 
+  deleteRow = (e) => {
+    const id = e.target.id.split('-').pop() - 1;
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder.map((row,i) => {
+      i === id ? tempOnOrder.splice(i,1) : 'nothing';
+    });
+    this.setState({onOrder: tempOnOrder});
+  }
+
   render () {
     console.error(this.state.onOrder);
     const rowsComponent = this.state.onOrder.map((row, i) => {
@@ -121,7 +130,12 @@ class OrderTable extends React.Component {
           </td>
           <td>{row.price}</td>
           <td>{row.amount}</td>
-          <td>Delete</td>
+          <td
+            onClick={this.deleteRow}
+            id={'actionRow-' + (i + 1)}
+          >
+            Delete
+          </td>
         </tr>
       );
     });
