@@ -10,6 +10,7 @@ class AutoComplete extends React.Component {
     // selectedOption can be null when the `x` (close) button is clicked
     if (selectedOption) {
       console.error(`Selected: ${selectedOption.label}`);
+      this.props.matchProductDescription(selectedOption);
     }
   }
 
@@ -21,7 +22,7 @@ class AutoComplete extends React.Component {
     return options;
   }
 
-  // options data formart: { value: 'one', label: 'One' }
+  // options data formart: options= {[{ value: 'one', label: 'One' }]}
 
   render () {
     const { selectedOption } = this.state;

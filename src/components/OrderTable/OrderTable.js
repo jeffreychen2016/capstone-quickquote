@@ -35,8 +35,9 @@ class OrderTable extends React.Component {
           <td>
             {<AutoComplete
               products={this.state.products}
+              matchProductDescription={this.matchProductDescription}
             />}</td>
-          <td>Table cell</td>
+          <td>Description shit</td>
           <td>Table cell</td>
           <td>Table cell</td>
           <td>Table cell</td>
@@ -54,7 +55,24 @@ class OrderTable extends React.Component {
     this.setState({tableRows: tempTableRows});
   };
 
+  matchProductDescription = (selectedOption) => {
+    const products = this.state.products;
+    for (let i = 0; i < products.length; i++) {
+      if (selectedOption.label === products[i].code) {
+        console.error('real description:',products[i].description);
+        console.error('hard coded description:',this.state.tableRows[0].props.children[1].props.children);
+        const tempTableRows = {...this.state.tableRows};
+        // tempTableRows[0].props.children[1].props.children = products[i].description;
+        // this.setState({tableRows: tempTableRows});
+      }
+    };
+  };
+
   render () {
+    // if (this.state.tableRows[0]) {
+    //   console.error(this.state.tableRows[0].props.children[1].props.children);
+    // }
+
     return (
       <div className="OrderTable">
         <h2>Order Form</h2>
