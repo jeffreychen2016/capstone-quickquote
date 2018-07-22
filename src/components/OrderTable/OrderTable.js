@@ -2,14 +2,27 @@ import React from 'react';
 import './OrderTable.css';
 import {Table} from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
+import productRequests from '../../firebaseRequests/product';
 
 class OrderTable extends React.Component {
   state = {
     tableRows: [],
+    products: [],
   }
 
   componentDidMount () {
     this.createRows();
+    this.getAllProducts();
+  };
+
+  getAllProducts = () => {
+    productRequests.getProductsRequest()
+      .then((products) => {
+        this.setState({products});
+      })
+      .catch((err) => {
+        console.error('Error getting products:', err);
+      });
   };
 
   // save dynamically generated rows into state for delete function later
@@ -19,7 +32,10 @@ class OrderTable extends React.Component {
     for (let tr = 0; tr < 10; tr++) {
       rows.push(
         <tr id={'row-' + (tr + 1)} key={(tr + 1)}>
-          <td>{<AutoComplete />}</td>
+          <td>
+            {<AutoComplete
+              products={this.products}
+            />}</td>
           <td>Table cell</td>
           <td>Table cell</td>
           <td>Table cell</td>
@@ -39,6 +55,7 @@ class OrderTable extends React.Component {
   };
 
   render () {
+    console.error(this.state.products);
     return (
       <div className="OrderTable">
         <h2>Order Form</h2>
