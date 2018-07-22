@@ -10,9 +10,9 @@ class AutoComplete extends React.Component {
     // selectedOption can be null when the `x` (close) button is clicked
     if (selectedOption) {
       // console.error(`Selected: ${selectedOption.label}`);
-      this.props.updateOnOrderCode(selectedOption.label);
-      this.props.matchProductDescription(selectedOption);
-      this.props.matchProductPrice(selectedOption);
+      this.props.updateOnOrderCode(selectedOption.label,this.props.auntoCompleteRowId);
+      this.props.matchProductDescription(selectedOption,this.props.auntoCompleteRowId);
+      this.props.matchProductPrice(selectedOption,this.props.auntoCompleteRowId);
     }
   }
 
