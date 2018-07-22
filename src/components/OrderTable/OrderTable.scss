@@ -6,4 +6,8 @@
   th {
     text-align: center;
   }
+
+  tr td:last-child {
+    cursor: pointer;
+  }
 }
