@@ -18,21 +18,19 @@ class AutoComplete extends React.Component {
     for (let i = 0; i < this.props.products.length; i++) {
       options.push({ value: `${this.props.products[i].code}`, label: `${this.props.products[i].code}`});
     };
-    console.error(options);
+    return options;
   }
+
+  // options data formart: { value: 'one', label: 'One' }
 
   render () {
     const { selectedOption } = this.state;
-    console.error(this.generateOptions());
     return (
       <Select
         name="form-field-name"
         value={selectedOption}
         onChange={this.handleChange}
-        options={[
-          { value: 'one', label: 'One' },
-          { value: 'two', label: 'Two' },
-        ]}
+        options={this.generateOptions()}
       />
     );
   }
