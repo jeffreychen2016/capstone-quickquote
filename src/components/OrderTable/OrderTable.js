@@ -1,14 +1,22 @@
 import React from 'react';
 import './OrderTable.css';
-import {Table} from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 
 class OrderTable extends React.Component {
   state = {
-    tableRows: [],
     products: [],
-    itemOnOrder: [],
+    onOrder: [
+      {
+        code: '',
+        description: '',
+        quantity: 0,
+        price: 0,
+        amount: 0,
+        action: '',
+      },
+    ],
   }
 
   componentDidMount () {
@@ -18,63 +26,83 @@ class OrderTable extends React.Component {
   getAllProducts = () => {
     productRequests.getProductsRequest()
       .then((products) => {
-        this.setState({products});
-        this.createRows();
+        this.setState({ products });
       })
       .catch((err) => {
         console.error('Error getting products:', err);
       });
   };
 
-  // save dynamically generated rows into state for delete function later
-  // can not do string += '<tr></tr>' here, instead, rows have to be saved into an array
-  createRows = () => {
-    const rows = [];
-    for (let tr = 0; tr < 10; tr++) {
-      rows.push(
-        <tr id={'row-' + (tr + 1)} key={(tr + 1)}>
-          <td>
-            {<AutoComplete
-              products={this.state.products}
-              matchProductDescription={this.matchProductDescription}
-              updateItemOnOrder={this.updateItemOnOrder}
-            />}</td>
-          <td>Description shit</td>
-          <td>Table cell</td>
-          <td>Table cell</td>
-          <td>Table cell</td>
-          <td onClick={this.deleteRow} id={'td-' + (tr + 1)} key={(tr + 1)}>Delete</td>
-        </tr>);
-    };
-    this.setState({tableRows: rows});
-  }
-
-  deleteRow = (e) => {
-    const rowNumber = e.target.id.split('-').pop();
-    const tempTableRows = [...this.state.tableRows];
-    // table row id starts with 1, tempTableRows obejct index starts with 0.
-    delete tempTableRows[(rowNumber - 1)];
-    this.setState({tableRows: tempTableRows});
-  };
-
   matchProductDescription = (selectedOption) => {
     const products = this.state.products;
-    for (let i = 0; i < products.length; i++) {
-      if (selectedOption.label === products[i].code) {
-        console.error('real description:',products[i].description);
-        console.error('hard coded description:',this.state.tableRows[0].props.children[1].props.children);
-        const tempTableRows = {...this.state.tableRows};
-        tempTableRows[0].props.children[1].props.children = products[i].description;
-        this.setState({tableRows: tempTableRows});
-      }
-    };
+    products.map((product) => {
+      if (selectedOption.label === product.code) {
+        const tempOnOrder = [...this.state.onOrder];
+        tempOnOrder[0].description = product.description;
+        this.setState({onOrder: tempOnOrder});
+      };
+    });
+  };
+
+  matchProductPrice = (selectedOption) => {
+    const products = this.state.products;
+    products.map((product) => {
+      if (selectedOption.label === product.code) {
+        const tempOnOrder = [...this.state.onOrder];
+        tempOnOrder[0].price = product.price;
+        this.setState({onOrder: tempOnOrder});
+      };
+    });
+  }
+
+  updateOnOrderCode = (selectedOption) => {
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder[0].code = selectedOption;
+    this.setState({onOrder: tempOnOrder});
+  };
+
+  updateOnOrderQuantity = (e) => {
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder[0].quantity = e.target.value;
+    this.setState({onOrder: tempOnOrder});
+    this.calculateRowTotal();
+  };
+
+  calculateRowTotal = () => {
+    const onOrder = this.state.onOrder[0];
+    const rowAmount = onOrder.price * onOrder.quantity;
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder[0].amount = rowAmount;
+    this.setState({onOrder: tempOnOrder});
   };
 
   render () {
-    // if (this.state.tableRows[0]) {
-    //   console.error(this.state.tableRows[0].props.children[1].props.children);
-    // }
-
+    const rowsComponent = this.state.onOrder.map((row, i) => {
+      return (
+        <tr key={i}>
+          <td>
+            <AutoComplete
+              products={this.state.products}
+              updateOnOrderCode={this.updateOnOrderCode}
+              matchProductDescription={this.matchProductDescription}
+              matchProductPrice={this.matchProductPrice}
+              calculateRowTotal={this.calculateRowTotal}
+            />
+          </td>
+          <td>{row.description}</td>
+          <td>
+            <input
+              type="number"
+              value={row.quantity}
+              onChange={this.updateOnOrderQuantity}
+            />
+          </td>
+          <td>{row.price}</td>
+          <td>{row.amount}</td>
+          <td>Delete</td>
+        </tr>
+      );
+    });
     return (
       <div className="OrderTable">
         <h2>Order Form</h2>
@@ -90,7 +118,7 @@ class OrderTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.tableRows}
+            {rowsComponent}
           </tbody>
         </Table>
       </div>
