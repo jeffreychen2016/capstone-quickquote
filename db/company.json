@@ -1,5 +1,6 @@
 {
 	"company1": {
+    "id": 1,
     "name": "Seller Company",
     "address": "123 Street",
     "city": "Nashville",
@@ -11,6 +12,7 @@
     "isSupplier": 1
   },
   "company2": {
+    "id": 2,
     "name": "Buyer Company",
     "address": "123 Street",
     "city": "Nashville",

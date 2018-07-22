@@ -5,7 +5,7 @@
     "email": "jeffreychen@gmail.com",
     "password": "123456",
     "isAdmin": 1,
-    "companyId": "company1",
+    "companyId": "1",
     "uid": "xxxx"
   },
   "user2": {
@@ -14,7 +14,7 @@
     "email": "kevinchen@gmail.com",
     "password": "123456",
     "isAdmin": 0,
-    "companyId": "company1",
-    "uid": "xxxx"
+    "companyId": "2",
+    "uid": "mQVAln9Ptuh4lVM7gsiVQn3frzJ3"
 	}
 }
