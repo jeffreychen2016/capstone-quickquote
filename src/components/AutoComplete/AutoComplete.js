@@ -13,6 +13,7 @@ class AutoComplete extends React.Component {
       this.props.updateOnOrderCode(selectedOption.label,this.props.auntoCompleteRowId);
       this.props.matchProductDescription(selectedOption,this.props.auntoCompleteRowId);
       this.props.matchProductPrice(selectedOption,this.props.auntoCompleteRowId);
+      this.props.calculateRowTotal(this.props.auntoCompleteRowId);
     }
   }
 

@@ -4,18 +4,19 @@ import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 
+// Note: state should be only used to store varibales
 class OrderTable extends React.Component {
   state = {
     products: [],
     onOrder: [
-      {
-        code: '',
-        description: '',
-        quantity: 0,
-        price: 0,
-        amount: 0,
-        action: '',
-      },
+      // {
+      //   code: '',
+      //   description: '',
+      //   quantity: 0,
+      //   price: 0,
+      //   amount: 0,
+      //   action: '',
+      // },
     ],
   }
 
@@ -95,6 +96,7 @@ class OrderTable extends React.Component {
   };
 
   render () {
+    console.error(this.state.onOrder);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
