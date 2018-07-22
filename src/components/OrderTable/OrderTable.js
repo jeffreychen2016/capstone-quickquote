@@ -16,19 +16,12 @@ class OrderTable extends React.Component {
         amount: 0,
         action: '',
       },
-      {
-        code: '',
-        description: '',
-        quantity: 0,
-        price: 0,
-        amount: 0,
-        action: '',
-      },
     ],
   }
 
   componentDidMount () {
     this.getAllProducts();
+    this.initializeStateOnOrder();
   };
 
   getAllProducts = () => {
@@ -39,6 +32,19 @@ class OrderTable extends React.Component {
       .catch((err) => {
         console.error('Error getting products:', err);
       });
+  };
+
+  initializeStateOnOrder = () => {
+    for (let i = 0; i < 10; i++)
+      this.state.onOrder.push(
+        {
+          code: '',
+          description: '',
+          quantity: 0,
+          price: 0,
+          amount: 0,
+          action: '',
+        });
   };
 
   matchProductDescription = (selectedOption,id) => {
