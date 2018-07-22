@@ -8,6 +8,7 @@ class OrderTable extends React.Component {
   state = {
     tableRows: [],
     products: [],
+    itemOnOrder: [],
   }
 
   componentDidMount () {
@@ -36,6 +37,7 @@ class OrderTable extends React.Component {
             {<AutoComplete
               products={this.state.products}
               matchProductDescription={this.matchProductDescription}
+              updateItemOnOrder={this.updateItemOnOrder}
             />}</td>
           <td>Description shit</td>
           <td>Table cell</td>
@@ -62,8 +64,8 @@ class OrderTable extends React.Component {
         console.error('real description:',products[i].description);
         console.error('hard coded description:',this.state.tableRows[0].props.children[1].props.children);
         const tempTableRows = {...this.state.tableRows};
-        // tempTableRows[0].props.children[1].props.children = products[i].description;
-        // this.setState({tableRows: tempTableRows});
+        tempTableRows[0].props.children[1].props.children = products[i].description;
+        this.setState({tableRows: tempTableRows});
       }
     };
   };
