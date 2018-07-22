@@ -11,7 +11,6 @@ class OrderTable extends React.Component {
   }
 
   componentDidMount () {
-    this.createRows();
     this.getAllProducts();
   };
 
@@ -19,6 +18,7 @@ class OrderTable extends React.Component {
     productRequests.getProductsRequest()
       .then((products) => {
         this.setState({products});
+        this.createRows();
       })
       .catch((err) => {
         console.error('Error getting products:', err);
@@ -34,7 +34,7 @@ class OrderTable extends React.Component {
         <tr id={'row-' + (tr + 1)} key={(tr + 1)}>
           <td>
             {<AutoComplete
-              products={this.products}
+              products={this.state.products}
             />}</td>
           <td>Table cell</td>
           <td>Table cell</td>
@@ -55,7 +55,6 @@ class OrderTable extends React.Component {
   };
 
   render () {
-    console.error(this.state.products);
     return (
       <div className="OrderTable">
         <h2>Order Form</h2>

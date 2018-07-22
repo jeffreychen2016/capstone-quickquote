@@ -12,9 +12,18 @@ class AutoComplete extends React.Component {
       console.error(`Selected: ${selectedOption.label}`);
     }
   }
+
+  generateOptions = () => {
+    const options = [];
+    for (let i = 0; i < this.props.products.length; i++) {
+      options.push({ value: `${this.props.products[i].code}`, label: `${this.props.products[i].code}`});
+    };
+    console.error(options);
+  }
+
   render () {
     const { selectedOption } = this.state;
-
+    console.error(this.generateOptions());
     return (
       <Select
         name="form-field-name"
