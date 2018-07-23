@@ -4,7 +4,6 @@ import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 import orderRequests from '../../firebaseRequests/order';
-import order from '../../firebaseRequests/order';
 
 // Note: state should be only used to store varibales
 class OrderTable extends React.Component {
@@ -108,7 +107,12 @@ class OrderTable extends React.Component {
     this.setState({onOrder: tempOnOrder});
   }
 
+  addRow = () => {
+
+  };
+
   saveAsOrder = () => {
+    this.cleanOrderObjectForPosting();
     orderRequests.postOrder(this.state.onOrder)
       .then((res) => {
         this.props.redirectToMyOrderAfterPost();
@@ -118,9 +122,15 @@ class OrderTable extends React.Component {
       });
   };
 
-  render () {
-    console.error(this.props.shipTo);
+  cleanOrderObjectForPosting = () => {
+    const tempOnOrder = [...this.state.onOrder];
+    const tempOnOrderAfterFilter = tempOnOrder.filter(value => value.code !== '');
+    this.setState({onOrder: tempOnOrderAfterFilter});
+    console.error(tempOnOrderAfterFilter);
     console.error(this.state.onOrder);
+  };
+
+  render () {
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
@@ -151,6 +161,10 @@ class OrderTable extends React.Component {
           >
             Delete
           </td>
+          {
+            // add an 'add' button to the last row of table
+            i === (this.state.onOrder.length - 1) ? (<td>Add</td>) : (<td></td>)
+          }
         </tr>
       );
     });
