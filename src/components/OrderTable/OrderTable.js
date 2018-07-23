@@ -118,7 +118,6 @@ class OrderTable extends React.Component {
       action: '',
     });
     this.setState({onOrder: tempOnOrder});
-    console.error('New Array:',this.state.onOrder);
   };
 
   saveAsOrder = () => {
@@ -136,16 +135,18 @@ class OrderTable extends React.Component {
     const tempOnOrder = [...this.state.onOrder];
     const tempOnOrderAfterFilter = tempOnOrder.filter(value => value.code !== '');
     this.setState({onOrder: tempOnOrderAfterFilter});
-    console.error(tempOnOrderAfterFilter);
-    console.error(this.state.onOrder);
+    // console.error(tempOnOrderAfterFilter);
+    // console.error(this.state.onOrder);
   };
 
   render () {
+    console.error(this.state.onOrder);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
           <td>
             <AutoComplete
+              dropdownValue={this.state.onOrder[i].code}
               auntoCompleteRowId={i}
               products={this.state.products}
               updateOnOrderCode={this.updateOnOrderCode}
