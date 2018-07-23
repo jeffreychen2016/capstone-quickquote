@@ -34,7 +34,6 @@ class AutoComplete extends React.Component {
   // options data formart: options= {[{ value: 'one', label: 'One' }]}
   render () {
     // const { selectedOption } = this.state;
-
     return (
       <Select
         name="form-field-name"

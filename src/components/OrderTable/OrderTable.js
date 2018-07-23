@@ -121,8 +121,8 @@ class OrderTable extends React.Component {
   };
 
   saveAsOrder = () => {
-    this.cleanOrderObjectForPosting();
-    orderRequests.postOrder(this.state.onOrder)
+    const orderToPost = this.cleanOrderObjectForPosting();
+    orderRequests.postOrder(orderToPost)
       .then((res) => {
         this.props.redirectToMyOrderAfterPost();
       })
@@ -134,13 +134,10 @@ class OrderTable extends React.Component {
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
     const tempOnOrderAfterFilter = tempOnOrder.filter(value => value.code !== '');
-    this.setState({onOrder: tempOnOrderAfterFilter});
-    // console.error(tempOnOrderAfterFilter);
-    // console.error(this.state.onOrder);
+    return tempOnOrderAfterFilter;
   };
 
   render () {
-    console.error(this.state.onOrder);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
@@ -173,7 +170,7 @@ class OrderTable extends React.Component {
             Delete
           </td>
           {
-            // add an 'add' button to the last row of table
+            // Logic: add an 'add' button to the last row of table
             i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow}>Add</td>) : (<td></td>)
           }
         </tr>
