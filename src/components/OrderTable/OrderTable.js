@@ -108,7 +108,17 @@ class OrderTable extends React.Component {
   }
 
   addRow = () => {
-
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder.push({
+      code: '',
+      description: '',
+      quantity: 0,
+      price: 0,
+      amount: 0,
+      action: '',
+    });
+    this.setState({onOrder: tempOnOrder});
+    console.error('New Array:',this.state.onOrder);
   };
 
   saveAsOrder = () => {
@@ -163,7 +173,7 @@ class OrderTable extends React.Component {
           </td>
           {
             // add an 'add' button to the last row of table
-            i === (this.state.onOrder.length - 1) ? (<td>Add</td>) : (<td></td>)
+            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow}>Add</td>) : (<td></td>)
           }
         </tr>
       );
