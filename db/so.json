@@ -16,5 +16,9 @@
     "status": "order",
     "userId": "xxxx",
     "companyId": "company2"
+  },
+  "so4": {
+    "items" : [],
+    "shipping": {}
   }
 }

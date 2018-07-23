@@ -25,14 +25,20 @@ class AutoComplete extends React.Component {
     return options;
   }
 
-  // options data formart: options= {[{ value: 'one', label: 'One' }]}
+  // the value in value={this.constructValueObject} takes in object {value: xx, lable: xx}
+  constructValueObject = () => {
+    const selectedOption = { value: this.props.dropdownValue, label: this.props.dropdownValue };
+    return selectedOption;
+  };
 
+  // options data formart: options= {[{ value: 'one', label: 'One' }]}
   render () {
-    const { selectedOption } = this.state;
+    // const { selectedOption } = this.state;
     return (
       <Select
         name="form-field-name"
-        value={selectedOption}
+        value={this.constructValueObject()}
+        // value={selectedOption}
         onChange={this.handleChange}
         options={this.generateOptions()}
       />

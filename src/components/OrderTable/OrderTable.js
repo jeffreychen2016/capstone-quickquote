@@ -3,6 +3,7 @@ import './OrderTable.css';
 import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
+import orderRequests from '../../firebaseRequests/order';
 
 // Note: state should be only used to store varibales
 class OrderTable extends React.Component {
@@ -15,7 +16,6 @@ class OrderTable extends React.Component {
       //   quantity: 0,
       //   price: 0,
       //   amount: 0,
-      //   action: '',
       // },
     ],
   }
@@ -44,13 +44,13 @@ class OrderTable extends React.Component {
           quantity: 0,
           price: 0,
           amount: 0,
-          action: '',
+          isOrder: 0,
         });
   };
 
   matchProductDescription = (selectedOption,id) => {
     const products = this.state.products;
-    products.map((product) => {
+    products.map((product, i) => {
       if (selectedOption.label === product.code) {
         const tempOnOrder = [...this.state.onOrder];
         tempOnOrder[id].description = product.description;
@@ -95,13 +95,86 @@ class OrderTable extends React.Component {
     this.setState({onOrder: tempOnOrder});
   };
 
+  // delete tempOnOrder[i] will still leave "empty" in the array, which will break other codes
+  // so user "splice" to remove deleted row
+  deleteRow = (e) => {
+    const id = e.target.id.split('-').pop() - 1;
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder.map((row,i) => {
+      i === id ? tempOnOrder.splice(i,1) : 'nothing';
+    });
+    this.setState({onOrder: tempOnOrder});
+  }
+
+  addRow = () => {
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder.push({
+      code: '',
+      description: '',
+      quantity: 0,
+      price: 0,
+      amount: 0,
+      action: '',
+      isOrder: 0,
+    });
+    this.setState({onOrder: tempOnOrder});
+  };
+
+  updateIsOrder = (bool) => {
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder.map((row) => {
+      row.isOrder = bool;
+    });
+    this.setState({onOrder: tempOnOrder});
+  };
+
+  mergeOrderAndShippingTogether = () => {
+    const orderToPost = this.cleanOrderObjectForPosting();
+    const shippingAddressToPost = this.props.shipTo;
+    const mergedOrderWithShippingAddress = {shippingAddress: shippingAddressToPost, items: orderToPost };
+    return mergedOrderWithShippingAddress;
+  };
+
+  // update the isOrder to either 1 or 0
+  // merge order with shipping address
+  // post to database
+  saveAsOrder = () => {
+    this.updateIsOrder(1);
+    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingTogether();
+    orderRequests.postOrder(mergedOrderWithShippingAddress)
+      .then((res) => {
+        this.props.redirectToMyOrderAfterPost();
+      })
+      .catch((err) => {
+        console.error('Errot with posting order to database:',err);
+      });
+  };
+
+  saveAsEstimate = () => {
+    this.updateIsOrder(0);
+    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingTogether();
+    orderRequests.postOrder(mergedOrderWithShippingAddress)
+      .then((res) => {
+        this.props.redirectToMyOrderAfterPost();
+      })
+      .catch((err) => {
+        console.error('Errot with posting order to database:',err);
+      });
+  };
+
+  cleanOrderObjectForPosting = () => {
+    const tempOnOrder = [...this.state.onOrder];
+    const tempOnOrderAfterFilter = tempOnOrder.filter(value => value.code !== '');
+    return tempOnOrderAfterFilter;
+  };
+
   render () {
-    console.error(this.state.onOrder);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
           <td>
             <AutoComplete
+              dropdownValue={this.state.onOrder[i].code}
               auntoCompleteRowId={i}
               products={this.state.products}
               updateOnOrderCode={this.updateOnOrderCode}
@@ -116,15 +189,29 @@ class OrderTable extends React.Component {
               id={'inputRow-' + (i + 1)}
               type="number"
               value={row.quantity}
-              onChange={e => this.updateOnOrderQuantity(e)}
+              onChange={this.updateOnOrderQuantity}
             />
           </td>
           <td>{row.price}</td>
           <td>{row.amount}</td>
-          <td>Delete</td>
+          <td
+            onClick={this.deleteRow}
+            id={'actionRow-' + (i + 1)}
+          >
+            Delete
+          </td>
+          {
+            // Logic: add an 'add' button to the last row of table
+            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow}>Add</td>) : (<td></td>)
+          }
         </tr>
       );
     });
+
+    const orderTotalComponent = this.state.onOrder.reduce((a,b) => {
+      return a + b.amount;
+    },0);
+
     return (
       <div className="OrderTable">
         <h2>Order Form</h2>
@@ -142,7 +229,16 @@ class OrderTable extends React.Component {
           <tbody>
             {rowsComponent}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan="1">Total</td>
+              <td colSpan="4"></td>
+              <td colSpan="1">{orderTotalComponent}</td>
+            </tr>
+          </tfoot>
         </Table>
+        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
+        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
       </div>
     );
   }
