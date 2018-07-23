@@ -16,7 +16,6 @@ class OrderTable extends React.Component {
       //   quantity: 0,
       //   price: 0,
       //   amount: 0,
-      //   action: '',
       // },
     ],
   }
@@ -45,7 +44,7 @@ class OrderTable extends React.Component {
           quantity: 0,
           price: 0,
           amount: 0,
-          action: '',
+          isOrder: 0,
         });
   };
 
@@ -116,13 +115,45 @@ class OrderTable extends React.Component {
       price: 0,
       amount: 0,
       action: '',
+      isOrder: 0,
     });
     this.setState({onOrder: tempOnOrder});
   };
 
-  saveAsOrder = () => {
+  updateIsOrder = (bool) => {
+    const tempOnOrder = [...this.state.onOrder];
+    tempOnOrder.map((row) => {
+      row.isOrder = bool;
+    });
+    this.setState({onOrder: tempOnOrder});
+  };
+
+  mergeOrderAndShippingTogether = () => {
     const orderToPost = this.cleanOrderObjectForPosting();
-    orderRequests.postOrder(orderToPost)
+    const shippingAddressToPost = this.props.shipTo;
+    const mergedOrderWithShippingAddress = {shippingAddress: shippingAddressToPost, items: orderToPost };
+    return mergedOrderWithShippingAddress;
+  };
+
+  // update the isOrder to either 1 or 0
+  // merge order with shipping address
+  // post to database
+  saveAsOrder = () => {
+    this.updateIsOrder(1);
+    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingTogether();
+    orderRequests.postOrder(mergedOrderWithShippingAddress)
+      .then((res) => {
+        this.props.redirectToMyOrderAfterPost();
+      })
+      .catch((err) => {
+        console.error('Errot with posting order to database:',err);
+      });
+  };
+
+  saveAsEstimate = () => {
+    this.updateIsOrder(0);
+    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingTogether();
+    orderRequests.postOrder(mergedOrderWithShippingAddress)
       .then((res) => {
         this.props.redirectToMyOrderAfterPost();
       })
@@ -206,8 +237,8 @@ class OrderTable extends React.Component {
             </tr>
           </tfoot>
         </Table>
-        <button className="btn btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
-        <button className="btn btn-primary" onClick={this.saveAsOrder}>Place Order</button>
+        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
+        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
       </div>
     );
   }
