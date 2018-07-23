@@ -111,6 +111,7 @@ class OrderTable extends React.Component {
   };
 
   render () {
+    console.error(this.props.shipTo);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
