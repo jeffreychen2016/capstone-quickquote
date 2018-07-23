@@ -106,8 +106,11 @@ class OrderTable extends React.Component {
     this.setState({onOrder: tempOnOrder});
   }
 
+  calculateOrderTotal = () => {
+
+  };
+
   render () {
-    console.error(this.state.onOrder);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
@@ -127,7 +130,7 @@ class OrderTable extends React.Component {
               id={'inputRow-' + (i + 1)}
               type="number"
               value={row.quantity}
-              onChange={e => this.updateOnOrderQuantity(e)}
+              onChange={this.updateOnOrderQuantity}
             />
           </td>
           <td>{row.price}</td>
@@ -141,6 +144,11 @@ class OrderTable extends React.Component {
         </tr>
       );
     });
+
+    const orderTotalComponent = this.state.onOrder.reduce((a,b) => {
+      return a + b.amount;
+    },0);
+
     return (
       <div className="OrderTable">
         <h2>Order Form</h2>
@@ -158,6 +166,12 @@ class OrderTable extends React.Component {
           <tbody>
             {rowsComponent}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan="1">Total</td>
+              <td colSpan="5">{orderTotalComponent}</td>
+            </tr>
+          </tfoot>
         </Table>
       </div>
     );
