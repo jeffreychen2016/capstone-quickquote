@@ -125,6 +125,10 @@ class OrderForm extends React.Component {
     this.setState({ shipTo: tempShipTo });
   };
 
+  redirectToMyOrderAfterPost = () => {
+    this.props.history.push('/myorder');
+  };
+
   render () {
     return (
       <div className="OrderForm">
@@ -148,6 +152,7 @@ class OrderForm extends React.Component {
         />
         <OrderTable
           shipTo={this.state.shipTo}
+          redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
         />
       </div>
     );

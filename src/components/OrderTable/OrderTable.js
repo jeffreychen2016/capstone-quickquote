@@ -3,6 +3,8 @@ import './OrderTable.css';
 import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
+import orderRequests from '../../firebaseRequests/order';
+import order from '../../firebaseRequests/order';
 
 // Note: state should be only used to store varibales
 class OrderTable extends React.Component {
@@ -106,12 +108,19 @@ class OrderTable extends React.Component {
     this.setState({onOrder: tempOnOrder});
   }
 
-  calculateOrderTotal = () => {
-
+  saveAsOrder = () => {
+    orderRequests.postOrder(this.state.onOrder)
+      .then((res) => {
+        this.props.redirectToMyOrderAfterPost();
+      })
+      .catch((err) => {
+        console.error('Errot with posting order to database:',err);
+      });
   };
 
   render () {
     console.error(this.props.shipTo);
+    console.error(this.state.onOrder);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
@@ -175,6 +184,8 @@ class OrderTable extends React.Component {
             </tr>
           </tfoot>
         </Table>
+        <button className="btn btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
+        <button className="btn btn-primary" onClick={this.saveAsOrder}>Place Order</button>
       </div>
     );
   }
