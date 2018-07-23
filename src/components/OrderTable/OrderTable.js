@@ -169,7 +169,8 @@ class OrderTable extends React.Component {
           <tfoot>
             <tr>
               <td colSpan="1">Total</td>
-              <td colSpan="5">{orderTotalComponent}</td>
+              <td colSpan="4"></td>
+              <td colSpan="1">{orderTotalComponent}</td>
             </tr>
           </tfoot>
         </Table>
