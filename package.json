@@ -24,6 +24,6 @@
     "build-js": "react-scripts build",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm-run-all build-css build-js",
-    "eject": "react-scripts eject"
+    "deploy": "npm run build && firebase deploy"
   }
 }

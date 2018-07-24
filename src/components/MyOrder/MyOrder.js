@@ -57,7 +57,7 @@ class MyOrder extends React.Component {
             this.state.radionButtonClicked === '0' ? (
               <td>
                 <button
-                  id={"delete-" + row.id}
+                  data-delete={row.id}
                   onClick={this.deleteOrder}
                 >Delete</button>
                 <button>View</button>
@@ -83,7 +83,7 @@ class MyOrder extends React.Component {
   }
 
   deleteOrder = (e) => {
-    const orderId = '-' + e.target.id.split('-').pop();
+    const orderId = e.target.dataset.delete;
     orderRequests.deleteOrder(orderId)
       .then(() => {
         this.getAllEstimates();
