@@ -84,10 +84,9 @@ class MyOrder extends React.Component {
 
   deleteOrder = (e) => {
     const orderId = '-' + e.target.id.split('-').pop();
-    console.error(orderId);
     orderRequests.deleteOrder(orderId)
       .then(() => {
-        console.error('Your order has been delete successfully');
+        this.getAllEstimates();
       })
       .catch((err) => {
         console.error('Error deleting order:',err);
