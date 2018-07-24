@@ -61,7 +61,10 @@ class MyOrder extends React.Component {
                   onClick={this.deleteOrder}
                 >Delete</button>
                 <button>View</button>
-                <button>Place Order</button>
+                <button
+                  id={"update-" + row.id}
+                  onClick={this.placeOrder}
+                >Place Order</button>
               </td>
             ) : (
               <td>
@@ -93,7 +96,26 @@ class MyOrder extends React.Component {
       });
   };
 
+  placeOrder = (e) => {
+    this.state.orders.map((order, i) => {
+      const orderId = '-' + e.target.id.split('-').pop();
+      if (order.id === orderId) {
+        const tempOrder = {...order};
+        tempOrder.isOrder = 1;
+        console.error(tempOrder);
+        orderRequests.updateOrderStatus(orderId,tempOrder)
+          .then(() => {
+            console.error('updated');
+          })
+          .catch((err) => {
+            console.error('Error updating the order status:',err);
+          });
+      };
+    });
+  }
+
   render () {
+    console.error(this.state.orders);
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>
