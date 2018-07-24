@@ -45,6 +45,7 @@ class MyOrder extends React.Component {
     },0);
   };
 
+  // row.id will return firebase id
   renderSelectedOrders = () => {
     const allMyOrdersComponent = this.state.orders.map((row, i) => {
       return (
@@ -55,7 +56,10 @@ class MyOrder extends React.Component {
           {
             this.state.radionButtonClicked === '0' ? (
               <td>
-                <button>Delete</button>
+                <button
+                  id={"delete-" + row.id}
+                  onClick={this.deleteOrder}
+                >Delete</button>
                 <button>View</button>
                 <button>Place Order</button>
               </td>
@@ -78,9 +82,19 @@ class MyOrder extends React.Component {
     this.state.radionButtonClicked === '1' ? (this.getAllEstimates()) : (this.getAllSalesOrders());
   }
 
-  // row.id will return firebase id
-  render () {
+  deleteOrder = (e) => {
+    const orderId = '-' + e.target.id.split('-').pop();
+    console.error(orderId);
+    orderRequests.deleteOrder(orderId)
+      .then(() => {
+        console.error('Your order has been delete successfully');
+      })
+      .catch((err) => {
+        console.error('Error deleting order:',err);
+      });
+  };
 
+  render () {
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>

@@ -34,4 +34,17 @@ const getAllOrders = (orderFlag) => {
   });
 };
 
-export default {postOrder, getAllOrders};
+const deleteOrder = (orderId) => {
+  return new Promise((resolve,reject) => {
+    axios
+      .delete(`${constants.firebaseConfig.databaseURL}/so/${orderId}.json`)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export default {postOrder, getAllOrders, deleteOrder};
