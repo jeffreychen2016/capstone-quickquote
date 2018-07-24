@@ -10,6 +10,10 @@ class MyOrder extends React.Component {
   }
 
   componentDidMount () {
+    this.getAllEstimates();
+  };
+
+  getAllEstimates = () => {
     const orderFlag = authRequests.getUserId() + '-' + '0';
     orderRequests.getAllOrders(orderFlag)
       .then((allEstimates) => {
@@ -20,6 +24,20 @@ class MyOrder extends React.Component {
       });
   };
 
+  getAllSalesOrders = () => {
+    const orderFlag = authRequests.getUserId() + '-' + '1';
+    orderRequests.getAllOrders(orderFlag)
+      .then((allEstimates) => {
+        this.setState({ allEstimates });
+      })
+      .catch((err) => {
+        console.error('Error with getting all sales orders:', err);
+      });
+  };
+
+  // loop through each order first
+  // then loop through each array which contains order rows
+  // then add row amount together
   calculateOrderTotal = (row) => {
     return row.items.reduce((a, b) => {
       return a + b.amount;
