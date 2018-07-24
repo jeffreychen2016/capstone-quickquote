@@ -4,6 +4,7 @@ import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 import orderRequests from '../../firebaseRequests/order';
+import authRequests from '../../firebaseRequests/auth';
 
 // Note: state should be only used to store varibales
 class OrderTable extends React.Component {
@@ -128,19 +129,21 @@ class OrderTable extends React.Component {
     this.setState({onOrder: tempOnOrder});
   };
 
-  mergeOrderAndShippingTogether = () => {
+  mergeOrderAndShippingAndUid = () => {
+    const userId = authRequests.getUserId();
     const orderToPost = this.cleanOrderObjectForPosting();
     const shippingAddressToPost = this.props.shipTo;
-    const mergedOrderWithShippingAddress = {shippingAddress: shippingAddressToPost, items: orderToPost };
+    const mergedOrderWithShippingAddress = {uid: userId, shippingAddress: shippingAddressToPost, items: orderToPost };
     return mergedOrderWithShippingAddress;
   };
 
   // update the isOrder to either 1 or 0
-  // merge order with shipping address
+  // merge order with shipping address and user id
   // post to database
   saveAsOrder = () => {
+
     this.updateIsOrder(1);
-    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingTogether();
+    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingAndUid();
     orderRequests.postOrder(mergedOrderWithShippingAddress)
       .then((res) => {
         this.props.redirectToMyOrderAfterPost();
@@ -152,7 +155,7 @@ class OrderTable extends React.Component {
 
   saveAsEstimate = () => {
     this.updateIsOrder(0);
-    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingTogether();
+    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingAndUid();
     orderRequests.postOrder(mergedOrderWithShippingAddress)
       .then((res) => {
         this.props.redirectToMyOrderAfterPost();
