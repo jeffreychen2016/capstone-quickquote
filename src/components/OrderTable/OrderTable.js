@@ -5,6 +5,7 @@ import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
+import moment from 'moment';
 
 // Note: state should be only used to store varibales
 class OrderTable extends React.Component {
@@ -45,7 +46,6 @@ class OrderTable extends React.Component {
           quantity: 0,
           price: 0,
           amount: 0,
-          isOrder: 0,
         });
   };
 
@@ -116,24 +116,23 @@ class OrderTable extends React.Component {
       price: 0,
       amount: 0,
       action: '',
-      isOrder: 0,
     });
     this.setState({onOrder: tempOnOrder});
   };
 
-  updateIsOrder = (bool) => {
-    const tempOnOrder = [...this.state.onOrder];
-    tempOnOrder.map((row) => {
-      row.isOrder = bool;
-    });
-    this.setState({onOrder: tempOnOrder});
-  };
-
-  mergeOrderAndShippingAndUid = () => {
+  // merge order array, user-id, ship-to-address,current-date obeject, and isOrder together
+  mergeObjects = (orderStatusCode) => {
+    const currentDate = moment().format('YYYY-MM-DD h:m:s a');
     const userId = authRequests.getUserId();
     const orderToPost = this.cleanOrderObjectForPosting();
     const shippingAddressToPost = this.props.shipTo;
-    const mergedOrderWithShippingAddress = {uid: userId, shippingAddress: shippingAddressToPost, items: orderToPost };
+    const mergedOrderWithShippingAddress = {
+      uid: userId,
+      shippingAddress: shippingAddressToPost,
+      items: orderToPost,
+      date: currentDate,
+      isOrder: orderStatusCode,
+    };
     return mergedOrderWithShippingAddress;
   };
 
@@ -141,9 +140,7 @@ class OrderTable extends React.Component {
   // merge order with shipping address and user id
   // post to database
   saveAsOrder = () => {
-
-    this.updateIsOrder(1);
-    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingAndUid();
+    const mergedOrderWithShippingAddress = this.mergeObjects(1);
     orderRequests.postOrder(mergedOrderWithShippingAddress)
       .then((res) => {
         this.props.redirectToMyOrderAfterPost();
@@ -154,8 +151,7 @@ class OrderTable extends React.Component {
   };
 
   saveAsEstimate = () => {
-    this.updateIsOrder(0);
-    const mergedOrderWithShippingAddress = this.mergeOrderAndShippingAndUid();
+    const mergedOrderWithShippingAddress = this.mergeObjects(0);
     orderRequests.postOrder(mergedOrderWithShippingAddress)
       .then((res) => {
         this.props.redirectToMyOrderAfterPost();
