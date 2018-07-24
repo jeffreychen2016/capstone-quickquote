@@ -120,18 +120,22 @@ class OrderTable extends React.Component {
     this.setState({onOrder: tempOnOrder});
   };
 
-  // merge order array, user-id, ship-to-address,current-date obeject, and isOrder together
+  // merge order array, userId, shipToAddress,currentDate obeject, and isOrder together
+  // orderFlag (uidIsOrder) is created to be used as index in firebase
+  // since firebase does not support multi-parameters query
   mergeObjects = (orderStatusCode) => {
     const currentDate = moment().format('YYYY-MM-DD h:m:s a');
     const userId = authRequests.getUserId();
     const orderToPost = this.cleanOrderObjectForPosting();
     const shippingAddressToPost = this.props.shipTo;
+    const uIdIsOrder = userId + '-' + orderStatusCode;
     const mergedOrderWithShippingAddress = {
       uid: userId,
       shippingAddress: shippingAddressToPost,
       items: orderToPost,
       date: currentDate,
       isOrder: orderStatusCode,
+      orderFlag: uIdIsOrder,
     };
     return mergedOrderWithShippingAddress;
   };
