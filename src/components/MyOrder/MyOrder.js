@@ -7,6 +7,7 @@ import authRequests from '../../firebaseRequests/auth';
 class MyOrder extends React.Component {
   state = {
     orders: [],
+    radionButtonClicked: '0',
   }
 
   componentDidMount () {
@@ -44,26 +45,57 @@ class MyOrder extends React.Component {
     },0);
   };
 
-  // row.id will return firebase id
-  render () {
+  renderSelectedOrders = () => {
     const allMyOrdersComponent = this.state.orders.map((row, i) => {
       return (
         <tr key={i}>
           <td>ES{row.id}</td>
           <td>{row.date}</td>
           <td>{this.calculateOrderTotal(row)}</td>
-          <td>
-            <button>Delete</button>
-            <button>Place Order</button>
-          </td>
+          {
+            this.state.radionButtonClicked === '0' ? (
+              <td>
+                <button>Delete</button>
+                <button>View</button>
+                <button>Place Order</button>
+              </td>
+            ) : (
+              <td>
+                <button>View</button>
+              </td>
+            )
+          }
         </tr>
       );
     });
+    return allMyOrdersComponent;
+  }
+
+  // based on the button selected, the orders array will be updated.
+  // if My Esistamtes is selected, the orders array in the state will be reset to contain all estimates
+  updateRadioButtonState = (e) => {
+    this.setState({radionButtonClicked: e.target.value});
+    this.state.radionButtonClicked === '1' ? (this.getAllEstimates()) : (this.getAllSalesOrders());
+  }
+
+  // row.id will return firebase id
+  render () {
+
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>
-        <input type="radio" name="gender" value="male" defaultChecked /> My Estimates
-        <input type="radio" name="gender" value="female" /> My Orders
+        <input
+          type="radio"
+          value="0"
+          checked={this.state.radionButtonClicked === '0'}
+          onChange={this.updateRadioButtonState}
+        /> My Estimates
+        <input
+          type="radio"
+          value="1"
+          checked={this.state.radionButtonClicked === '1'}
+          onChange={this.updateRadioButtonState}
+        /> My Orders
         <Table responsive id="order-table">
           <thead>
             <tr>
@@ -74,7 +106,7 @@ class MyOrder extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {allMyOrdersComponent}
+            {this.renderSelectedOrders()}
           </tbody>
         </Table>
       </div>
