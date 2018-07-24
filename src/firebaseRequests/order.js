@@ -14,10 +14,10 @@ const postOrder = (newOrder) => {
   });
 };
 
-const getAllOrders = (uid) => {
+const getAllOrders = (orderFlag) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${constants.firebaseConfig.databaseURL}/so.json?orderBy="uid"&equalTo="${uid}"`)
+      .get(`${constants.firebaseConfig.databaseURL}/so.json?orderBy="orderFlag"&equalTo="${orderFlag}"`)
       .then(res => {
         const orders = [];
         if (res.data !== null) {
