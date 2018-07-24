@@ -6,7 +6,7 @@ import authRequests from '../../firebaseRequests/auth';
 
 class MyOrder extends React.Component {
   state = {
-    allEstimates: [],
+    orders: [],
   }
 
   componentDidMount () {
@@ -17,7 +17,7 @@ class MyOrder extends React.Component {
     const orderFlag = authRequests.getUserId() + '-' + '0';
     orderRequests.getAllOrders(orderFlag)
       .then((allEstimates) => {
-        this.setState({ allEstimates });
+        this.setState({ orders : allEstimates });
       })
       .catch((err) => {
         console.error('Error with getting all estimates:', err);
@@ -27,8 +27,8 @@ class MyOrder extends React.Component {
   getAllSalesOrders = () => {
     const orderFlag = authRequests.getUserId() + '-' + '1';
     orderRequests.getAllOrders(orderFlag)
-      .then((allEstimates) => {
-        this.setState({ allEstimates });
+      .then((allSalesOrders) => {
+        this.setState({ orders : allSalesOrders });
       })
       .catch((err) => {
         console.error('Error with getting all sales orders:', err);
@@ -46,7 +46,7 @@ class MyOrder extends React.Component {
 
   // row.id will return firebase id
   render () {
-    const allEstimateComponent = this.state.allEstimates.map((row, i) => {
+    const allMyOrdersComponent = this.state.orders.map((row, i) => {
       return (
         <tr key={i}>
           <td>ES{row.id}</td>
@@ -74,7 +74,7 @@ class MyOrder extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {allEstimateComponent}
+            {allMyOrdersComponent}
           </tbody>
         </Table>
       </div>
