@@ -6,7 +6,6 @@ import productRequests from '../../firebaseRequests/product';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
 import orderItemRequests from '../../firebaseRequests/orderItem';
-import shipToRequests from '../../firebaseRequests/shipTo';
 import moment from 'moment';
 
 // Note: state should be only used to store varibales
@@ -137,47 +136,29 @@ class OrderTable extends React.Component {
   // merge order array, userId, shipToAddress,currentDate obeject, and isOrder together
   // orderFlag (uidIsOrder) is created to be used as index in firebase
   // since firebase does not support multi-parameters query
-  mergeObjects = (orderStatusCode) => {
+  constructSOData = (orderStatusCode) => {
     const currentDate = moment().format('YYYY-MM-DD h:m:s a');
     const userId = authRequests.getUserId();
-
     const uIdIsOrder = userId + '-' + orderStatusCode;
 
-    const shippingAddressToPost = this.addOrderIdToShipTo(this.props.shipTo);
-    shipToRequests.postShipTo(shippingAddressToPost)
-      .then(() => {
-        console.error('Ship to posted');
-      })
-      .catch((err) => {
-        console.error('Error posting ship to address:', err);
-      });
-
-    const orderItemToPost = this.cleanOrderObjectForPosting();
-    orderItemRequests.postOrderItem(orderItemToPost)
-      .then(() => {
-        console.error('item posted');
-      })
-      .catch((err) => {
-        console.error('Error posting order items:', err);
-      });
-
-    const mergedOrderWithShippingAddress = {
-      soid: this.state.soNumber,
+    const so = {
       uid: userId,
       date: currentDate,
       isOrder: orderStatusCode,
       orderFlag: uIdIsOrder,
+      shipToAddress: this.props.shipTo,
     };
-    return mergedOrderWithShippingAddress;
+    return so;
   };
 
   // update the isOrder to either 1 or 0
   // merge order with shipping address and user id
   // post to database
   saveAsOrder = () => {
-    const mergedOrderWithShippingAddress = this.mergeObjects(1);
-    orderRequests.postOrder(mergedOrderWithShippingAddress)
-      .then((res) => {
+    const soData = this.constructSOData(1);
+    orderRequests.postOrder(soData)
+      .then((key) => {
+        console.error(key);
         this.props.redirectToMyOrderAfterPost();
       })
       .catch((err) => {
@@ -186,9 +167,15 @@ class OrderTable extends React.Component {
   };
 
   saveAsEstimate = () => {
-    const mergedOrderWithShippingAddress = this.mergeObjects(0);
-    orderRequests.postOrder(mergedOrderWithShippingAddress)
-      .then((res) => {
+    const soData = this.constructSOData(0);
+    orderRequests.postOrder(soData)
+      .then((key) => {
+        console.error('key:',key.data.name);
+        const orderItemToPost = this.cleanOrderObjectForPosting();
+        orderItemRequests.postOrderItem(orderItemToPost)
+          .then(() => {
+            console.error('item posted');
+          });
         this.props.redirectToMyOrderAfterPost();
       })
       .catch((err) => {
@@ -196,22 +183,10 @@ class OrderTable extends React.Component {
       });
   };
 
-  addOrderIdToOrderItems = (tempOnOrderAfterFilter) => {
-    tempOnOrderAfterFilter.map((row) => {
-      row.soid = this.state.soNumber;
-    });
-    return tempOnOrderAfterFilter;
-  };
-
-  addOrderIdToShipTo = (shipTo) => {
-    shipTo.soid = this.state.soNumber;
-    return shipTo;
-  };
-
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
-    const tempOnOrderAfterFilter = tempOnOrder.filter(value => value.code !== '');
-    return this.addOrderIdToOrderItems(tempOnOrderAfterFilter);
+    const addOrderIdToOrderItems = tempOnOrder.filter(value => value.code !== '');
+    return addOrderIdToOrderItems;
   };
 
   render () {

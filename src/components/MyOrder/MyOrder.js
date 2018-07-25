@@ -3,6 +3,7 @@ import './MyOrder.css';
 import { Table } from 'react-bootstrap';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
+import orderItemRequests from '../../firebaseRequests/orderItem';
 
 class MyOrder extends React.Component {
   state = {
@@ -40,9 +41,8 @@ class MyOrder extends React.Component {
   // then loop through each array which contains order rows
   // then add row amount together
   calculateOrderTotal = (row) => {
-    // return row.items.reduce((a, b) => {
-    //   return a + b.amount;
-    // },0);
+
+    console.error(row);
   };
 
   // row.id will return firebase id
