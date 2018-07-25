@@ -18,7 +18,7 @@ class MyOrder extends React.Component {
     const orderFlag = authRequests.getUserId() + '-' + '0';
     orderRequests.getAllOrders(orderFlag)
       .then((allEstimates) => {
-        this.setState({ orders : allEstimates });
+        this.setState({orders: allEstimates });
       })
       .catch((err) => {
         console.error('Error with getting all estimates:', err);
@@ -29,7 +29,7 @@ class MyOrder extends React.Component {
     const orderFlag = authRequests.getUserId() + '-' + '1';
     orderRequests.getAllOrders(orderFlag)
       .then((allSalesOrders) => {
-        this.setState({ orders : allSalesOrders });
+        this.setState({orders: allSalesOrders });
       })
       .catch((err) => {
         console.error('Error with getting all sales orders:', err);
@@ -57,11 +57,14 @@ class MyOrder extends React.Component {
             this.state.radionButtonClicked === '0' ? (
               <td>
                 <button
-                  data-delete={row.id}
+                  data-deleteorder={row.id}
                   onClick={this.deleteOrder}
                 >Delete</button>
                 <button>View</button>
-                <button>Place Order</button>
+                <button
+                  data-updateorder={row.id}
+                  onClick={this.placeOrder}
+                >Place Order</button>
               </td>
             ) : (
               <td>
@@ -83,7 +86,7 @@ class MyOrder extends React.Component {
   }
 
   deleteOrder = (e) => {
-    const orderId = e.target.dataset.delete;
+    const orderId = e.target.dataset.deleteorder;
     orderRequests.deleteOrder(orderId)
       .then(() => {
         this.getAllEstimates();
@@ -93,7 +96,29 @@ class MyOrder extends React.Component {
       });
   };
 
+  // for the object thats needs for put request
+  // have tup update isOrder key as well as orderFlag
+  // becuase firebase does not take in two order by parameters
+  placeOrder = (e) => {
+    this.state.orders.map((order, i) => {
+      const orderId = e.target.dataset.updateorder;
+      if (order.id === orderId) {
+        const tempOrder = {...order};
+        tempOrder.isOrder = 1;
+        tempOrder.orderFlag = tempOrder.orderFlag.slice(0, -1) + '1';
+        orderRequests.updateOrderStatus(orderId,tempOrder)
+          .then(() => {
+            this.getAllEstimates();
+          })
+          .catch((err) => {
+            console.error('Error updating the order status:',err);
+          });
+      };
+    });
+  }
+
   render () {
+    console.error(this.state.orders);
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>
