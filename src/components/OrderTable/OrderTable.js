@@ -5,6 +5,7 @@ import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
+import itemRequests from '../../firebaseRequests/item';
 import orderItemRequests from '../../firebaseRequests/orderItem';
 import moment from 'moment';
 
@@ -169,12 +170,17 @@ class OrderTable extends React.Component {
   saveAsEstimate = () => {
     const soData = this.constructSOData(0);
     orderRequests.postOrder(soData)
-      .then((key) => {
-        console.error('key:',key.data.name);
-        const orderItemToPost = this.cleanOrderObjectForPosting();
-        orderItemRequests.postOrderItem(orderItemToPost)
-          .then(() => {
-            console.error('item posted');
+      .then((soKey) => {
+        console.error('key:',soKey.data.name);
+        const itemToPost = this.cleanOrderObjectForPosting();
+        itemRequests.postOrderItem(itemToPost)
+          .then((itemKey) => {
+            console.error('Item Key:', itemKey.data.name);
+            const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name};
+            orderItemRequests.postOrderItem(orderItem)
+              .then(() => {
+                console.error('All Data Posted!');
+              });
           });
         this.props.redirectToMyOrderAfterPost();
       })

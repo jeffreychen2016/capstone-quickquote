@@ -3,7 +3,7 @@ import './MyOrder.css';
 import { Table } from 'react-bootstrap';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
-import orderItemRequests from '../../firebaseRequests/orderItem';
+import itemRequests from '../../firebaseRequests/item';
 
 class MyOrder extends React.Component {
   state = {
