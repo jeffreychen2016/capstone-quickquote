@@ -40,9 +40,9 @@ class MyOrder extends React.Component {
   // then loop through each array which contains order rows
   // then add row amount together
   calculateOrderTotal = (row) => {
-    return row.items.reduce((a, b) => {
-      return a + b.amount;
-    },0);
+    // return row.items.reduce((a, b) => {
+    //   return a + b.amount;
+    // },0);
   };
 
   // row.id will return firebase id
@@ -118,7 +118,6 @@ class MyOrder extends React.Component {
   }
 
   render () {
-    console.error(this.state.orders);
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>

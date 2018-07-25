@@ -5,6 +5,8 @@ import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
+import orderItemRequests from '../../firebaseRequests/orderItem';
+import shipToRequests from '../../firebaseRequests/shipTo';
 import moment from 'moment';
 
 // Note: state should be only used to store varibales
@@ -20,11 +22,23 @@ class OrderTable extends React.Component {
       //   amount: 0,
       // },
     ],
+    soNumber: '',
   }
 
   componentDidMount () {
     this.getAllProducts();
     this.initializeStateOnOrder();
+    this.generateSONumber();
+  };
+
+  generateSONumber = () => {
+    orderRequests.getAllOrdersForSONumber()
+      .then((orders) => {
+        this.setState({soNumber: orders.length});
+      })
+      .catch((err) => {
+        console.error('Error with getting SO:', err);
+      });
   };
 
   getAllProducts = () => {
@@ -126,13 +140,30 @@ class OrderTable extends React.Component {
   mergeObjects = (orderStatusCode) => {
     const currentDate = moment().format('YYYY-MM-DD h:m:s a');
     const userId = authRequests.getUserId();
-    const orderToPost = this.cleanOrderObjectForPosting();
-    const shippingAddressToPost = this.props.shipTo;
+
     const uIdIsOrder = userId + '-' + orderStatusCode;
+
+    const shippingAddressToPost = this.addOrderIdToShipTo(this.props.shipTo);
+    shipToRequests.postShipTo(shippingAddressToPost)
+      .then(() => {
+        console.error('Ship to posted');
+      })
+      .catch((err) => {
+        console.error('Error posting ship to address:', err);
+      });
+
+    const orderItemToPost = this.cleanOrderObjectForPosting();
+    orderItemRequests.postOrderItem(orderItemToPost)
+      .then(() => {
+        console.error('item posted');
+      })
+      .catch((err) => {
+        console.error('Error posting order items:', err);
+      });
+
     const mergedOrderWithShippingAddress = {
+      soid: this.state.soNumber,
       uid: userId,
-      shippingAddress: shippingAddressToPost,
-      items: orderToPost,
       date: currentDate,
       isOrder: orderStatusCode,
       orderFlag: uIdIsOrder,
@@ -165,10 +196,22 @@ class OrderTable extends React.Component {
       });
   };
 
+  addOrderIdToOrderItems = (tempOnOrderAfterFilter) => {
+    tempOnOrderAfterFilter.map((row) => {
+      row.soid = this.state.soNumber;
+    });
+    return tempOnOrderAfterFilter;
+  };
+
+  addOrderIdToShipTo = (shipTo) => {
+    shipTo.soid = this.state.soNumber;
+    return shipTo;
+  };
+
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
     const tempOnOrderAfterFilter = tempOnOrder.filter(value => value.code !== '');
-    return tempOnOrderAfterFilter;
+    return this.addOrderIdToOrderItems(tempOnOrderAfterFilter);
   };
 
   render () {
