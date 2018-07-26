@@ -158,9 +158,22 @@ class OrderTable extends React.Component {
   saveAsOrder = () => {
     const soData = this.constructSOData(1);
     orderRequests.postOrder(soData)
-      .then((key) => {
-        console.error(key);
-        this.props.redirectToMyOrderAfterPost();
+      .then((soKey) => {
+        const itemsToPost = this.cleanOrderObjectForPosting();
+        itemsToPost.map((item) => {
+          const tempItem = {...item};
+          delete tempItem.amount;
+          delete tempItem.quantity;
+          itemRequests.postOrderItem(tempItem)
+            .then((itemKey) => {
+              const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+              orderItemRequests.postOrderItem(orderItem)
+                .then(() => {
+                  this.props.redirectToMyOrderAfterPost();
+                  console.error('All Data Posted!');
+                });
+            });
+        });
       })
       .catch((err) => {
         console.error('Errot with posting order to database:',err);

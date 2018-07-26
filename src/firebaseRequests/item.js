@@ -14,19 +14,12 @@ const postOrderItem = (newOrderItem) => {
   });
 };
 
-const getAllOrderItemsBasedOnSOId = (soid) => {
+const getAllOrderItemsBasedOnItemId = (itemid) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${constants.firebaseConfig.databaseURL}/item.json?orderBy="soid"&equalTo="${soid}"`)
+      .get(`${constants.firebaseConfig.databaseURL}/item/${itemid}.json`)
       .then(res => {
-        const orders = [];
-        if (res.data !== null) {
-          Object.keys(res.data).forEach(fbKey => {
-            res.data[fbKey].id = fbKey;
-            orders.push(res.data[fbKey]);
-          });
-        }
-        resolve(orders);
+        resolve(res.data);
       })
       .catch(err => {
         reject(err);
@@ -34,4 +27,4 @@ const getAllOrderItemsBasedOnSOId = (soid) => {
   });
 };
 
-export default {postOrderItem, getAllOrderItemsBasedOnSOId};
+export default {postOrderItem, getAllOrderItemsBasedOnItemId};

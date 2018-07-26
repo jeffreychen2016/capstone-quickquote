@@ -4,6 +4,7 @@ import { Table } from 'react-bootstrap';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
 import itemRequests from '../../firebaseRequests/item';
+import orderItemRequests from '../../firebaseRequests/orderItem';
 
 class MyOrder extends React.Component {
   state = {
@@ -11,7 +12,7 @@ class MyOrder extends React.Component {
     radionButtonClicked: '0',
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.getAllEstimates();
   };
 
@@ -19,7 +20,7 @@ class MyOrder extends React.Component {
     const orderFlag = authRequests.getUserId() + '-' + '0';
     orderRequests.getAllOrders(orderFlag)
       .then((allEstimates) => {
-        this.setState({orders: allEstimates });
+        this.setState({ orders: allEstimates });
       })
       .catch((err) => {
         console.error('Error with getting all estimates:', err);
@@ -30,20 +31,37 @@ class MyOrder extends React.Component {
     const orderFlag = authRequests.getUserId() + '-' + '1';
     orderRequests.getAllOrders(orderFlag)
       .then((allSalesOrders) => {
-        this.setState({orders: allSalesOrders });
+        this.setState({ orders: allSalesOrders });
       })
       .catch((err) => {
         console.error('Error with getting all sales orders:', err);
       });
   };
 
-  // loop through each order first
-  // then loop through each array which contains order rows
-  // then add row amount together
   calculateOrderTotal = (row) => {
-
-    console.error(row);
+    const rowTotals = [];
+    let orderTotalAmount = 0;
+    orderItemRequests.getAllOrderItemsForGivenOrderNumber(row.id)
+      .then((soitems) => {
+        soitems.map((soitem) => {
+          itemRequests.getAllOrderItemsBasedOnItemId(soitem.itemid)
+            .then((item) => {
+              const rowTotal = item.price * soitem.quantity;
+              rowTotals.push(rowTotal);
+              orderTotalAmount = rowTotals.reduce((a, b) => {
+                return a + b;
+              });
+            });
+        });
+      })
+      .catch((err) => {
+        console.error('Error with getting all soitems:', err);
+      });
   };
+
+  test = () => {
+    return '1';
+  }
 
   // row.id will return firebase id
   renderSelectedOrders = () => {
@@ -53,6 +71,8 @@ class MyOrder extends React.Component {
           <td>ES{row.id}</td>
           <td>{row.date}</td>
           <td>{this.calculateOrderTotal(row)}</td>
+          {/* <td>{this.test()}</td> */}
+
           {
             this.state.radionButtonClicked === '0' ? (
               <td>
@@ -67,10 +87,10 @@ class MyOrder extends React.Component {
                 >Place Order</button>
               </td>
             ) : (
-              <td>
-                <button>View</button>
-              </td>
-            )
+                <td>
+                  <button>View</button>
+                </td>
+              )
           }
         </tr>
       );
@@ -81,7 +101,7 @@ class MyOrder extends React.Component {
   // based on the button selected, the orders array will be updated.
   // if My Esistamtes is selected, the orders array in the state will be reset to contain all estimates
   updateRadioButtonState = (e) => {
-    this.setState({radionButtonClicked: e.target.value});
+    this.setState({ radionButtonClicked: e.target.value });
     this.state.radionButtonClicked === '1' ? (this.getAllEstimates()) : (this.getAllSalesOrders());
   }
 
@@ -92,7 +112,7 @@ class MyOrder extends React.Component {
         this.getAllEstimates();
       })
       .catch((err) => {
-        console.error('Error deleting order:',err);
+        console.error('Error deleting order:', err);
       });
   };
 
@@ -103,21 +123,21 @@ class MyOrder extends React.Component {
     this.state.orders.map((order, i) => {
       const orderId = e.target.dataset.updateorder;
       if (order.id === orderId) {
-        const tempOrder = {...order};
+        const tempOrder = { ...order };
         tempOrder.isOrder = 1;
         tempOrder.orderFlag = tempOrder.orderFlag.slice(0, -1) + '1';
-        orderRequests.updateOrderStatus(orderId,tempOrder)
+        orderRequests.updateOrderStatus(orderId, tempOrder)
           .then(() => {
             this.getAllEstimates();
           })
           .catch((err) => {
-            console.error('Error updating the order status:',err);
+            console.error('Error updating the order status:', err);
           });
       };
     });
   }
 
-  render () {
+  render() {
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>

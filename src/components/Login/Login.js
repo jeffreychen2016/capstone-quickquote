@@ -5,7 +5,7 @@ import authRequests from '../../firebaseRequests/auth';
 class Login extends React.Component {
   state = {
     user: {
-      email: 'jeffreychen2016@gmail.com',
+      email: 'jeffreychencoding@gmail.com',
       password: '123456',
     },
   };
