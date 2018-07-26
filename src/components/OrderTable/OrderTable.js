@@ -167,22 +167,29 @@ class OrderTable extends React.Component {
       });
   };
 
+  // the reason to have tempItem is because when post to orderItem
+  // it needs quantity and amount, but item collection itself does not
+  // they are in the same loop, if remove in from "item" parameter
+  // then time.quantity will not have access to the quantity anymore
   saveAsEstimate = () => {
     const soData = this.constructSOData(0);
     orderRequests.postOrder(soData)
       .then((soKey) => {
-        console.error('key:',soKey.data.name);
-        const itemToPost = this.cleanOrderObjectForPosting();
-        itemRequests.postOrderItem(itemToPost)
-          .then((itemKey) => {
-            console.error('Item Key:', itemKey.data.name);
-            const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name};
-            orderItemRequests.postOrderItem(orderItem)
-              .then(() => {
-                console.error('All Data Posted!');
-              });
-          });
-        this.props.redirectToMyOrderAfterPost();
+        const itemsToPost = this.cleanOrderObjectForPosting();
+        itemsToPost.map((item) => {
+          const tempItem = {...item};
+          delete tempItem.amount;
+          delete tempItem.quantity;
+          itemRequests.postOrderItem(tempItem)
+            .then((itemKey) => {
+              const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+              orderItemRequests.postOrderItem(orderItem)
+                .then(() => {
+                  this.props.redirectToMyOrderAfterPost();
+                  console.error('All Data Posted!');
+                });
+            });
+        });
       })
       .catch((err) => {
         console.error('Errot with posting order to database:',err);
@@ -191,8 +198,8 @@ class OrderTable extends React.Component {
 
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
-    const addOrderIdToOrderItems = tempOnOrder.filter(value => value.code !== '');
-    return addOrderIdToOrderItems;
+    const cleanOrder = tempOnOrder.filter(value => value.code !== '');
+    return cleanOrder;
   };
 
   render () {
