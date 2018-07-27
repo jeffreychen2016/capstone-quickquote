@@ -10,6 +10,7 @@ class MyOrder extends React.Component {
   state = {
     orders: [],
     radionButtonClicked: '0',
+    orderTotal: 0,
   }
 
   componentDidMount () {
@@ -38,31 +39,31 @@ class MyOrder extends React.Component {
       });
   };
 
-  calculateOrderTotal = (row) => {
-    const total = new Promise((resolve,reject) => {
-      const rowTotals = [];
-      orderItemRequests.getAllOrderItemsForGivenOrderNumber(row.id)
-        .then((soitems) => {
-          soitems.map((soitem) => {
-            itemRequests.getAllOrderItemsBasedOnItemId(soitem.itemid)
-              .then((item) => {
-                const rowTotal = item.price * soitem.quantity;
-                rowTotals.push(rowTotal);
-                rowTotals.reduce((a, b) => {
-                  resolve(a + b);
-                });
-              });
-          });
-        })
-        .catch((err) => {
-          console.error('Error with getting all soitems:', err);
-        });
-    });
-    total
-      .then((orderTotal) => {
-        this.setState({orderTotal});
-      });
-  };
+  // calculateOrderTotal = (row) => {
+  //   const total = new Promise((resolve,reject) => {
+  //     const rowTotals = [];
+  //     orderItemRequests.getAllOrderItemsForGivenOrderNumber(row.id)
+  //       .then((soitems) => {
+  //         soitems.map((soitem) => {
+  //           itemRequests.getAllOrderItemsBasedOnItemId(soitem.itemid)
+  //             .then((item) => {
+  //               const rowTotal = item.price * soitem.quantity;
+  //               rowTotals.push(rowTotal);
+  //               rowTotals.reduce((a, b) => {
+  //                 resolve(a + b);
+  //               });
+  //             });
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.error('Error with getting all soitems:', err);
+  //       });
+  //   });
+  //   total
+  //     .then((orderTotal) => {
+  //       this.setState({orderTotal});
+  //     });
+  // };
 
   test = () => {
     return '1';
@@ -75,8 +76,7 @@ class MyOrder extends React.Component {
         <tr key={i}>
           <td>ES{row.id}</td>
           <td>{row.date}</td>
-          <td></td>
-          {/* <td>{this.calculateOrderTotal(row)}</td> */}
+          {/* <td>{this.state.orderTotal}</td> */}
           {/* <td>{this.test()}</td> */}
 
           {
@@ -114,22 +114,34 @@ class MyOrder extends React.Component {
   // deleteOrder = (e) => {
   //   const orderId = e.target.dataset.deleteorder;
   //   orderRequests.deleteOrder(orderId)
-  //     .then((res) => {
-  //       orderItemRequests.deleteOrderItems(orderId)
-  //         .then(() => {
-  //           this.getAllEstimates();
-  //         });
+  //     .then(() => {
+  //       this.getAllEstimates();
   //     })
   //     .catch((err) => {
   //       console.error('Error deleting order:', err);
   //     });
   // };
 
+  // in order to delete all 3 collections
+  // need to get the id for each record back first
+  // then delete the record based on the returned id
   deleteOrder = (e) => {
     const orderId = e.target.dataset.deleteorder;
     orderRequests.deleteOrder(orderId)
       .then(() => {
-        this.getAllEstimates();
+        orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
+          .then((soitems) => {
+            soitems.map((soitem) => {
+              orderItemRequests.deleteOrderItems(soitem.id)
+                .then(() => {
+                  itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+                    .then((item) => {
+                      console.error('item:',item);
+                    });
+                });
+            });
+          });
+        // this.getAllEstimates();
       })
       .catch((err) => {
         console.error('Error deleting order:', err);

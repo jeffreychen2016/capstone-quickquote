@@ -164,7 +164,7 @@ class OrderTable extends React.Component {
           const tempItem = {...item};
           delete tempItem.amount;
           delete tempItem.quantity;
-          itemRequests.postOrderItem(tempItem)
+          itemRequests.postItem(tempItem)
             .then((itemKey) => {
               const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
               orderItemRequests.postOrderItem(orderItem)
@@ -191,9 +191,10 @@ class OrderTable extends React.Component {
         const itemsToPost = this.cleanOrderObjectForPosting();
         itemsToPost.map((item) => {
           const tempItem = {...item};
+
           delete tempItem.amount;
           delete tempItem.quantity;
-          itemRequests.postOrderItem(tempItem)
+          itemRequests.postItem(tempItem)
             .then((itemKey) => {
               const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
               orderItemRequests.postOrderItem(orderItem)
@@ -212,6 +213,7 @@ class OrderTable extends React.Component {
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
     const cleanOrder = tempOnOrder.filter(value => value.code !== '');
+    console.error('cleanOrder:',cleanOrder);
     return cleanOrder;
   };
 

@@ -19,14 +19,16 @@ const getAllOrderItemsForGivenOrderNumber = (soid) => {
     axios
       .get(`${constants.firebaseConfig.databaseURL}/soitem.json?orderBy="soid"&equalTo="${soid}"`)
       .then(res => {
-        const orders = [];
+        const soitems = [];
         if (res.data !== null) {
+          console.error(Object.keys(res.data));
           Object.keys(res.data).forEach(fbKey => {
+            console.error(res.data[fbKey]);
             res.data[fbKey].id = fbKey;
-            orders.push(res.data[fbKey]);
+            soitems.push(res.data[fbKey]);
           });
         }
-        resolve(orders);
+        resolve(soitems);
       })
       .catch(err => {
         reject(err);
@@ -34,10 +36,10 @@ const getAllOrderItemsForGivenOrderNumber = (soid) => {
   });
 };
 
-const deleteOrderItems = (soid) => {
+const deleteOrderItems = (soitemid) => {
   return new Promise((resolve,reject) => {
     axios
-      .delete(`${constants.firebaseConfig.databaseURL}/soitem?orderBy="soid"&equalTo="${soid}"`)
+      .delete(`${constants.firebaseConfig.databaseURL}/soitem/${soitemid}.json`)
       .then((res) => {
         resolve(res);
       })
