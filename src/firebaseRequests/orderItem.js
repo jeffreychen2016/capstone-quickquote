@@ -21,7 +21,6 @@ const getAllOrderItemsForGivenOrderNumber = (soid) => {
       .then(res => {
         const soitems = [];
         if (res.data !== null) {
-          console.error(Object.keys(res.data));
           Object.keys(res.data).forEach(fbKey => {
             console.error(res.data[fbKey]);
             res.data[fbKey].id = fbKey;
@@ -47,6 +46,6 @@ const deleteOrderItems = (soitemid) => {
         reject(err);
       });
   });
-}
+};
 
 export default { postOrderItem, getAllOrderItemsForGivenOrderNumber, deleteOrderItems };

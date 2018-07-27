@@ -14,6 +14,13 @@ const postItem = (newItem) => {
   });
 };
 
+// becuase of item/${itemid}.json returns objct key (stuffs inside of -jdhfsfdlsjfxh)
+// if still doing:
+//  Object.keys(res.data).forEach(fbKey => {
+//   res.data[fbKey].id = fbKey;
+//   orders.push(res.data[fbKey]);
+//  });
+// it will try to pull id on "code", which will then throw error
 const getAllItemsBasedOnItemId = (itemid) => {
   return new Promise((resolve, reject) => {
     axios
@@ -21,12 +28,8 @@ const getAllItemsBasedOnItemId = (itemid) => {
       .then(res => {
         const items = [];
         if (res.data !== null) {
-          console.error(res.data);
-          Object.keys(res.data).forEach(fbKey => {
-            console.error(res.data[fbKey]);
-            res.data[fbKey].id = fbKey;
-            items.push(res.data[fbKey]);
-          });
+          res.data.id = itemid;
+          items.push(res.data);
         }
         resolve(items);
       })
@@ -36,4 +39,17 @@ const getAllItemsBasedOnItemId = (itemid) => {
   });
 };
 
-export default {postItem, getAllItemsBasedOnItemId};
+const deleteItems = (itemid) => {
+  return new Promise((resolve,reject) => {
+    axios
+      .delete(`${constants.firebaseConfig.databaseURL}/item/${itemid}.json`)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export default {postItem, getAllItemsBasedOnItemId,deleteItems};

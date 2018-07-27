@@ -135,13 +135,17 @@ class MyOrder extends React.Component {
               orderItemRequests.deleteOrderItems(soitem.id)
                 .then(() => {
                   itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
-                    .then((item) => {
-                      console.error('item:',item);
+                    .then((items) => {
+                      items.map((item) => {
+                        itemRequests.deleteItems(item.id)
+                          .then(() => {
+                            this.getAllEstimates();
+                          });
+                      });
                     });
                 });
             });
           });
-        // this.getAllEstimates();
       })
       .catch((err) => {
         console.error('Error deleting order:', err);
