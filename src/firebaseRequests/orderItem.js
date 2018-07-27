@@ -34,4 +34,17 @@ const getAllOrderItemsForGivenOrderNumber = (soid) => {
   });
 };
 
-export default { postOrderItem, getAllOrderItemsForGivenOrderNumber };
+const deleteOrderItems = (soid) => {
+  return new Promise((resolve,reject) => {
+    axios
+      .delete(`${constants.firebaseConfig.databaseURL}/soitem?orderBy="soid"&equalTo="${soid}"`)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export default { postOrderItem, getAllOrderItemsForGivenOrderNumber, deleteOrderItems };

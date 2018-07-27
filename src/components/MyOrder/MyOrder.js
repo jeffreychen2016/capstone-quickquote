@@ -12,7 +12,7 @@ class MyOrder extends React.Component {
     radionButtonClicked: '0',
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.getAllEstimates();
   };
 
@@ -39,23 +39,28 @@ class MyOrder extends React.Component {
   };
 
   calculateOrderTotal = (row) => {
-    const rowTotals = [];
-    let orderTotalAmount = 0;
-    orderItemRequests.getAllOrderItemsForGivenOrderNumber(row.id)
-      .then((soitems) => {
-        soitems.map((soitem) => {
-          itemRequests.getAllOrderItemsBasedOnItemId(soitem.itemid)
-            .then((item) => {
-              const rowTotal = item.price * soitem.quantity;
-              rowTotals.push(rowTotal);
-              orderTotalAmount = rowTotals.reduce((a, b) => {
-                return a + b;
+    const total = new Promise((resolve,reject) => {
+      const rowTotals = [];
+      orderItemRequests.getAllOrderItemsForGivenOrderNumber(row.id)
+        .then((soitems) => {
+          soitems.map((soitem) => {
+            itemRequests.getAllOrderItemsBasedOnItemId(soitem.itemid)
+              .then((item) => {
+                const rowTotal = item.price * soitem.quantity;
+                rowTotals.push(rowTotal);
+                rowTotals.reduce((a, b) => {
+                  resolve(a + b);
+                });
               });
-            });
+          });
+        })
+        .catch((err) => {
+          console.error('Error with getting all soitems:', err);
         });
-      })
-      .catch((err) => {
-        console.error('Error with getting all soitems:', err);
+    });
+    total
+      .then((orderTotal) => {
+        this.setState({orderTotal});
       });
   };
 
@@ -70,7 +75,8 @@ class MyOrder extends React.Component {
         <tr key={i}>
           <td>ES{row.id}</td>
           <td>{row.date}</td>
-          <td>{this.calculateOrderTotal(row)}</td>
+          <td></td>
+          {/* <td>{this.calculateOrderTotal(row)}</td> */}
           {/* <td>{this.test()}</td> */}
 
           {
@@ -87,10 +93,10 @@ class MyOrder extends React.Component {
                 >Place Order</button>
               </td>
             ) : (
-                <td>
-                  <button>View</button>
-                </td>
-              )
+              <td>
+                <button>View</button>
+              </td>
+            )
           }
         </tr>
       );
@@ -104,6 +110,20 @@ class MyOrder extends React.Component {
     this.setState({ radionButtonClicked: e.target.value });
     this.state.radionButtonClicked === '1' ? (this.getAllEstimates()) : (this.getAllSalesOrders());
   }
+
+  // deleteOrder = (e) => {
+  //   const orderId = e.target.dataset.deleteorder;
+  //   orderRequests.deleteOrder(orderId)
+  //     .then((res) => {
+  //       orderItemRequests.deleteOrderItems(orderId)
+  //         .then(() => {
+  //           this.getAllEstimates();
+  //         });
+  //     })
+  //     .catch((err) => {
+  //       console.error('Error deleting order:', err);
+  //     });
+  // };
 
   deleteOrder = (e) => {
     const orderId = e.target.dataset.deleteorder;
@@ -137,7 +157,7 @@ class MyOrder extends React.Component {
     });
   }
 
-  render() {
+  render () {
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>
