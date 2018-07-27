@@ -5,6 +5,8 @@ import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import productRequests from '../../firebaseRequests/product';
 import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
+import itemRequests from '../../firebaseRequests/item';
+import orderItemRequests from '../../firebaseRequests/orderItem';
 import moment from 'moment';
 
 // Note: state should be only used to store varibales
@@ -20,11 +22,23 @@ class OrderTable extends React.Component {
       //   amount: 0,
       // },
     ],
+    soNumber: '',
   }
 
   componentDidMount () {
     this.getAllProducts();
     this.initializeStateOnOrder();
+    this.generateSONumber();
+  };
+
+  generateSONumber = () => {
+    orderRequests.getAllOrdersForSONumber()
+      .then((orders) => {
+        this.setState({soNumber: orders.length});
+      })
+      .catch((err) => {
+        console.error('Error with getting SO:', err);
+      });
   };
 
   getAllProducts = () => {
@@ -123,42 +137,73 @@ class OrderTable extends React.Component {
   // merge order array, userId, shipToAddress,currentDate obeject, and isOrder together
   // orderFlag (uidIsOrder) is created to be used as index in firebase
   // since firebase does not support multi-parameters query
-  mergeObjects = (orderStatusCode) => {
+  constructSOData = (orderStatusCode) => {
     const currentDate = moment().format('YYYY-MM-DD h:m:s a');
     const userId = authRequests.getUserId();
-    const orderToPost = this.cleanOrderObjectForPosting();
-    const shippingAddressToPost = this.props.shipTo;
     const uIdIsOrder = userId + '-' + orderStatusCode;
-    const mergedOrderWithShippingAddress = {
+
+    const so = {
       uid: userId,
-      shippingAddress: shippingAddressToPost,
-      items: orderToPost,
       date: currentDate,
       isOrder: orderStatusCode,
       orderFlag: uIdIsOrder,
+      shipToAddress: this.props.shipTo,
     };
-    return mergedOrderWithShippingAddress;
+    return so;
   };
 
   // update the isOrder to either 1 or 0
   // merge order with shipping address and user id
   // post to database
   saveAsOrder = () => {
-    const mergedOrderWithShippingAddress = this.mergeObjects(1);
-    orderRequests.postOrder(mergedOrderWithShippingAddress)
-      .then((res) => {
-        this.props.redirectToMyOrderAfterPost();
+    const soData = this.constructSOData(1);
+    orderRequests.postOrder(soData)
+      .then((soKey) => {
+        const itemsToPost = this.cleanOrderObjectForPosting();
+        itemsToPost.map((item) => {
+          const tempItem = {...item};
+          delete tempItem.amount;
+          delete tempItem.quantity;
+          itemRequests.postItem(tempItem)
+            .then((itemKey) => {
+              const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+              orderItemRequests.postOrderItem(orderItem)
+                .then(() => {
+                  this.props.redirectToMyOrderAfterPost();
+                  console.error('All Data Posted!');
+                });
+            });
+        });
       })
       .catch((err) => {
         console.error('Errot with posting order to database:',err);
       });
   };
 
+  // the reason to have tempItem is because when post to orderItem
+  // it needs quantity and amount, but item collection itself does not
+  // they are in the same loop, if remove in from "item" parameter
+  // then time.quantity will not have access to the quantity anymore
   saveAsEstimate = () => {
-    const mergedOrderWithShippingAddress = this.mergeObjects(0);
-    orderRequests.postOrder(mergedOrderWithShippingAddress)
-      .then((res) => {
-        this.props.redirectToMyOrderAfterPost();
+    const soData = this.constructSOData(0);
+    orderRequests.postOrder(soData)
+      .then((soKey) => {
+        const itemsToPost = this.cleanOrderObjectForPosting();
+        itemsToPost.map((item) => {
+          const tempItem = {...item};
+
+          delete tempItem.amount;
+          delete tempItem.quantity;
+          itemRequests.postItem(tempItem)
+            .then((itemKey) => {
+              const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+              orderItemRequests.postOrderItem(orderItem)
+                .then(() => {
+                  this.props.redirectToMyOrderAfterPost();
+                  console.error('All Data Posted!');
+                });
+            });
+        });
       })
       .catch((err) => {
         console.error('Errot with posting order to database:',err);
@@ -167,8 +212,9 @@ class OrderTable extends React.Component {
 
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
-    const tempOnOrderAfterFilter = tempOnOrder.filter(value => value.code !== '');
-    return tempOnOrderAfterFilter;
+    const cleanOrder = tempOnOrder.filter(value => value.code !== '');
+    console.error('cleanOrder:',cleanOrder);
+    return cleanOrder;
   };
 
   render () {

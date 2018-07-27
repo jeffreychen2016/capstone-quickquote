@@ -73,7 +73,6 @@ class App extends Component {
   };
 
   render () {
-
     return (
       <div className="App">
         <BrowserRouter>
@@ -100,6 +99,11 @@ class App extends Component {
                     path="/orderform"
                     authed={this.state.authed}
                     component={OrderForm}
+                  />
+                  <PrivateRoute
+                    path="/orderdetail/:id"
+                    authed={this.state.authed}
+                    component={OrderDetail}
                   />
                   <PrivateRoute
                     path="/orderdetail"
