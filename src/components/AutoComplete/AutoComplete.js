@@ -33,6 +33,7 @@ class AutoComplete extends React.Component {
 
   // options data formart: options= {[{ value: 'one', label: 'One' }]}
   render () {
+    // console.error('dropdownValue:',this.props.dropdownValue);
     // const { selectedOption } = this.state;
     return (
       <Select

@@ -159,7 +159,6 @@ class OrderTable extends React.Component {
               orderItemRequests.postOrderItem(orderItem)
                 .then(() => {
                   this.props.redirectToMyOrderAfterPost();
-                  console.error('All Data Posted!');
                 });
             });
         });
@@ -189,7 +188,6 @@ class OrderTable extends React.Component {
               orderItemRequests.postOrderItem(orderItem)
                 .then(() => {
                   this.props.redirectToMyOrderAfterPost();
-                  console.error('All Data Posted!');
                 });
             });
         });
@@ -202,11 +200,11 @@ class OrderTable extends React.Component {
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
     const cleanOrder = tempOnOrder.filter(value => value.code !== '');
-    console.error('cleanOrder:',cleanOrder);
     return cleanOrder;
   };
 
   render () {
+    // console.error(this.props);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>

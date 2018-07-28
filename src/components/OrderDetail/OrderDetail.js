@@ -85,7 +85,7 @@ class OrderDetail extends React.Component {
   };
 
   render () {
-    // console.error(this.state.so.shipTo);
+    console.error(this.state.so);
     const orderNumber = this.props.match.params.id;
     return (
       <div className="OrderDetail">
@@ -111,7 +111,9 @@ class OrderDetail extends React.Component {
             contactChange={this.contactChange}
           />) : ('')}
         <h2>Order Table</h2>
-        <OrderTable />
+        <OrderTable
+          dropdownValue={'test'}
+        />
       </div>
     );
   };
