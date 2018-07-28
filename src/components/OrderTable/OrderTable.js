@@ -244,9 +244,8 @@ class OrderTable extends React.Component {
         console.error('Error deleting order:', err);
       });
 
-    // post changes
+    // post order table changes
     const itemsToPost = this.cleanOrderObjectForPosting();
-    console.error(itemsToPost);
     itemsToPost.map((item) => {
       const tempItem = {...item};
       delete tempItem.amount;
@@ -264,6 +263,22 @@ class OrderTable extends React.Component {
           console.error('Error posting changed order:', err);
         });;
     });
+
+    // post update ship to address
+    const newShipTo = {...this.props.shipTo};
+    orderRequests.getSigngeOrder(orderId)
+      .then((order) => {
+        console.error(order);
+        const tempOrder = {...order};
+        tempOrder.shipTo = newShipTo;
+        orderRequests.updateOrderShipTo(orderId,tempOrder)
+          .then(() => {
+            console.error('updated!');
+          });
+      })
+      .catch(() => {
+
+      });
   }
 
   cleanOrderObjectForPosting = () => {
@@ -273,6 +288,7 @@ class OrderTable extends React.Component {
   };
 
   render () {
+    console.error(this.props.shipTo);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>

@@ -123,6 +123,7 @@ class OrderDetail extends React.Component {
           orderId={this.props.match.params.id}
           componentFrom={this.state.componentFrom}
           redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
+          shipTo={this.state.so.shipTo}
         />
       </div>
     );
