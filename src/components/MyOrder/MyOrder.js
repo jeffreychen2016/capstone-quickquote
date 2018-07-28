@@ -177,7 +177,6 @@ class MyOrder extends React.Component {
   }
 
   render () {
-    console.error(this.state.orders);
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>

@@ -41,15 +41,40 @@ class OrderTable extends React.Component {
   };
 
   initializeStateOnOrder = () => {
-    for (let i = 0; i < 10; i++)
-      this.state.onOrder.push(
-        {
-          code: '',
-          description: '',
-          quantity: 0,
-          price: 0,
-          amount: 0,
+    if (this.props.componentFrom === 'OrderDetail') {
+      const orderNumber = this.props.orderId;
+      const items = [];
+      orderRequests.getSigngeOrder(orderNumber)
+        .then((so) => {
+          this.setState({so});
+          orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderNumber)
+            .then((soitems) => {
+              soitems.map((soitem) => {
+                itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+                  .then((item) => {
+                    item[0].quantity = soitem.quantity;
+                    item[0].amount = soitem.amount;
+                    items.push(item[0]);
+                    this.setState({onOrder: items});
+                  });
+              });
+            });
+        })
+        .catch((err) => {
+          console.error('Error with getting single order:', err);
         });
+    } else {
+      for (let i = 0; i < 10; i++) {
+        this.state.onOrder.push(
+          {
+            code: '',
+            description: '',
+            quantity: 0,
+            price: 0,
+            amount: 0,
+          });
+      };
+    }
   };
 
   matchProductDescription = (selectedOption,id) => {
@@ -204,13 +229,12 @@ class OrderTable extends React.Component {
   };
 
   render () {
-    // console.error(this.props);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
           <td>
             <AutoComplete
-              dropdownValue={this.state.onOrder[i].code}
+              dropdownValue={row.code}
               auntoCompleteRowId={i}
               products={this.state.products}
               updateOnOrderCode={this.updateOnOrderCode}
