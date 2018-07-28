@@ -88,6 +88,10 @@ class OrderDetail extends React.Component {
     this.setState({ so: tempSO });
   };
 
+  redirectToMyOrderAfterPost = () => {
+    this.props.history.push('/myorder');
+  };
+
   render () {
     const orderNumber = this.props.match.params.id;
     return (
@@ -117,6 +121,7 @@ class OrderDetail extends React.Component {
         <OrderTable
           orderId={this.props.match.params.id}
           componentFrom={this.state.componentFrom}
+          redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
         />
       </div>
     );

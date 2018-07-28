@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './OrderTable.css';
 import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
@@ -143,7 +143,6 @@ class OrderTable extends React.Component {
       quantity: 0,
       price: 0,
       amount: 0,
-      action: '',
     });
     this.setState({onOrder: tempOnOrder});
   };
@@ -222,6 +221,48 @@ class OrderTable extends React.Component {
       });
   };
 
+  saveChanges = () => {
+    const orderId = this.props.orderId;
+    // delete all this so related records in soitem and item collection
+    orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
+      .then((soitems) => {
+        soitems.map((soitem) => {
+          orderItemRequests.deleteOrderItems(soitem.id)
+            .then(() => {
+              itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+                .then((items) => {
+                  items.map((item) => {
+                    itemRequests.deleteItems(item.id)
+                      .then(() => {
+                      });
+                  });
+                });
+            });
+        });
+      })
+      .catch((err) => {
+        console.error('Error deleting order:', err);
+      });
+
+    // post changes
+    const itemsToPost = this.cleanOrderObjectForPosting();
+    console.error(itemsToPost);
+    itemsToPost.map((item) => {
+      const tempItem = {...item};
+      delete tempItem.amount;
+      delete tempItem.quantity;
+      delete tempItem.id;
+      itemRequests.postItem(tempItem)
+        .then((itemKey) => {
+          const orderItem = {soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+          orderItemRequests.postOrderItem(orderItem)
+            .then(() => {
+              this.props.redirectToMyOrderAfterPost();
+            });
+        });
+    });
+  }
+
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
     const cleanOrder = tempOnOrder.filter(value => value.code !== '');
@@ -297,8 +338,16 @@ class OrderTable extends React.Component {
             </tr>
           </tfoot>
         </Table>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
+        {
+          this.props.componentFrom === 'OrderDetail' ? (
+            <button type="button" className="btn btn-lg btn-primary" onClick={this.saveChanges}>Save Changes</button>
+          ) : (
+            <Fragment>
+              <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
+              <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
+            </Fragment>
+          )
+        }
       </div>
     );
   }
