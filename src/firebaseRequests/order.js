@@ -34,19 +34,12 @@ const getAllOrders = (orderFlag) => {
   });
 };
 
-const getAllOrdersForSONumber = (orderFlag) => {
+const getSigngeOrder = (orderId) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${constants.firebaseConfig.databaseURL}/so.json`)
+      .get(`${constants.firebaseConfig.databaseURL}/so/${orderId}.json`)
       .then(res => {
-        const orders = [];
-        if (res.data !== null) {
-          Object.keys(res.data).forEach(fbKey => {
-            res.data[fbKey].id = fbKey;
-            orders.push(res.data[fbKey]);
-          });
-        }
-        resolve(orders);
+        resolve(res.data);
       })
       .catch(err => {
         reject(err);
@@ -80,4 +73,4 @@ const updateOrderStatus = (orderId,updatedOrder) => {
   });
 };
 
-export default {postOrder, getAllOrders, deleteOrder, updateOrderStatus, getAllOrdersForSONumber};
+export default {postOrder, getAllOrders, deleteOrder, updateOrderStatus, getSigngeOrder};

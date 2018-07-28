@@ -28,17 +28,6 @@ class OrderTable extends React.Component {
   componentDidMount () {
     this.getAllProducts();
     this.initializeStateOnOrder();
-    this.generateSONumber();
-  };
-
-  generateSONumber = () => {
-    orderRequests.getAllOrdersForSONumber()
-      .then((orders) => {
-        this.setState({soNumber: orders.length});
-      })
-      .catch((err) => {
-        console.error('Error with getting SO:', err);
-      });
   };
 
   getAllProducts = () => {
@@ -147,7 +136,7 @@ class OrderTable extends React.Component {
       date: currentDate,
       isOrder: orderStatusCode,
       orderFlag: uIdIsOrder,
-      shipToAddress: this.props.shipTo,
+      shipTo: this.props.shipTo,
     };
     return so;
   };
@@ -170,7 +159,6 @@ class OrderTable extends React.Component {
               orderItemRequests.postOrderItem(orderItem)
                 .then(() => {
                   this.props.redirectToMyOrderAfterPost();
-                  console.error('All Data Posted!');
                 });
             });
         });
@@ -200,7 +188,6 @@ class OrderTable extends React.Component {
               orderItemRequests.postOrderItem(orderItem)
                 .then(() => {
                   this.props.redirectToMyOrderAfterPost();
-                  console.error('All Data Posted!');
                 });
             });
         });
@@ -213,11 +200,11 @@ class OrderTable extends React.Component {
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
     const cleanOrder = tempOnOrder.filter(value => value.code !== '');
-    console.error('cleanOrder:',cleanOrder);
     return cleanOrder;
   };
 
   render () {
+    // console.error(this.props);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>

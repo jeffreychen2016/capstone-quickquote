@@ -10,7 +10,6 @@ class MyOrder extends React.Component {
   state = {
     orders: [],
     radionButtonClicked: '0',
-    orderTotal: 0,
   }
 
   componentDidMount () {
@@ -22,6 +21,7 @@ class MyOrder extends React.Component {
     orderRequests.getAllOrders(orderFlag)
       .then((allEstimates) => {
         this.setState({ orders: allEstimates });
+        this.calculateOrderTotal();
       })
       .catch((err) => {
         console.error('Error with getting all estimates:', err);
@@ -33,37 +33,39 @@ class MyOrder extends React.Component {
     orderRequests.getAllOrders(orderFlag)
       .then((allSalesOrders) => {
         this.setState({ orders: allSalesOrders });
+        this.calculateOrderTotal();
       })
       .catch((err) => {
         console.error('Error with getting all sales orders:', err);
       });
   };
 
-  // calculateOrderTotal = (row) => {
-  //   const total = new Promise((resolve,reject) => {
-  //     const rowTotals = [];
-  //     orderItemRequests.getAllOrderItemsForGivenOrderNumber(row.id)
-  //       .then((soitems) => {
-  //         soitems.map((soitem) => {
-  //           itemRequests.getAllOrderItemsBasedOnItemId(soitem.itemid)
-  //             .then((item) => {
-  //               const rowTotal = item.price * soitem.quantity;
-  //               rowTotals.push(rowTotal);
-  //               rowTotals.reduce((a, b) => {
-  //                 resolve(a + b);
-  //               });
-  //             });
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         console.error('Error with getting all soitems:', err);
-  //       });
-  //   });
-  //   total
-  //     .then((orderTotal) => {
-  //       this.setState({orderTotal});
-  //     });
-  // };
+  calculateOrderTotal = () => {
+    this.state.orders.map((order, i) => {
+      const rowTotals = [];
+      let orderTotal = 0;
+      orderItemRequests.getAllOrderItemsForGivenOrderNumber(order.id)
+        .then((soitems) => {
+          soitems.map((soitem) => {
+            itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+              .then((item) => {
+                const rowTotal = item[0].price * (soitem.quantity * 1);
+                rowTotals.push(rowTotal);
+                orderTotal = rowTotals.reduce((a, b) => {
+                  return a + b;
+                });
+                // assigning total to the orders in state
+                const tempOrders = [...this.state.orders];
+                tempOrders[i].total = orderTotal;
+                this.setState({orders: tempOrders});
+              });
+          });
+        })
+        .catch((err) => {
+          console.error('Error with getting all soitems:', err);
+        });
+    });
+  };
 
   test = () => {
     return '1';
@@ -71,30 +73,31 @@ class MyOrder extends React.Component {
 
   // row.id will return firebase id
   renderSelectedOrders = () => {
-    const allMyOrdersComponent = this.state.orders.map((row, i) => {
+    const allMyOrdersComponent = this.state.orders.map((order, i) => {
+      const viewDetailClickEvent = () => {
+        this.props.history.push(`/orderdetail/${order.id}`);
+      };
       return (
         <tr key={i}>
-          <td>ES{row.id}</td>
-          <td>{row.date}</td>
-          {/* <td>{this.state.orderTotal}</td> */}
-          {/* <td>{this.test()}</td> */}
-
+          <td>ES{order.id}</td>
+          <td>{order.date}</td>
+          <td>{order.total}</td>
           {
             this.state.radionButtonClicked === '0' ? (
               <td>
                 <button
-                  data-deleteorder={row.id}
+                  data-deleteorder={order.id}
                   onClick={this.deleteOrder}
                 >Delete</button>
-                <button>View</button>
+                <button onClick={viewDetailClickEvent}>View</button>
                 <button
-                  data-updateorder={row.id}
+                  data-updateorder={order.id}
                   onClick={this.placeOrder}
                 >Place Order</button>
               </td>
             ) : (
               <td>
-                <button>View</button>
+                <button onClick={viewDetailClickEvent}>View</button>
               </td>
             )
           }
@@ -174,6 +177,7 @@ class MyOrder extends React.Component {
   }
 
   render () {
+    console.error(this.state.orders);
     return (
       <div className="MyOrder">
         <h2>MyOrder</h2>
