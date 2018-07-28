@@ -72,10 +72,15 @@ class MyOrder extends React.Component {
   // row.id will return firebase id
   renderSelectedOrders = () => {
     const allMyOrdersComponent = this.state.orders.map((row, i) => {
+      const viewDetailClickEvent = () => {
+        console.error(row.id);
+        this.props.history.push(`/orderdetail/${row.id}`);
+      };
       return (
         <tr key={i}>
           <td>ES{row.id}</td>
           <td>{row.date}</td>
+          <td></td>
           {/* <td>{this.state.orderTotal}</td> */}
           {/* <td>{this.test()}</td> */}
 
@@ -86,7 +91,7 @@ class MyOrder extends React.Component {
                   data-deleteorder={row.id}
                   onClick={this.deleteOrder}
                 >Delete</button>
-                <button>View</button>
+                <button onClick={viewDetailClickEvent}>View</button>
                 <button
                   data-updateorder={row.id}
                   onClick={this.placeOrder}
@@ -94,7 +99,7 @@ class MyOrder extends React.Component {
               </td>
             ) : (
               <td>
-                <button>View</button>
+                <button onClick={viewDetailClickEvent}>View</button>
               </td>
             )
           }

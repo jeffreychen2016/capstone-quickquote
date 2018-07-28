@@ -28,17 +28,6 @@ class OrderTable extends React.Component {
   componentDidMount () {
     this.getAllProducts();
     this.initializeStateOnOrder();
-    this.generateSONumber();
-  };
-
-  generateSONumber = () => {
-    orderRequests.getAllOrdersForSONumber()
-      .then((orders) => {
-        this.setState({soNumber: orders.length});
-      })
-      .catch((err) => {
-        console.error('Error with getting SO:', err);
-      });
   };
 
   getAllProducts = () => {
@@ -147,7 +136,7 @@ class OrderTable extends React.Component {
       date: currentDate,
       isOrder: orderStatusCode,
       orderFlag: uIdIsOrder,
-      shipToAddress: this.props.shipTo,
+      shipTo: this.props.shipTo,
     };
     return so;
   };

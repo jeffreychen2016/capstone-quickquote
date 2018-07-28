@@ -105,11 +105,11 @@ class App extends Component {
                     authed={this.state.authed}
                     component={OrderDetail}
                   />
-                  <PrivateRoute
+                  {/* <PrivateRoute
                     path="/orderdetail"
                     authed={this.state.authed}
                     component={OrderDetail}
-                  />
+                  /> */}
                   <PrivateRoute
                     path="/buyerprofile"
                     authed={this.state.authed}
