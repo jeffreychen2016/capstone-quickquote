@@ -2,6 +2,7 @@ import React from 'react';
 import './OrderDetail.css';
 import orderRequests from '../../firebaseRequests/order';
 import ShipToForm from '../../components/ShipToForm/ShipToForm';
+import OrderTable from '../../components/OrderTable/OrderTable';
 
 class OrderDetail extends React.Component {
   state = {
@@ -109,6 +110,8 @@ class OrderDetail extends React.Component {
             faxNumberChange={this.faxNumberChange}
             contactChange={this.contactChange}
           />) : ('')}
+        <h2>Order Table</h2>
+        <OrderTable />
       </div>
     );
   };
