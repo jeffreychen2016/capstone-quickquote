@@ -259,7 +259,10 @@ class OrderTable extends React.Component {
             .then(() => {
               this.props.redirectToMyOrderAfterPost();
             });
-        });
+        })
+        .catch((err) => {
+          console.error('Error posting changed order:', err);
+        });;
     });
   }
 

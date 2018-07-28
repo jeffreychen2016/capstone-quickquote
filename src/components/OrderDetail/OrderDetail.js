@@ -116,8 +116,9 @@ class OrderDetail extends React.Component {
             phoneNumberChange={this.phoneNumberChange}
             faxNumberChange={this.faxNumberChange}
             contactChange={this.contactChange}
+            componentFrom={this.state.componentFrom}
           />) : ('')}
-        <h2>Order Table</h2>
+        {/* <h2>Order Table</h2> */}
         <OrderTable
           orderId={this.props.match.params.id}
           componentFrom={this.state.componentFrom}
