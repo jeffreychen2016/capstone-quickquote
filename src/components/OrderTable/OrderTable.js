@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './OrderTable.css';
 import { Table } from 'react-bootstrap';
 import AutoComplete from '../../components/AutoComplete/AutoComplete';
@@ -41,15 +41,40 @@ class OrderTable extends React.Component {
   };
 
   initializeStateOnOrder = () => {
-    for (let i = 0; i < 10; i++)
-      this.state.onOrder.push(
-        {
-          code: '',
-          description: '',
-          quantity: 0,
-          price: 0,
-          amount: 0,
+    if (this.props.componentFrom === 'OrderDetail') {
+      const orderNumber = this.props.orderId;
+      const items = [];
+      orderRequests.getSigngeOrder(orderNumber)
+        .then((so) => {
+          this.setState({so});
+          orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderNumber)
+            .then((soitems) => {
+              soitems.map((soitem) => {
+                itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+                  .then((item) => {
+                    item[0].quantity = soitem.quantity;
+                    item[0].amount = soitem.amount;
+                    items.push(item[0]);
+                    this.setState({onOrder: items});
+                  });
+              });
+            });
+        })
+        .catch((err) => {
+          console.error('Error with getting single order:', err);
         });
+    } else {
+      for (let i = 0; i < 10; i++) {
+        this.state.onOrder.push(
+          {
+            code: '',
+            description: '',
+            quantity: 0,
+            price: 0,
+            amount: 0,
+          });
+      };
+    }
   };
 
   matchProductDescription = (selectedOption,id) => {
@@ -118,7 +143,6 @@ class OrderTable extends React.Component {
       quantity: 0,
       price: 0,
       amount: 0,
-      action: '',
     });
     this.setState({onOrder: tempOnOrder});
   };
@@ -197,6 +221,66 @@ class OrderTable extends React.Component {
       });
   };
 
+  saveChanges = () => {
+    const orderId = this.props.orderId;
+    // delete all this so related records in soitem and item collection
+    orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
+      .then((soitems) => {
+        soitems.map((soitem) => {
+          orderItemRequests.deleteOrderItems(soitem.id)
+            .then(() => {
+              itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+                .then((items) => {
+                  items.map((item) => {
+                    itemRequests.deleteItems(item.id)
+                      .then(() => {
+                      });
+                  });
+                });
+            });
+        });
+      })
+      .catch((err) => {
+        console.error('Error deleting order:', err);
+      });
+
+    // post order table changes
+    const itemsToPost = this.cleanOrderObjectForPosting();
+    itemsToPost.map((item) => {
+      const tempItem = {...item};
+      delete tempItem.amount;
+      delete tempItem.quantity;
+      delete tempItem.id;
+      itemRequests.postItem(tempItem)
+        .then((itemKey) => {
+          const orderItem = {soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+          orderItemRequests.postOrderItem(orderItem)
+            .then(() => {
+              this.props.redirectToMyOrderAfterPost();
+            });
+        })
+        .catch((err) => {
+          console.error('Error posting changed order:', err);
+        });;
+    });
+
+    // post update ship to address
+    const newShipTo = {...this.props.shipTo};
+    orderRequests.getSigngeOrder(orderId)
+      .then((order) => {
+        console.error(order);
+        const tempOrder = {...order};
+        tempOrder.shipTo = newShipTo;
+        orderRequests.updateOrderShipTo(orderId,tempOrder)
+          .then(() => {
+            console.error('updated!');
+          });
+      })
+      .catch(() => {
+
+      });
+  }
+
   cleanOrderObjectForPosting = () => {
     const tempOnOrder = [...this.state.onOrder];
     const cleanOrder = tempOnOrder.filter(value => value.code !== '');
@@ -204,13 +288,13 @@ class OrderTable extends React.Component {
   };
 
   render () {
-    // console.error(this.props);
+    console.error(this.props.shipTo);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
           <td>
             <AutoComplete
-              dropdownValue={this.state.onOrder[i].code}
+              dropdownValue={row.code}
               auntoCompleteRowId={i}
               products={this.state.products}
               updateOnOrderCode={this.updateOnOrderCode}
@@ -273,8 +357,16 @@ class OrderTable extends React.Component {
             </tr>
           </tfoot>
         </Table>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
+        {
+          this.props.componentFrom === 'OrderDetail' ? (
+            <button type="button" className="btn btn-lg btn-primary" onClick={this.saveChanges}>Save Changes</button>
+          ) : (
+            <Fragment>
+              <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
+              <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
+            </Fragment>
+          )
+        }
       </div>
     );
   }

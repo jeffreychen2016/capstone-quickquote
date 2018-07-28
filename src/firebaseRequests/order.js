@@ -73,4 +73,17 @@ const updateOrderStatus = (orderId,updatedOrder) => {
   });
 };
 
-export default {postOrder, getAllOrders, deleteOrder, updateOrderStatus, getSigngeOrder};
+const updateOrderShipTo = (orderId,updatedAddress) => {
+  return new Promise((resolve,reject) => {
+    axios
+      .put(`${constants.firebaseConfig.databaseURL}/so/${orderId}.json`,updatedAddress)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export default {postOrder, getAllOrders, deleteOrder, updateOrderStatus, getSigngeOrder, updateOrderShipTo};

@@ -3,10 +3,14 @@ import './OrderDetail.css';
 import orderRequests from '../../firebaseRequests/order';
 import ShipToForm from '../../components/ShipToForm/ShipToForm';
 import OrderTable from '../../components/OrderTable/OrderTable';
+import itemRequests from '../../firebaseRequests/item';
+import orderItemRequests from '../../firebaseRequests/orderItem';
 
 class OrderDetail extends React.Component {
   state = {
     so: {},
+    // items: [],
+    componentFrom: 'OrderDetail',
   };
 
   componentDidMount () {
@@ -84,8 +88,11 @@ class OrderDetail extends React.Component {
     this.setState({ so: tempSO });
   };
 
+  redirectToMyOrderAfterPost = () => {
+    this.props.history.push('/myorder');
+  };
+
   render () {
-    console.error(this.state.so);
     const orderNumber = this.props.match.params.id;
     return (
       <div className="OrderDetail">
@@ -109,10 +116,14 @@ class OrderDetail extends React.Component {
             phoneNumberChange={this.phoneNumberChange}
             faxNumberChange={this.faxNumberChange}
             contactChange={this.contactChange}
+            componentFrom={this.state.componentFrom}
           />) : ('')}
-        <h2>Order Table</h2>
+        {/* <h2>Order Table</h2> */}
         <OrderTable
-          dropdownValue={'test'}
+          orderId={this.props.match.params.id}
+          componentFrom={this.state.componentFrom}
+          redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
+          shipTo={this.state.so.shipTo}
         />
       </div>
     );

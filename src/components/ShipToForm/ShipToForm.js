@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './ShipToForm.css';
 
 class ShipToForm extends React.Component {
   render () {
     return (
       <div>
-        <h2 className="col-sm-4">Ship To</h2>
-        <div className="col-sm-6" id="ship-to-checkbox-container">
-          <input
-            type="checkbox"
-            id="ship-to-checkbox"
-            onChange={this.props.sameAsAboveClick}
-          />
-          <label htmlFor="ship-to-checkbox">Same as above</label>
-        </div>
+        {
+          this.props.componentFrom === 'OrderDetail' ? (
+            <Fragment>
+              <div className="col-sm-12" id="ship-to-checkbox-container"></div>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <h2 className="col-sm-4">Ship To</h2>
+              <div className="col-sm-6" id="ship-to-checkbox-container">
+                <input
+                  type="checkbox"
+                  id="ship-to-checkbox"
+                  onChange={this.props.sameAsAboveClick}
+                />
+                <label htmlFor="ship-to-checkbox">Same as above</label>
+              </div>
+            </Fragment>
+          )
+        }
         <form className="form-horizontal col-sm-12">
           <div className="form-group">
             <label htmlFor="buyer-company" className="col-sm-4 control-label">

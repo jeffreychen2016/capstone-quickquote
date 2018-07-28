@@ -22,7 +22,6 @@ const getAllOrderItemsForGivenOrderNumber = (soid) => {
         const soitems = [];
         if (res.data !== null) {
           Object.keys(res.data).forEach(fbKey => {
-            console.error(res.data[fbKey]);
             res.data[fbKey].id = fbKey;
             soitems.push(res.data[fbKey]);
           });
