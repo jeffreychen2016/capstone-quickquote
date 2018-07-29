@@ -93,7 +93,6 @@ class OrderDetail extends React.Component {
   };
 
   render () {
-    console.error('test:',this.props.match.params.id);
     const orderNumber = this.props.match.params.id;
     return (
       <div className="OrderDetail">

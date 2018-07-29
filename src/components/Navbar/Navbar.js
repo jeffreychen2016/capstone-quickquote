@@ -39,7 +39,7 @@ class Navbar extends React.Component {
                       <Link to="/myorder">My Orders</Link>
                     </li>
                     <li>
-                      <Link to="/chart">Charts</Link>
+                      <Link to="/report">Reports</Link>
                     </li>
                     <li className="navbar-form">
                       <button
