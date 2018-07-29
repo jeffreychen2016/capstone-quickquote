@@ -9,7 +9,14 @@ class ReportList extends React.Component {
         <h2>Report List</h2>
         <div className="report-list-container">
           <ButtonToolbar className="no-margin-left">
-            <Button bsStyle="default" bsSize="large" className="no-margin-left" block>
+            <Button
+              bsStyle="default"
+              bsSize="large"
+              className="no-margin-left"
+              value="All-Items-Purchased-By-Date"
+              onClick={this.props.renderReportEvent}
+              block
+            >
               Report - All Items Purchased By Date
             </Button>
             <Button bsStyle="default" bsSize="large" className="no-margin-left" block>
