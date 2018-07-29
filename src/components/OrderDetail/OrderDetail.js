@@ -93,6 +93,7 @@ class OrderDetail extends React.Component {
   };
 
   render () {
+    console.error('test:',this.props.match.params.id);
     const orderNumber = this.props.match.params.id;
     return (
       <div className="OrderDetail">
@@ -121,6 +122,7 @@ class OrderDetail extends React.Component {
         {/* <h2>Order Table</h2> */}
         <OrderTable
           orderId={this.props.match.params.id}
+          isEstimate={this.props.match.params.isEstimate}
           componentFrom={this.state.componentFrom}
           redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
           shipTo={this.state.so.shipTo}

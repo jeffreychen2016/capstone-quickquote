@@ -75,7 +75,7 @@ class MyOrder extends React.Component {
   renderSelectedOrders = () => {
     const allMyOrdersComponent = this.state.orders.map((order, i) => {
       const viewDetailClickEvent = () => {
-        this.props.history.push(`/orderdetail/${order.id}`);
+        this.props.history.push(`/orderdetail/${order.id}/${this.state.radionButtonClicked}`);
       };
       return (
         <tr key={i}>
