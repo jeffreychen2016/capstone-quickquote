@@ -25,7 +25,7 @@ class OrderTable extends React.Component {
     soNumber: '',
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.getAllProducts();
     this.initializeStateOnOrder();
   };

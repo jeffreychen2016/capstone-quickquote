@@ -3,8 +3,6 @@ import './OrderDetail.css';
 import orderRequests from '../../firebaseRequests/order';
 import ShipToForm from '../../components/ShipToForm/ShipToForm';
 import OrderTable from '../../components/OrderTable/OrderTable';
-import itemRequests from '../../firebaseRequests/item';
-import orderItemRequests from '../../firebaseRequests/orderItem';
 
 class OrderDetail extends React.Component {
   state = {
