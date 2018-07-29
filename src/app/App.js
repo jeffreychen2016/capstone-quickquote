@@ -101,7 +101,7 @@ class App extends Component {
                     component={OrderForm}
                   />
                   <PrivateRoute
-                    path="/orderdetail/:id"
+                    path="/orderdetail/:id/:isEstimate"
                     authed={this.state.authed}
                     component={OrderDetail}
                   />

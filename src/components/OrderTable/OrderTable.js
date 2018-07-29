@@ -25,7 +25,7 @@ class OrderTable extends React.Component {
     soNumber: '',
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.getAllProducts();
     this.initializeStateOnOrder();
   };
@@ -46,7 +46,7 @@ class OrderTable extends React.Component {
       const items = [];
       orderRequests.getSigngeOrder(orderNumber)
         .then((so) => {
-          this.setState({so});
+          this.setState({ so });
           orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderNumber)
             .then((soitems) => {
               soitems.map((soitem) => {
@@ -55,7 +55,7 @@ class OrderTable extends React.Component {
                     item[0].quantity = soitem.quantity;
                     item[0].amount = soitem.amount;
                     items.push(item[0]);
-                    this.setState({onOrder: items});
+                    this.setState({ onOrder: items });
                   });
               });
             });
@@ -77,32 +77,32 @@ class OrderTable extends React.Component {
     }
   };
 
-  matchProductDescription = (selectedOption,id) => {
+  matchProductDescription = (selectedOption, id) => {
     const products = this.state.products;
     products.map((product, i) => {
       if (selectedOption.label === product.code) {
         const tempOnOrder = [...this.state.onOrder];
         tempOnOrder[id].description = product.description;
-        this.setState({onOrder: tempOnOrder});
+        this.setState({ onOrder: tempOnOrder });
       };
     });
   };
 
-  matchProductPrice = (selectedOption,id) => {
+  matchProductPrice = (selectedOption, id) => {
     const products = this.state.products;
     products.map((product) => {
       if (selectedOption.label === product.code) {
         const tempOnOrder = [...this.state.onOrder];
         tempOnOrder[id].price = product.price;
-        this.setState({onOrder: tempOnOrder});
+        this.setState({ onOrder: tempOnOrder });
       };
     });
   }
 
-  updateOnOrderCode = (selectedOption,id) => {
+  updateOnOrderCode = (selectedOption, id) => {
     const tempOnOrder = [...this.state.onOrder];
     tempOnOrder[id].code = selectedOption;
-    this.setState({onOrder: tempOnOrder});
+    this.setState({ onOrder: tempOnOrder });
   };
 
   updateOnOrderQuantity = (e) => {
@@ -111,7 +111,7 @@ class OrderTable extends React.Component {
     const id = e.target.id.split('-').pop() - 1;
     const tempOnOrder = [...this.state.onOrder];
     tempOnOrder[id].quantity = e.target.value;
-    this.setState({onOrder: tempOnOrder});
+    this.setState({ onOrder: tempOnOrder });
 
     this.calculateRowTotal(id);
   };
@@ -121,7 +121,7 @@ class OrderTable extends React.Component {
     const rowAmount = onOrder.price * onOrder.quantity;
     const tempOnOrder = [...this.state.onOrder];
     tempOnOrder[id].amount = rowAmount;
-    this.setState({onOrder: tempOnOrder});
+    this.setState({ onOrder: tempOnOrder });
   };
 
   // delete tempOnOrder[i] will still leave "empty" in the array, which will break other codes
@@ -129,10 +129,10 @@ class OrderTable extends React.Component {
   deleteRow = (e) => {
     const id = e.target.id.split('-').pop() - 1;
     const tempOnOrder = [...this.state.onOrder];
-    tempOnOrder.map((row,i) => {
-      i === id ? tempOnOrder.splice(i,1) : 'nothing';
+    tempOnOrder.map((row, i) => {
+      i === id ? tempOnOrder.splice(i, 1) : 'nothing';
     });
-    this.setState({onOrder: tempOnOrder});
+    this.setState({ onOrder: tempOnOrder });
   }
 
   addRow = () => {
@@ -144,7 +144,7 @@ class OrderTable extends React.Component {
       price: 0,
       amount: 0,
     });
-    this.setState({onOrder: tempOnOrder});
+    this.setState({ onOrder: tempOnOrder });
   };
 
   // merge order array, userId, shipToAddress,currentDate obeject, and isOrder together
@@ -174,12 +174,12 @@ class OrderTable extends React.Component {
       .then((soKey) => {
         const itemsToPost = this.cleanOrderObjectForPosting();
         itemsToPost.map((item) => {
-          const tempItem = {...item};
+          const tempItem = { ...item };
           delete tempItem.amount;
           delete tempItem.quantity;
           itemRequests.postItem(tempItem)
             .then((itemKey) => {
-              const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+              const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
               orderItemRequests.postOrderItem(orderItem)
                 .then(() => {
                   this.props.redirectToMyOrderAfterPost();
@@ -188,7 +188,7 @@ class OrderTable extends React.Component {
         });
       })
       .catch((err) => {
-        console.error('Errot with posting order to database:',err);
+        console.error('Errot with posting order to database:', err);
       });
   };
 
@@ -202,13 +202,13 @@ class OrderTable extends React.Component {
       .then((soKey) => {
         const itemsToPost = this.cleanOrderObjectForPosting();
         itemsToPost.map((item) => {
-          const tempItem = {...item};
+          const tempItem = { ...item };
 
           delete tempItem.amount;
           delete tempItem.quantity;
           itemRequests.postItem(tempItem)
             .then((itemKey) => {
-              const orderItem = {soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+              const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
               orderItemRequests.postOrderItem(orderItem)
                 .then(() => {
                   this.props.redirectToMyOrderAfterPost();
@@ -217,7 +217,7 @@ class OrderTable extends React.Component {
         });
       })
       .catch((err) => {
-        console.error('Errot with posting order to database:',err);
+        console.error('Errot with posting order to database:', err);
       });
   };
 
@@ -247,13 +247,13 @@ class OrderTable extends React.Component {
     // post order table changes
     const itemsToPost = this.cleanOrderObjectForPosting();
     itemsToPost.map((item) => {
-      const tempItem = {...item};
+      const tempItem = { ...item };
       delete tempItem.amount;
       delete tempItem.quantity;
       delete tempItem.id;
       itemRequests.postItem(tempItem)
         .then((itemKey) => {
-          const orderItem = {soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount};
+          const orderItem = { soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
           orderItemRequests.postOrderItem(orderItem)
             .then(() => {
               this.props.redirectToMyOrderAfterPost();
@@ -265,19 +265,18 @@ class OrderTable extends React.Component {
     });
 
     // post update ship to address
-    const newShipTo = {...this.props.shipTo};
+    const newShipTo = { ...this.props.shipTo };
     orderRequests.getSigngeOrder(orderId)
       .then((order) => {
-        console.error(order);
-        const tempOrder = {...order};
+        const tempOrder = { ...order };
         tempOrder.shipTo = newShipTo;
-        orderRequests.updateOrderShipTo(orderId,tempOrder)
+        orderRequests.updateOrderShipTo(orderId, tempOrder)
           .then(() => {
             console.error('updated!');
           });
       })
-      .catch(() => {
-
+      .catch((err) => {
+        console.error('Eorr updating ship to address:',err);
       });
   }
 
@@ -287,8 +286,21 @@ class OrderTable extends React.Component {
     return cleanOrder;
   };
 
+  renderButtons = () => {
+    if (this.props.componentFrom === 'OrderDetail' && this.props.isEstimate === '0') {
+      return (<button type="button" className="btn btn-lg btn-primary" onClick={this.saveChanges}>Save Changes</button>);
+    } else if (this.props.componentFrom === 'OrderDetail' && this.props.isEstimate === '1') {
+      return null;
+    } else {
+      return (<Fragment>
+        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
+        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
+      </Fragment>);
+    }
+  };
+
   render () {
-    console.error(this.props.shipTo);
+    console.error(this.props.isEstimate);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
@@ -328,9 +340,9 @@ class OrderTable extends React.Component {
       );
     });
 
-    const orderTotalComponent = this.state.onOrder.reduce((a,b) => {
+    const orderTotalComponent = this.state.onOrder.reduce((a, b) => {
       return a + b.amount;
-    },0);
+    }, 0);
 
     return (
       <div className="OrderTable">
@@ -357,7 +369,8 @@ class OrderTable extends React.Component {
             </tr>
           </tfoot>
         </Table>
-        {
+        {this.renderButtons()}
+        {/* {
           this.props.componentFrom === 'OrderDetail' ? (
             <button type="button" className="btn btn-lg btn-primary" onClick={this.saveChanges}>Save Changes</button>
           ) : (
@@ -366,7 +379,7 @@ class OrderTable extends React.Component {
               <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
             </Fragment>
           )
-        }
+        } */}
       </div>
     );
   }
