@@ -7,7 +7,6 @@ import OrderTable from '../../components/OrderTable/OrderTable';
 class OrderDetail extends React.Component {
   state = {
     so: {},
-    // items: [],
     componentFrom: 'OrderDetail',
   };
 

@@ -13,11 +13,11 @@ class ReportList extends React.Component {
               bsStyle="default"
               bsSize="large"
               className="no-margin-left"
-              value="All-Items-Purchased-By-Date"
+              value="Total-Purchase-Of-The-Year"
               onClick={this.props.renderReportEvent}
               block
             >
-              Report - All Items Purchased By Date
+              Report - Total Purchase Of The Year
             </Button>
             <Button bsStyle="default" bsSize="large" className="no-margin-left" block>
               Large button

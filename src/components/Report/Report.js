@@ -13,13 +13,14 @@ class Chart extends React.Component {
   };
 
   renderClickedReport = () => {
-    if (this.state.reportToRedener === 'All-Items-Purchased-By-Date') {
+    if (this.state.reportToRedener === 'Total-Purchase-Of-The-Year') {
       return <BarChart />;
+    } else {
+      return null;
     }
   }
 
   render () {
-    console.error(this.state.reportToRedener);
     return (
       <div className="Report container-fluid">
         <h2>Report</h2>
@@ -29,7 +30,7 @@ class Chart extends React.Component {
               renderReportEvent={this.renderReportEvent}
             />
           </div>
-          <div className="col-sm-7 col-sm-offset-1">
+          <div className="col-sm-8">
             {this.renderClickedReport()}
           </div>
         </div>
