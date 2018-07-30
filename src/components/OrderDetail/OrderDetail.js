@@ -92,37 +92,42 @@ class OrderDetail extends React.Component {
   render () {
     const orderNumber = this.props.match.params.id;
     return (
-      <div className="OrderDetail">
-        <h2>OrderDetail</h2>
-        <div>
-          <span>Order Number:{orderNumber}</span>
-          <span>Status:{
-            this.state.so.isOrder === 0 ? 'Estimate' : 'SO'
-          }</span>
-          <span>Date Created:{this.state.so.date}</span>
+      <div className="OrderDetail container-fluid">
+        <div className="row">
+          <h2>OrderDetail</h2>
+          <div>
+            <span>Order Number:{orderNumber}</span>
+            <span>Status:{
+              this.state.so.isOrder === 0 ? 'Estimate' : 'SO'
+            }</span>
+            <span>Date Created:{this.state.so.date}</span>
+          </div>
         </div>
-        <h2>Shipping Info</h2>
-        {this.state.so.shipTo ? (
-          <ShipToForm
-            shipTo={this.state.so.shipTo}
-            companyChange={this.companyChange}
-            addressChange={this.addressChange}
-            cityChange={this.cityChange}
-            stateChange={this.stateChange}
-            zipChange={this.zipChange}
-            phoneNumberChange={this.phoneNumberChange}
-            faxNumberChange={this.faxNumberChange}
-            contactChange={this.contactChange}
+        <div className="row">
+          <h2>Shipping Info</h2>
+          {this.state.so.shipTo ? (
+            <ShipToForm
+              shipTo={this.state.so.shipTo}
+              companyChange={this.companyChange}
+              addressChange={this.addressChange}
+              cityChange={this.cityChange}
+              stateChange={this.stateChange}
+              zipChange={this.zipChange}
+              phoneNumberChange={this.phoneNumberChange}
+              faxNumberChange={this.faxNumberChange}
+              contactChange={this.contactChange}
+              componentFrom={this.state.componentFrom}
+            />) : ('')}
+        </div>
+        <div className="row">
+          <OrderTable
+            orderId={this.props.match.params.id}
+            isEstimate={this.props.match.params.isEstimate}
             componentFrom={this.state.componentFrom}
-          />) : ('')}
-        {/* <h2>Order Table</h2> */}
-        <OrderTable
-          orderId={this.props.match.params.id}
-          isEstimate={this.props.match.params.isEstimate}
-          componentFrom={this.state.componentFrom}
-          redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
-          shipTo={this.state.so.shipTo}
-        />
+            redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
+            shipTo={this.state.so.shipTo}
+          />
+        </div>
       </div>
     );
   };
