@@ -132,29 +132,33 @@ class OrderForm extends React.Component {
 
   render () {
     return (
-      <div className="OrderForm">
+      <div className="OrderForm container-fluid ">
         <h2>OrderForm</h2>
-        <SupplierProfile />
-        <BuyerProfile
-          buyerProfiles={this.state.buyerProfiles}
-          companies={this.state.companies}
-          shipTo={this.state.shipTo}
-          isChecked={this.state.isChecked}
-          updateIsCheckStatus={this.updateIsCheckStatus}
-          sameAsAboveClick={this.sameAsAboveClick}
-          companyChange={this.companyChange}
-          addressChange={this.addressChange}
-          cityChange={this.cityChange}
-          stateChange={this.stateChange}
-          zipChange={this.zipChange}
-          phoneNumberChange={this.phoneNumberChange}
-          faxNumberChange={this.faxNumberChange}
-          contactChange={this.contactChange}
-        />
-        <OrderTable
-          shipTo={this.state.shipTo}
-          redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
-        />
+        <div className="row">
+          <SupplierProfile />
+          <BuyerProfile
+            buyerProfiles={this.state.buyerProfiles}
+            companies={this.state.companies}
+            shipTo={this.state.shipTo}
+            isChecked={this.state.isChecked}
+            updateIsCheckStatus={this.updateIsCheckStatus}
+            sameAsAboveClick={this.sameAsAboveClick}
+            companyChange={this.companyChange}
+            addressChange={this.addressChange}
+            cityChange={this.cityChange}
+            stateChange={this.stateChange}
+            zipChange={this.zipChange}
+            phoneNumberChange={this.phoneNumberChange}
+            faxNumberChange={this.faxNumberChange}
+            contactChange={this.contactChange}
+          />
+        </div>
+        <div className="row">
+          <OrderTable
+            shipTo={this.state.shipTo}
+            redirectToMyOrderAfterPost={this.redirectToMyOrderAfterPost}
+          />
+        </div>
       </div>
     );
   };

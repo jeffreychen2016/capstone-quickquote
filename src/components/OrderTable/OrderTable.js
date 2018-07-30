@@ -300,11 +300,10 @@ class OrderTable extends React.Component {
   };
 
   render () {
-    console.error(this.props.isEstimate);
     const rowsComponent = this.state.onOrder.map((row, i) => {
       return (
         <tr key={i} id={'row-' + (i + 1)}>
-          <td>
+          <td className="td-vertical-align-center">
             <AutoComplete
               dropdownValue={row.code}
               auntoCompleteRowId={i}
@@ -315,26 +314,29 @@ class OrderTable extends React.Component {
               calculateRowTotal={this.calculateRowTotal}
             />
           </td>
-          <td>{row.description}</td>
-          <td>
+          <td className="td-vertical-align-center"> {row.description}</td>
+          <td className="td-vertical-align-center">
             <input
               id={'inputRow-' + (i + 1)}
               type="number"
               value={row.quantity}
               onChange={this.updateOnOrderQuantity}
+              className="input-quantity"
             />
           </td>
-          <td>{row.price}</td>
-          <td>{row.amount}</td>
-          <td
-            onClick={this.deleteRow}
-            id={'actionRow-' + (i + 1)}
-          >
+          <td className="td-vertical-align-center">{row.price}</td>
+          <td className="td-vertical-align-center">{row.amount}</td>
+          <td className="td-vertical-align-center">
+            <button
+              onClick={this.deleteRow}
+              id={'actionRow-' + (i + 1)}
+            >
             Delete
+            </button>
           </td>
           {
             // Logic: add an 'add' button to the last row of table
-            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow}>Add</td>) : (<td></td>)
+            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center"><button>Add</button></td>) : (<td></td>)
           }
         </tr>
       );
@@ -346,16 +348,16 @@ class OrderTable extends React.Component {
 
     return (
       <div className="OrderTable">
-        <h2>Order Form</h2>
+        <h2>Order Table</h2>
         <Table responsive id="order-table">
           <thead>
             <tr>
-              <th>Item</th>
-              <th>Description</th>
-              <th>Quantity</th>
-              <th>Unit Price</th>
-              <th>Amount</th>
-              <th>Action</th>
+              <th className="th-item">Item</th>
+              <th className="th-description">Description</th>
+              <th className="th-quantity">Quantity</th>
+              <th className="th-price">Unit Price</th>
+              <th className="th-amount">Amount</th>
+              <th className="th-action">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -370,16 +372,6 @@ class OrderTable extends React.Component {
           </tfoot>
         </Table>
         {this.renderButtons()}
-        {/* {
-          this.props.componentFrom === 'OrderDetail' ? (
-            <button type="button" className="btn btn-lg btn-primary" onClick={this.saveChanges}>Save Changes</button>
-          ) : (
-            <Fragment>
-              <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
-              <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
-            </Fragment>
-          )
-        } */}
       </div>
     );
   }

@@ -114,17 +114,6 @@ class MyOrder extends React.Component {
     this.state.radionButtonClicked === '1' ? (this.getAllEstimates()) : (this.getAllSalesOrders());
   }
 
-  // deleteOrder = (e) => {
-  //   const orderId = e.target.dataset.deleteorder;
-  //   orderRequests.deleteOrder(orderId)
-  //     .then(() => {
-  //       this.getAllEstimates();
-  //     })
-  //     .catch((err) => {
-  //       console.error('Error deleting order:', err);
-  //     });
-  // };
-
   // in order to delete all 3 collections
   // need to get the id for each record back first
   // then delete the record based on the returned id
