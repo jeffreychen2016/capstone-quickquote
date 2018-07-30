@@ -11,7 +11,7 @@ import OrderDetail from '../components/OrderDetail/OrderDetail';
 import OrderForm from '../components/OrderForm/OrderForm';
 import SupplierProfile from '../components/SupplierProfile/SupplierProfile';
 import Home from '../components/Home/Home';
-import Chart from '../components/Chart/Chart';
+import Report from '../components/Report/Report';
 import {Route, BrowserRouter, Redirect, Switch} from 'react-router-dom';
 
 fbConnection();
@@ -116,9 +116,9 @@ class App extends Component {
                     component={BuyerProfile}
                   />
                   <PrivateRoute
-                    path="/chart"
+                    path="/Report"
                     authed={this.state.authed}
-                    component={Chart}
+                    component={Report}
                   />
                   <PublicRoute
                     path="/login"
