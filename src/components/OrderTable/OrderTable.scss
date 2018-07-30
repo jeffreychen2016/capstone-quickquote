@@ -1,10 +1,34 @@
 .OrderTable {
+  border-top: solid black 2px;
+
   #order-table {
     width: 80%;
     margin: auto;
   }
+
   th {
     text-align: center;
+  }
+
+  .th-item {
+    width: 20%;
+  }
+
+  .th-description {
+    width: 30%;
+  }
+
+  .th-quantity {
+    width: 10%;
+  }
+
+  .td-vertical-align-center {
+    padding: 3px;
+    vertical-align: middle;
+  }
+
+  .input-quantity {
+    width: 50px;
   }
 
   tr td:last-child {
