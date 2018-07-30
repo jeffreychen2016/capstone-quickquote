@@ -20,7 +20,7 @@ class ReportList extends React.Component {
               Report - Total Purchase Of The Year
             </Button>
             <Button bsStyle="default" bsSize="large" className="no-margin-left" block>
-              Large button
+              No Report
             </Button>
           </ButtonToolbar>
         </div>

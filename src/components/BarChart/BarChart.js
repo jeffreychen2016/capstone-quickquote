@@ -9,7 +9,8 @@ import moment from 'moment';
 
 class BarChart extends React.Component {
   state = {
-    input: '2018',
+    mergedData: [],
+    input: '',
     janData: [],
     data: {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
@@ -21,7 +22,7 @@ class BarChart extends React.Component {
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(255,99,132,0.4)',
           hoverBorderColor: 'rgba(255,99,132,1)',
-          data: [12,12,13,14,15,16,20],
+          data: [],
         },
       ],
     },
@@ -48,7 +49,7 @@ class BarChart extends React.Component {
                         price: item.price,
                         total: (soitem.quantity * 1) * item.price,
                       };
-                      console.error(mergedData);
+                      this.state.mergedData.push(mergedData);
                     });
                   });
               });
@@ -60,77 +61,136 @@ class BarChart extends React.Component {
       });
   };
 
-  test = () => {
-    const janData = [1];
-    this.setState({janData});
+  getValue = (e) => {
+    this.setState({input: e.target.value});
   };
 
-  // processData = (mergedData) => {
-  //   // console.error(mergedData);
+  renderDataInChart = (e) => {
+    if (e.key === 'Enter') {
+      const monthTotal = [];
 
-  //   if (mergedData.year === 2018 && mergedData.month === 1) {
-  //     const tempJanData = [...this.state.janData];
-  //     console.error(tempJanData);
+      const janData = [];
+      const febData = [];
+      const marData = [];
+      const aprData = [];
+      const mayData = [];
+      const junData = [];
+      const julData = [];
+      const augData = [];
+      const sepData = [];
+      const octData = [];
+      const novData = [];
+      const decData = [];
 
-  //     tempJanData.push(mergedData.total);
+      let janTotal = 0;
+      let febTotal = 0;
+      let marTotal = 0;
+      let aprTotal = 0;
+      let mayTotal = 0;
+      let junTotal = 0;
+      let julTotal = 0;
+      let augTotal = 0;
+      let sepTotal = 0;
+      let octTotal = 0;
+      let novTotal = 0;
+      let decTotal = 0;
+      this.state.mergedData.map((data) => {
+        if (data.year  === e.target.value * 1 && data.month === 1) {
+          janData.push(data.total);
+          janTotal = janData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 2) {
+          febData.push(data.total);
+          febTotal = febData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 3) {
+          marData.push(data.total);
+          marTotal = marData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 4) {
+          aprData.push(data.total);
+          aprTotal = aprData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 5) {
+          mayData.push(data.total);
+          mayTotal = mayData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 6) {
+          junData.push(data.total);
+          junTotal = junData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 7) {
+          julData.push(data.total);
+          julTotal = julData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 8) {
+          augData.push(data.total);
+          augTotal = augData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 9) {
+          sepData.push(data.total);
+          sepTotal = sepData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 10) {
+          octData.push(data.total);
+          octTotal = octData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 11) {
+          novData.push(data.total);
+          novTotal = novData.reduce((a,b) => {
+            return a + b;
+          });
+        } else if (data.year === e.target.value * 1 && data.month === 12) {
+          decData.push(data.total);
+          decTotal = decData.reduce((a,b) => {
+            return a + b;
+          });
+        };
+      });
+      monthTotal.push(janTotal);
+      monthTotal.push(febTotal);
+      monthTotal.push(marTotal);
+      monthTotal.push(aprTotal);
+      monthTotal.push(mayTotal);
+      monthTotal.push(junTotal);
+      monthTotal.push(julTotal);
+      monthTotal.push(augTotal);
+      monthTotal.push(sepTotal);
+      monthTotal.push(octTotal);
+      monthTotal.push(novTotal);
+      monthTotal.push(decTotal);
 
-  //     const tempJanTotal = tempJanData.reduce((a, b) => {
-  //       return a + b;
-  //     },0);
-  //     // console.error(tempJanTotal);
-  //     this.setState({janData: tempJanTotal});
-  //   }
-  // }
-
-  // processData = (mergedData) => {
-  //   const mergedDataArray = [];
-  //   const dataForReport = [];
-  //   const januaryData = [];
-  //   const februaryData = [];
-
-  //   mergedDataArray.push(mergedData);
-
-  //   if (mergedDataArray) {
-  //     mergedDataArray.map((mergedData) => {
-  //       if (mergedData.year === 2018) {
-  //         if (mergedData.month === 1) {
-  //           januaryData.push(mergedData.quantity * mergedData.price);
-  //           console.error(januaryData);
-  //         } else if (mergedData.month === 2) {
-  //           februaryData.push(mergedData.quantity * mergedData.price);
-  //         }
-  //       }
-  //     });
-  //   }
-
-  //   console.error('test:',januaryData);
-
-  //   const janAmount = januaryData.reduce((a, b) => {
-  //     return a + b;
-  //   },0);
-
-  //   const febAmount = februaryData.reduce((a, b) => {
-  //     return a + b;
-  //   },0);
-
-  //   dataForReport.push(janAmount);
-  //   dataForReport.push(febAmount);
-
-  //   const tempDatasets = [...this.state.data.datasets];
-  //   const tempData = {...this.state.data};
-  //   tempDatasets.data = dataForReport;
-  //   tempData.datasets = tempDatasets;
-  //   this.setState({data: tempData});
-
-  // }
+      const tempDatasets = [...this.state.data.datasets];
+      const tempData = {...this.state.data};
+      tempDatasets[0].data = monthTotal;
+      tempData.datasets = tempDatasets;
+      this.setState({data: tempData});
+    };
+  };
 
   render () {
-    console.error(this.state.janData);
     return (
       <div className='BarChart'>
         <h2>Bar Chart</h2>
         <label htmlFor="input-year">Year:</label>
-        <input type="text" id="input-year" placeholder="Example: 2018"/>
+        <input
+          type="text"
+          id="input-year"
+          placeholder="Example: 2018"
+          value={this.state.input}
+          onChange={this.getValue}
+          onKeyPress={this.renderDataInChart}
+        />
         <Bar
           data={this.state.data}
         />
