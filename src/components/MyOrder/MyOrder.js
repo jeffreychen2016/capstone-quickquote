@@ -5,6 +5,7 @@ import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
 import itemRequests from '../../firebaseRequests/item';
 import orderItemRequests from '../../firebaseRequests/orderItem';
+import formatPrice from '../../helpers';
 
 class MyOrder extends React.Component {
   state = {
@@ -67,10 +68,6 @@ class MyOrder extends React.Component {
     });
   };
 
-  test = () => {
-    return '1';
-  }
-
   // row.id will return firebase id
   renderSelectedOrders = () => {
     const allMyOrdersComponent = this.state.orders.map((order, i) => {
@@ -81,7 +78,7 @@ class MyOrder extends React.Component {
         <tr key={i}>
           <td>ES{order.id}</td>
           <td>{order.date}</td>
-          <td>{order.total}</td>
+          <td>{order.total ? formatPrice(order.total) : null}</td>
           {
             this.state.radionButtonClicked === '0' ? (
               <td>
