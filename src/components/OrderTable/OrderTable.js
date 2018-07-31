@@ -7,6 +7,7 @@ import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
 import itemRequests from '../../firebaseRequests/item';
 import orderItemRequests from '../../firebaseRequests/orderItem';
+import formatPrice from '../../helpers';
 import moment from 'moment';
 
 // Note: state should be only used to store varibales
@@ -288,14 +289,15 @@ class OrderTable extends React.Component {
 
   renderButtons = () => {
     if (this.props.componentFrom === 'OrderDetail' && this.props.isEstimate === '0') {
-      return (<button type="button" className="btn btn-lg btn-primary" onClick={this.saveChanges}>Save Changes</button>);
+      return (<button type="button" className="btn btn-primary btn-save-order-form" onClick={this.saveChanges}>Save Changes</button>);
     } else if (this.props.componentFrom === 'OrderDetail' && this.props.isEstimate === '1') {
       return null;
     } else {
-      return (<Fragment>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
-      </Fragment>);
+      return (
+        <Fragment>
+          <button type="button" className="btn btn-primary btn-save-order-form" onClick={this.saveAsEstimate}>Save As Estimate</button>
+          <button type="button" className="btn btn-primary btn-save-order-form" onClick={this.saveAsOrder}>Place Order</button>
+        </Fragment>);
     }
   };
 
@@ -324,19 +326,19 @@ class OrderTable extends React.Component {
               className="input-quantity"
             />
           </td>
-          <td className="td-vertical-align-center">{row.price}</td>
-          <td className="td-vertical-align-center">{row.amount}</td>
+          <td className="td-vertical-align-center">{formatPrice(row.price)}</td>
+          <td className="td-vertical-align-center">{formatPrice(row.amount)}</td>
           <td className="td-vertical-align-center">
             <button
               onClick={this.deleteRow}
               id={'actionRow-' + (i + 1)}
             >
-            Delete
+              <span className="glyphicon glyphicon-trash"></span>Delete
             </button>
           </td>
           {
             // Logic: add an 'add' button to the last row of table
-            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center"><button>Add</button></td>) : (<td></td>)
+            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center no-border"><span className="glyphicon glyphicon-plus"></span></td>) : (null)
           }
         </tr>
       );
@@ -365,13 +367,17 @@ class OrderTable extends React.Component {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan="1">Total</td>
+              <td colSpan="1" id="order-total-label">Order Total:</td>
               <td colSpan="4"></td>
-              <td colSpan="1">{orderTotalComponent}</td>
+              <td colSpan="1" id="order-total-amount">{formatPrice(orderTotalComponent)}</td>
+            </tr>
+            <tr>
+              <td colSpan="1" id="order-total-label"></td>
+              <td colSpan="3"></td>
+              <td colSpan="2" id="order-total-amount">{this.renderButtons()}</td>
             </tr>
           </tfoot>
         </Table>
-        {this.renderButtons()}
       </div>
     );
   }

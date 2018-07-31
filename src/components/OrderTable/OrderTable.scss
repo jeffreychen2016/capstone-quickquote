@@ -38,4 +38,23 @@
   .button-group{
     text-align: right;
   }
+
+  #order-total-label,
+  #order-total-amount {
+    font-size: 2em;
+  }
+
+  .no-border {
+    border: none;
+  }
+
+  .glyphicon {
+    top: 2px;
+  }
+
+  .btn-save-order-form {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+  }
 }
