@@ -292,10 +292,11 @@ class OrderTable extends React.Component {
     } else if (this.props.componentFrom === 'OrderDetail' && this.props.isEstimate === '1') {
       return null;
     } else {
-      return (<Fragment>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
-        <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
-      </Fragment>);
+      return (
+        <Fragment>
+          <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsEstimate}>Save As Estimate</button>
+          <button type="button" className="btn btn-lg btn-primary" onClick={this.saveAsOrder}>Place Order</button>
+        </Fragment>);
     }
   };
 

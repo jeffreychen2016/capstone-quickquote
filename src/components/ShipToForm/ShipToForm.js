@@ -7,9 +7,7 @@ class ShipToForm extends React.Component {
       <div>
         {
           this.props.componentFrom === 'OrderDetail' ? (
-            <Fragment>
-              <div className="col-sm-12" id="ship-to-checkbox-container"></div>
-            </Fragment>
+            null
           ) : (
             <Fragment>
               <h2 className="col-sm-4">Ship To</h2>
@@ -24,7 +22,7 @@ class ShipToForm extends React.Component {
             </Fragment>
           )
         }
-        <form className="form-horizontal col-sm-12">
+        <form className={`form-horizontal ${this.props.componentFrom === 'OrderDetail' ? 'col-sm-6 col-sm-offset-3' : 'col-sm-12'}`}>
           <div className="form-group">
             <label htmlFor="buyer-company" className="col-sm-4 control-label">
               Company:
