@@ -96,11 +96,11 @@ class OrderDetail extends React.Component {
         <div className="row">
           <h2>OrderDetail</h2>
           <div>
-            <span>Order Number:{orderNumber}</span>
-            <span>Status:{
+            <span className="col-sm-5">Order Number:{orderNumber}</span>
+            <span className="col-sm-2">Status:{
               this.state.so.isOrder === 0 ? 'Estimate' : 'SO'
             }</span>
-            <span>Date Created:{this.state.so.date}</span>
+            <span className="col-sm-5">Date Created:{this.state.so.date}</span>
           </div>
         </div>
         <div className="row">
@@ -117,7 +117,7 @@ class OrderDetail extends React.Component {
               faxNumberChange={this.faxNumberChange}
               contactChange={this.contactChange}
               componentFrom={this.state.componentFrom}
-            />) : ('')}
+            />) : (null)}
         </div>
         <div className="row">
           <OrderTable
