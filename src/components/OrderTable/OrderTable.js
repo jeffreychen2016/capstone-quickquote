@@ -128,12 +128,17 @@ class OrderTable extends React.Component {
   // delete tempOnOrder[i] will still leave "empty" in the array, which will break other codes
   // so user "splice" to remove deleted row
   deleteRow = (e) => {
-    const id = e.target.id.split('-').pop() - 1;
-    const tempOnOrder = [...this.state.onOrder];
-    tempOnOrder.map((row, i) => {
-      i === id ? tempOnOrder.splice(i, 1) : 'nothing';
-    });
-    this.setState({ onOrder: tempOnOrder });
+    if (this.state.onOrder.length !== 1) {
+      const id = e.target.id.split('-').pop() - 1;
+      const tempOnOrder = [...this.state.onOrder];
+      tempOnOrder.map((row, i) => {
+        i === id ? tempOnOrder.splice(i, 1) : null;
+      });
+      this.setState({ onOrder: tempOnOrder });
+    } else {
+      return null;
+    }
+
   }
 
   addRow = () => {
