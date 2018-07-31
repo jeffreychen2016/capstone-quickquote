@@ -273,7 +273,7 @@ class OrderTable extends React.Component {
         tempOrder.shipTo = newShipTo;
         orderRequests.updateOrderShipTo(orderId, tempOrder)
           .then(() => {
-            console.error('updated!');
+            // console.error('updated!');
           });
       })
       .catch((err) => {
@@ -322,6 +322,7 @@ class OrderTable extends React.Component {
               id={'inputRow-' + (i + 1)}
               type="number"
               value={row.quantity}
+              min={0}
               onChange={this.updateOnOrderQuantity}
               className="input-quantity"
             />
