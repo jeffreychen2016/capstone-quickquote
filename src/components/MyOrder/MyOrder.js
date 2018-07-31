@@ -164,33 +164,49 @@ class MyOrder extends React.Component {
 
   render () {
     return (
-      <div className="MyOrder">
+      <div className="MyOrder container-fluid">
         <h2>MyOrder</h2>
-        <input
-          type="radio"
-          value="0"
-          checked={this.state.radionButtonClicked === '0'}
-          onChange={this.updateRadioButtonState}
-        /> My Estimates
-        <input
-          type="radio"
-          value="1"
-          checked={this.state.radionButtonClicked === '1'}
-          onChange={this.updateRadioButtonState}
-        /> My Orders
-        <Table responsive id="order-table">
-          <thead>
-            <tr>
-              <th>Order Number</th>
-              <th>Date Created</th>
-              <th>Total Amount</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderSelectedOrders()}
-          </tbody>
-        </Table>
+        <div className="row">
+          <div className="col-sm-6">
+            <div className="input-group">
+              <span className="input-group-addon">
+                <input
+                  type="radio"
+                  value="0"
+                  checked={this.state.radionButtonClicked === '0'}
+                  onChange={this.updateRadioButtonState}
+                /> My Estimates
+              </span>
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <div className="input-group">
+              <span className="input-group-addon">
+                <input
+                  type="radio"
+                  value="1"
+                  checked={this.state.radionButtonClicked === '1'}
+                  onChange={this.updateRadioButtonState}
+                /> My Orders
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <Table responsive id="order-table">
+            <thead>
+              <tr>
+                <th>Order Number</th>
+                <th>Date Created</th>
+                <th>Total Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.renderSelectedOrders()}
+            </tbody>
+          </Table>
+        </div>
       </div>
     );
   };
