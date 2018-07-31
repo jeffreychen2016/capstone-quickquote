@@ -7,6 +7,7 @@ import orderRequests from '../../firebaseRequests/order';
 import authRequests from '../../firebaseRequests/auth';
 import itemRequests from '../../firebaseRequests/item';
 import orderItemRequests from '../../firebaseRequests/orderItem';
+import formatPrice from '../../helpers';
 import moment from 'moment';
 
 // Note: state should be only used to store varibales
@@ -325,8 +326,8 @@ class OrderTable extends React.Component {
               className="input-quantity"
             />
           </td>
-          <td className="td-vertical-align-center">{row.price}</td>
-          <td className="td-vertical-align-center">{row.amount}</td>
+          <td className="td-vertical-align-center">{formatPrice(row.price)}</td>
+          <td className="td-vertical-align-center">{formatPrice(row.amount)}</td>
           <td className="td-vertical-align-center">
             <button
               onClick={this.deleteRow}
@@ -366,9 +367,9 @@ class OrderTable extends React.Component {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan="1">Total</td>
+              <td colSpan="1" id="order-total-label">Order Total:</td>
               <td colSpan="4"></td>
-              <td colSpan="1">{orderTotalComponent}</td>
+              <td colSpan="1" id="order-total-amount">{orderTotalComponent}</td>
             </tr>
           </tfoot>
         </Table>
