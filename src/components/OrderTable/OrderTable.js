@@ -333,12 +333,12 @@ class OrderTable extends React.Component {
               onClick={this.deleteRow}
               id={'actionRow-' + (i + 1)}
             >
-            Delete
+              <span className="glyphicon glyphicon-trash"></span>Delete
             </button>
           </td>
           {
             // Logic: add an 'add' button to the last row of table
-            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center"><button>Add</button></td>) : (<td></td>)
+            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center no-border"><span className="glyphicon glyphicon-plus"></span></td>) : (null)
           }
         </tr>
       );
@@ -369,7 +369,7 @@ class OrderTable extends React.Component {
             <tr>
               <td colSpan="1" id="order-total-label">Order Total:</td>
               <td colSpan="4"></td>
-              <td colSpan="1" id="order-total-amount">{orderTotalComponent}</td>
+              <td colSpan="1" id="order-total-amount">{formatPrice(orderTotalComponent)}</td>
             </tr>
           </tfoot>
         </Table>
