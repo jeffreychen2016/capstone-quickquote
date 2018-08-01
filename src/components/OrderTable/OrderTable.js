@@ -131,7 +131,7 @@ class OrderTable extends React.Component {
     const id = e.target.id.split('-').pop() - 1;
     const tempOnOrder = [...this.state.onOrder];
     tempOnOrder.map((row, i) => {
-      i === id ? tempOnOrder.splice(i, 1) : 'nothing';
+      i === id ? tempOnOrder.splice(i, 1) : null;
     });
     this.setState({ onOrder: tempOnOrder });
   }
@@ -314,6 +314,7 @@ class OrderTable extends React.Component {
               matchProductDescription={this.matchProductDescription}
               matchProductPrice={this.matchProductPrice}
               calculateRowTotal={this.calculateRowTotal}
+              isEstimate={this.props.isEstimate}
             />
           </td>
           <td className="td-vertical-align-center"> {row.description}</td>
@@ -324,6 +325,7 @@ class OrderTable extends React.Component {
               value={row.quantity}
               min={0}
               onChange={this.updateOnOrderQuantity}
+              disabled={this.props.isEstimate === '1' ? true : false}
               className="input-quantity"
             />
           </td>
@@ -333,13 +335,16 @@ class OrderTable extends React.Component {
             <button
               onClick={this.deleteRow}
               id={'actionRow-' + (i + 1)}
+              disabled={this.state.onOrder.length === 1 || this.props.isEstimate === '1' ? true : false}
             >
               <span className="glyphicon glyphicon-trash"></span>Delete
             </button>
           </td>
           {
             // Logic: add an 'add' button to the last row of table
-            i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center no-border"><span className="glyphicon glyphicon-plus"></span></td>) : (null)
+            this.props.isEstimate !== '1' ? (
+              i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center no-border"><span className="glyphicon glyphicon-plus"></span></td>) : (null)
+            ) : (null)
           }
         </tr>
       );
