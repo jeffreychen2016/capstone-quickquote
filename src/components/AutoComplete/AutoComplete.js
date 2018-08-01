@@ -42,6 +42,7 @@ class AutoComplete extends React.Component {
         // value={selectedOption}
         onChange={this.handleChange}
         options={this.generateOptions()}
+        isDisabled={this.props.isEstimate === '1' ? true : false}
       />
     );
   }
