@@ -117,6 +117,7 @@ class OrderDetail extends React.Component {
               faxNumberChange={this.faxNumberChange}
               contactChange={this.contactChange}
               componentFrom={this.state.componentFrom}
+              isEstimate={this.props.match.params.isEstimate}
             />) : (null)}
         </div>
         <div className="row">

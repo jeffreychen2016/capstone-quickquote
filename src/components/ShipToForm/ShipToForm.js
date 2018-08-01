@@ -28,7 +28,7 @@ class ShipToForm extends React.Component {
               Company:
             </label>
             <div className="col-sm-8">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
@@ -52,7 +52,7 @@ class ShipToForm extends React.Component {
               Address:
             </label>
             <div className="col-sm-8">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
@@ -73,7 +73,7 @@ class ShipToForm extends React.Component {
           </div>
           <div className="form-group">
             <div className="col-sm-3 col-sm-offset-4">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
@@ -92,7 +92,7 @@ class ShipToForm extends React.Component {
               }
             </div>
             <div className="col-sm-2">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
@@ -111,7 +111,7 @@ class ShipToForm extends React.Component {
               }
             </div>
             <div className="col-sm-3">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
@@ -135,7 +135,7 @@ class ShipToForm extends React.Component {
               Phone Number:
             </label>
             <div className="col-sm-8">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
@@ -159,7 +159,7 @@ class ShipToForm extends React.Component {
               Fax Number:
             </label>
             <div className="col-sm-8">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
@@ -183,7 +183,7 @@ class ShipToForm extends React.Component {
               Contact:
             </label>
             <div className="col-sm-8">
-              {this.props.isChecked ?
+              {this.props.isChecked || this.props.isEstimate === '1' ?
                 (<input
                   type="text"
                   className="form-control"
