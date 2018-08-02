@@ -11,7 +11,7 @@ import moment from 'moment';
 class BarChart extends React.Component {
   state = {
     mergedData: [],
-    input: '',
+    input: '2018',
     data: {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
       datasets: [
@@ -29,15 +29,16 @@ class BarChart extends React.Component {
   }
 
   componentDidMount () {
-    const orderFlag = authRequests.getUserId() + '-' + '1';
-    this.getData();
+    this.getOneYearData();
   };
 
-  getData = () => {
+  getOneYearData = () => {
     const userId = authRequests.getUserId();
+    const orderFlag = userId + '-1';
+    const yearToSeach = this.state.input;
 
     const rootRef = firebase.database().ref();
-    const soRef = rootRef.child('so').orderByChild('orderFlag').startAt(userId);
+    const soRef = rootRef.child('so').orderByChild('orderFlag').startAt(orderFlag);
     soRef.on('value',(snapshot) => {
       const salesOrders = [];
       if (snapshot.val() !== null) {
@@ -46,9 +47,19 @@ class BarChart extends React.Component {
           salesOrders.push(snapshot.val()[fbKey]);
         });
       }
-    console.error(salesOrders);
+
+      const filteredData = salesOrders.filter((so) => {
+        return so.date.substring(0,4) === yearToSeach;
+      });
+
+      this.calculateMonthlyTotal(filteredData);
     });
   };
+
+  calculateMonthlyTotal = (oneYearData) => {
+    console.error('oneYearData',oneYearData);
+
+  }
 
   getValue = (e) => {
     this.setState({input: e.target.value});
