@@ -34,10 +34,19 @@ class BarChart extends React.Component {
   };
 
   getData = () => {
+    const userId = authRequests.getUserId();
+
     const rootRef = firebase.database().ref();
-    const soRef = rootRef.child('so').orderByChild('date').startAt('2018');
+    const soRef = rootRef.child('so').orderByChild('orderFlag').startAt(userId);
     soRef.on('value',(snapshot) => {
-      console.error('so', snapshot.val());
+      const salesOrders = [];
+      if (snapshot.val() !== null) {
+        Object.keys(snapshot.val()).forEach(fbKey => {
+          snapshot.val()[fbKey].id = fbKey;
+          salesOrders.push(snapshot.val()[fbKey]);
+        });
+      }
+    console.error(salesOrders);
     });
   };
 
