@@ -11,7 +11,7 @@ import moment from 'moment';
 class BarChart extends React.Component {
   state = {
     mergedData: [],
-    input: '2018',
+    input: 2018,
     data: {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
       datasets: [
@@ -29,36 +29,50 @@ class BarChart extends React.Component {
   }
 
   componentDidMount () {
-    this.getOneYearData();
+    this.getUserSOData();
   };
 
-  getOneYearData = () => {
+  // get all so (1) data for the user
+  getUserSOData = () => {
     const userId = authRequests.getUserId();
     const orderFlag = userId + '-1';
-    const yearToSeach = this.state.input;
 
     const rootRef = firebase.database().ref();
     const soRef = rootRef.child('so').orderByChild('orderFlag').startAt(orderFlag);
     soRef.on('value',(snapshot) => {
       const salesOrders = [];
-      if (snapshot.val() !== null) {
-        Object.keys(snapshot.val()).forEach(fbKey => {
-          snapshot.val()[fbKey].id = fbKey;
-          salesOrders.push(snapshot.val()[fbKey]);
+      const returnedValue = snapshot.val();
+      if (returnedValue !== null) {
+        Object.keys(returnedValue).forEach(fbKey => {
+          returnedValue[fbKey].id = fbKey;
+          salesOrders.push(returnedValue[fbKey]);
         });
       }
-
-      const filteredData = salesOrders.filter((so) => {
-        return so.date.substring(0,4) === yearToSeach;
-      });
-
-      this.calculateMonthlyTotal(filteredData);
+      this.getOneYearSOData(salesOrders);
     });
   };
 
-  calculateMonthlyTotal = (oneYearData) => {
-    console.error('oneYearData',oneYearData);
+  getOneYearSOData = (allData) => {
+    const yearToSearch = this.state.input;
+    const oneYearSO = allData.filter((so) => {
+      return moment(so.date).year() === yearToSearch;
+    });
+    this.getOneYearSOItemData(oneYearSO);
+  };
 
+  getOneYearSOItemData = (oneYearData) => {
+    console.error('oneYearData',oneYearData);
+    const rootRef = firebase.database().ref();
+    const soitemRef = rootRef.child('soitem').child('1');
+    const soitems = [];
+    const allMonth = [1,2,3,4,5,6,7,8,9,10,11,12];
+    oneYearData.map((so) => {
+      if ((moment(so.date).month() + 1) === 8) {
+        // soitems[0].push();
+        console.error('so',soitemRef);
+
+      }
+    });
   }
 
   getValue = (e) => {
