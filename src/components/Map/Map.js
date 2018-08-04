@@ -1,8 +1,10 @@
 import React from 'react';
 import './Map.css';
 import Geocode from 'react-geocode';
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import constants from '../../constants';
 
-class Map extends React.Component {
+export class MapContainer extends React.Component {
   state = {
     address: '',
   }
@@ -38,11 +40,36 @@ class Map extends React.Component {
   render () {
     this.getCoordinate();
     return (
-      <div className="Map col-sm-6">
-        <h2>Map</h2>
+      <div className="col-sm-6">
+        <Map
+          google={this.props.google}
+          zoom={8}
+          style={{
+            width: '90%',
+            height: '280px',
+          }}
+          initialCenter={{
+            lat: 40.854885,
+            lng: -88.081807
+          }}
+        >
+          <Marker onClick={this.onMarkerClick}
+            name={'Current location'}
+          />
+
+          <InfoWindow onClose={this.onInfoWindowClose}>
+            <div>
+              {/* <h1>{this.state.selectedPlace.name}</h1> */}
+              <h1>{1}</h1>
+            </div>
+          </InfoWindow>
+
+        </Map>
       </div>
     );
   }
 }
 
-export default Map;
+export default GoogleApiWrapper({
+  apiKey: (constants.googleMap.apiKey)
+})(MapContainer);
