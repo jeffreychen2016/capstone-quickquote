@@ -15,23 +15,24 @@ class Map extends React.Component {
         const addressObject = nextProps.address.shipTo;
         const fullAddress = addressObject.address + ' ' + addressObject.city + ', ' + addressObject.state + ' ' + addressObject.zip;
         return { address: fullAddress };
-      }
+      } else return null;
     }
     else return null;
   }
 
   getCoordinate = () => {
-    const address = this.state.address;
-    Geocode.fromAddress(address).then(
-      response => {
-        const { lat, lng } = response.results[0].geometry.location;
-        console.error(lat, lng);
-      },
-      error => {
-        console.error(error);
-      }
-    );
-
+    if (Object.keys(this.state.address).length > 0) {
+      const address = this.state.address;
+      Geocode.fromAddress(address).then(
+        response => {
+          const { lat, lng } = response.results[0].geometry.location;
+          console.error(lat, lng);
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    }
   };
 
   render () {

@@ -92,7 +92,6 @@ class OrderDetail extends React.Component {
 
   render () {
     const fullAddress = this.state.so;
-    console.error('fullAddress:',fullAddress);
     const orderNumber = this.props.match.params.id;
     return (
       <div className="OrderDetail container-fluid">
