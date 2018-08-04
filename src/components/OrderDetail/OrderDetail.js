@@ -90,17 +90,9 @@ class OrderDetail extends React.Component {
     this.props.history.push('/myorder');
   };
 
-  getFullAddress = () => {
-    if (this.state.so.address) {
-      const addressObject = this.state.so.shipTo;
-      const fullAddress = addressObject.address + ' ' + addressObject.city + ', ' + addressObject.state + ' ' + addressObject.zip;
-      return fullAddress;
-    } else {
-      return '320 swynford ct';
-    }
-  };
-
   render () {
+    const fullAddress = this.state.so;
+    console.error('fullAddress:',fullAddress);
     const orderNumber = this.props.match.params.id;
     return (
       <div className="OrderDetail container-fluid">
@@ -131,7 +123,8 @@ class OrderDetail extends React.Component {
               isEstimate={this.props.match.params.isEstimate}
             />) : (null)}
           <Map
-            getFullAddress={this.getFullAddress}
+            // getFullAddress={this.getFullAddress}
+            address={fullAddress}
           />
         </div>
         <div className="row">
