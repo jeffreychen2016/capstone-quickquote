@@ -22,7 +22,7 @@ class ShipToForm extends React.Component {
             </Fragment>
           )
         }
-        <form className={`form-horizontal ${this.props.componentFrom === 'OrderDetail' ? 'col-sm-6 col-sm-offset-3' : 'col-sm-12'}`}>
+        <form className={`form-horizontal ${this.props.componentFrom === 'OrderDetail' ? 'col-sm-6' : 'col-sm-12'}`}>
           <div className="form-group">
             <label htmlFor="buyer-company" className="col-sm-4 control-label">
               Company:

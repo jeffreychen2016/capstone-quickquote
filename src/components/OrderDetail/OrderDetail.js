@@ -3,6 +3,7 @@ import './OrderDetail.css';
 import orderRequests from '../../firebaseRequests/order';
 import ShipToForm from '../../components/ShipToForm/ShipToForm';
 import OrderTable from '../../components/OrderTable/OrderTable';
+import Map from '../../components/Map/Map';
 
 class OrderDetail extends React.Component {
   state = {
@@ -119,6 +120,7 @@ class OrderDetail extends React.Component {
               componentFrom={this.state.componentFrom}
               isEstimate={this.props.match.params.isEstimate}
             />) : (null)}
+          <Map />
         </div>
         <div className="row">
           <OrderTable
