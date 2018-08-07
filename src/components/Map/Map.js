@@ -7,10 +7,13 @@ import constants from '../../constants';
 export class MapContainer extends React.Component {
   state = {
     address: '',
+    coordinate: {},
   }
 
   // first time the props will be empty since so object in OrderDetail is empty
-  // second time the props has value, then assign to state
+  // second time the props has value, then assign to state to trigger re-render
+  // if not use it, only first prop will get pass from OrderDetail and being render
+  // second prop will also pass, but will not re-render the page
   static getDerivedStateFromProps (nextProps, prevState) {
     if (nextProps.address !== prevState.address) {
       if (Object.keys(nextProps.address).length > 0) {
@@ -22,13 +25,29 @@ export class MapContainer extends React.Component {
     else return null;
   }
 
+  // can not use setstate here, it will running to infinite loop 'cause
+  // every time state changes, the page will re-render, and call the setstate again
+
+  // can not return coordinate and call it inside render either since it is async call,
+  // it will run the rest of call before data comes back
+  componentDidUpdate () {
+    return this.getCoordinate();
+  }
+
+  componentDidMount () {
+    this.getCoordinate();
+  }
+
   getCoordinate = () => {
     if (Object.keys(this.state.address).length > 0) {
       const address = this.state.address;
       Geocode.fromAddress(address).then(
         response => {
           const { lat, lng } = response.results[0].geometry.location;
-          console.error(lat, lng);
+          const coordinate = {lat, lng};
+          console.error('coordinate:',coordinate);
+          this.setState({coordinate});
+          // return coordinate;
         },
         error => {
           console.error(error);
@@ -38,7 +57,7 @@ export class MapContainer extends React.Component {
   };
 
   render () {
-    this.getCoordinate();
+    console.error(this.state.coordinate);
     return (
       <div className="col-sm-6">
         <Map
@@ -48,10 +67,8 @@ export class MapContainer extends React.Component {
             width: '90%',
             height: '280px',
           }}
-          initialCenter={{
-            lat: 40.854885,
-            lng: -88.081807
-          }}
+          initialCenter={this.state.coordinate}
+          // initialCenter={coordinate}
         >
           <Marker onClick={this.onMarkerClick}
             name={'Current location'}
