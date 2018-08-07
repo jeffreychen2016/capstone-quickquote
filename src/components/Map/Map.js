@@ -3,6 +3,7 @@ import './Map.css';
 import Geocode from 'react-geocode';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import constants from '../../constants';
+import { resolve } from 'url';
 
 export class MapContainer extends React.Component {
   state = {
@@ -30,60 +31,83 @@ export class MapContainer extends React.Component {
 
   // can not return coordinate and call it inside render either since it is async call,
   // it will run the rest of call before data comes back
-  componentDidUpdate () {
-    return this.getCoordinate();
-  }
+  // componentDidUpdate () {
+  //   return this.getCoordinate();
+  // }
 
   componentDidMount () {
     this.getCoordinate();
   }
 
+  // getCoordinate = () => {
+  //   if (Object.keys(this.state.address).length > 0) {
+  //     const address = this.state.address;
+  //     Geocode.fromAddress(address).then(
+  //       response => {
+  //         const { lat, lng } = response.results[0].geometry.location;
+  //         const coordinate = {lat, lng};
+  //         console.error('coordinate:',coordinate);
+  //         this.setState({coordinate});
+  //         // return coordinate;
+  //       },
+  //       error => {
+  //         console.error(error);
+  //       }
+  //     );
+  //   }
+  // };
+
   getCoordinate = () => {
-    if (Object.keys(this.state.address).length > 0) {
-      const address = this.state.address;
-      Geocode.fromAddress(address).then(
-        response => {
-          const { lat, lng } = response.results[0].geometry.location;
-          const coordinate = {lat, lng};
-          console.error('coordinate:',coordinate);
-          this.setState({coordinate});
-          // return coordinate;
-        },
-        error => {
-          console.error(error);
-        }
-      );
-    }
+    return new Promise ((resolve, reject) => {
+      if (Object.keys(this.state.address).length > 0) {
+        const address = this.state.address;
+        Geocode.fromAddress(address).then(
+          response => {
+            const { lat, lng } = response.results[0].geometry.location;
+            const coordinate = {lat, lng};
+            console.error('coordinate:',coordinate);
+            resolve({coordinate});
+            // return coordinate;
+          },
+          error => {
+            console.error(error);
+          }
+        );
+      }
+    });
   };
 
   render () {
-    console.error(this.state.coordinate);
-    return (
-      <div className="col-sm-6">
-        <Map
-          google={this.props.google}
-          zoom={8}
-          style={{
-            width: '90%',
-            height: '280px',
-          }}
-          initialCenter={this.state.coordinate}
-          // initialCenter={coordinate}
-        >
-          <Marker onClick={this.onMarkerClick}
-            name={'Current location'}
-          />
+    const mapComponent = this.getCoordinate().then((coordinate) => {
+      return (
+        <div className="col-sm-6">
+          <Map
+            google={this.props.google}
+            zoom={8}
+            style={{
+              width: '90%',
+              height: '280px',
+            }}
+            initialCenter={coordinate}
+          >
+            <Marker onClick={this.onMarkerClick}
+              name={'Current location'}
+            />
 
-          <InfoWindow onClose={this.onInfoWindowClose}>
-            <div>
-              {/* <h1>{this.state.selectedPlace.name}</h1> */}
-              <h1>{1}</h1>
-            </div>
-          </InfoWindow>
+            <InfoWindow onClose={this.onInfoWindowClose}>
+              <div>
+                {/* <h1>{this.state.selectedPlace.name}</h1> */}
+                <h1>{1}</h1>
+              </div>
+            </InfoWindow>
 
-        </Map>
-      </div>
-    );
+          </Map>
+        </div>
+      );
+    });
+  return (
+    {mapComponent}
+  )
   }
 }
 
