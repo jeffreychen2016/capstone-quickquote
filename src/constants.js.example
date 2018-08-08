@@ -7,6 +7,9 @@ const constants = {
     storageBucket: '',
     messagingSenderId: '',
   },
+    googleMap: {
+    apiKey: '',
+  },
 };
 
 export default constants;
