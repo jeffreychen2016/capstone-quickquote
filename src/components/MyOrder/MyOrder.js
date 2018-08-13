@@ -76,7 +76,7 @@ class MyOrder extends React.Component {
       };
       return (
         <tr key={i}>
-          <td>ES{order.id}</td>
+          <td>{order.id}</td>
           <td>{order.date}</td>
           <td>{order.total ? formatPrice(order.total) : null}</td>
           {

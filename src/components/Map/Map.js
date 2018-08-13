@@ -8,7 +8,7 @@ export class MapContainer extends React.Component {
   state = {
     address: '',
     coordinate: {},
-  }
+  };
 
   // first time the props will be empty since so object in OrderDetail is empty
   // second time the props has value, then assign to state to trigger re-render
@@ -23,7 +23,7 @@ export class MapContainer extends React.Component {
       } else return null;
     }
     else return null;
-  }
+  };
 
   // can not use setstate here, it will running to infinite loop 'cause
   // every time state changes, the page will re-render, and call the setstate again
@@ -37,7 +37,7 @@ export class MapContainer extends React.Component {
   // and without running into infinite loop
   shouldComponentUpdate (nextProps, nextState) {
     return Object.keys(this.state.coordinate).length === 0;
-  }
+  };
 
   getCoordinate = () => {
     if (Object.keys(this.state.address).length > 0) {
@@ -64,7 +64,7 @@ export class MapContainer extends React.Component {
   render () {
     this.getCoordinate();
     const coordinate = this.state.coordinate;
-    if (Object.keys(coordinate).length === 0) { return null }
+    if (Object.keys(coordinate).length === 0) { return null; }
     return (
       <div className="col-sm-6">
         <Map
@@ -93,5 +93,5 @@ export class MapContainer extends React.Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: (constants.googleMap.apiKey)
+  apiKey: (constants.googleMap.apiKey),
 })(MapContainer);
