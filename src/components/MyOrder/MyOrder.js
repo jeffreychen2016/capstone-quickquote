@@ -76,7 +76,7 @@ class MyOrder extends React.Component {
       };
       return (
         <tr key={i}>
-          <td>ES{order.id}</td>
+          <td>{order.id}</td>
           <td>{order.date}</td>
           <td>{order.total ? formatPrice(order.total) : null}</td>
           {
@@ -165,7 +165,7 @@ class MyOrder extends React.Component {
   render () {
     return (
       <div className="MyOrder container-fluid">
-        <h2>MyOrder</h2>
+        <h2>My Order</h2>
         <div className="row">
           <div className="col-sm-6">
             <div className="input-group">

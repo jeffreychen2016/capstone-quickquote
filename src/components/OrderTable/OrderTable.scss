@@ -1,5 +1,4 @@
 .OrderTable {
-  border-top: solid black 2px;
 
   #order-table {
     width: 80%;
@@ -8,6 +7,7 @@
 
   th {
     text-align: center;
+
   }
 
   .th-item {
@@ -20,6 +20,14 @@
 
   .th-quantity {
     width: 10%;
+  }
+
+  thead tr {
+    border-bottom: 4px solid white;
+  }
+
+  tbody tr {
+    border-bottom: 2px solid white;
   }
 
   .td-vertical-align-center {
