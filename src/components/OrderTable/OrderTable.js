@@ -9,6 +9,7 @@ import itemRequests from '../../firebaseRequests/item';
 import orderItemRequests from '../../firebaseRequests/orderItem';
 import formatPrice from '../../helpers';
 import moment from 'moment';
+import { Modal, Button } from 'react-bootstrap';
 
 // Note: state should be only used to store varibales
 class OrderTable extends React.Component {
@@ -23,12 +24,21 @@ class OrderTable extends React.Component {
       //   amount: 0,
       // },
     ],
+    show: false,
   }
 
   componentDidMount () {
     this.getAllProducts();
     this.initializeStateOnOrder();
   };
+
+  handleClose = () => {
+    this.setState({ show: false });
+  }
+
+  handleShow = () => {
+    this.setState({ show: true });
+  }
 
   getAllProducts = () => {
     productRequests.getProductsRequest()
@@ -176,7 +186,6 @@ class OrderTable extends React.Component {
         || shipTo.state === ''
         || shipTo.zip === ''
     ) {
-      console.error('Please enter ship to info');
       return false;
     } else {
       return true;
@@ -209,6 +218,8 @@ class OrderTable extends React.Component {
         .catch((err) => {
           console.error('Errot with posting order to database:', err);
         });
+    } else {
+      this.handleShow();
     };
   };
 
@@ -217,28 +228,32 @@ class OrderTable extends React.Component {
   // they are in the same loop, if remove in from "item" parameter
   // then time.quantity will not have access to the quantity anymore
   saveAsEstimate = () => {
-    const soData = this.constructSOData(0);
-    orderRequests.postOrder(soData)
-      .then((soKey) => {
-        const itemsToPost = this.cleanOrderObjectForPosting();
-        itemsToPost.map((item) => {
-          const tempItem = { ...item };
+    if (this.invalidShipToAlert()) {
+      const soData = this.constructSOData(0);
+      orderRequests.postOrder(soData)
+        .then((soKey) => {
+          const itemsToPost = this.cleanOrderObjectForPosting();
+          itemsToPost.map((item) => {
+            const tempItem = { ...item };
 
-          delete tempItem.amount;
-          delete tempItem.quantity;
-          itemRequests.postItem(tempItem)
-            .then((itemKey) => {
-              const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
-              orderItemRequests.postOrderItem(orderItem)
-                .then(() => {
-                  this.props.redirectToMyOrderAfterPost();
-                });
-            });
+            delete tempItem.amount;
+            delete tempItem.quantity;
+            itemRequests.postItem(tempItem)
+              .then((itemKey) => {
+                const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
+                orderItemRequests.postOrderItem(orderItem)
+                  .then(() => {
+                    this.props.redirectToMyOrderAfterPost();
+                  });
+              });
+          });
+        })
+        .catch((err) => {
+          console.error('Errot with posting order to database:', err);
         });
-      })
-      .catch((err) => {
-        console.error('Errot with posting order to database:', err);
-      });
+    } else {
+      this.handleShow();
+    }
   };
 
   saveChanges = () => {
@@ -403,6 +418,17 @@ class OrderTable extends React.Component {
             </tr>
           </tfoot>
         </Table>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Missing Info:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Please complete ship to address!</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleClose}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
