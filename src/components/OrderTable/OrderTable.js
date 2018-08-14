@@ -23,7 +23,6 @@ class OrderTable extends React.Component {
       //   amount: 0,
       // },
     ],
-    soNumber: '',
   }
 
   componentDidMount () {
@@ -166,31 +165,51 @@ class OrderTable extends React.Component {
     return so;
   };
 
+  invalidShipToAlert = () => {
+    const shipTo = this.props.shipTo;
+    if (shipTo.address === ''
+        || shipTo.city === ''
+        || shipTo.companyName === ''
+        || shipTo.contact === ''
+        || shipTo.faxNumber === ''
+        || shipTo.phoneNumber === ''
+        || shipTo.state === ''
+        || shipTo.zip === ''
+    ) {
+      console.error('Please enter ship to info');
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   // update the isOrder to either 1 or 0
   // merge order with shipping address and user id
   // post to database
   saveAsOrder = () => {
-    const soData = this.constructSOData(1);
-    orderRequests.postOrder(soData)
-      .then((soKey) => {
-        const itemsToPost = this.cleanOrderObjectForPosting();
-        itemsToPost.map((item) => {
-          const tempItem = { ...item };
-          delete tempItem.amount;
-          delete tempItem.quantity;
-          itemRequests.postItem(tempItem)
-            .then((itemKey) => {
-              const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
-              orderItemRequests.postOrderItem(orderItem)
-                .then(() => {
-                  this.props.redirectToMyOrderAfterPost();
-                });
-            });
+    if (this.invalidShipToAlert()) {
+      const soData = this.constructSOData(1);
+      orderRequests.postOrder(soData)
+        .then((soKey) => {
+          const itemsToPost = this.cleanOrderObjectForPosting();
+          itemsToPost.map((item) => {
+            const tempItem = { ...item };
+            delete tempItem.amount;
+            delete tempItem.quantity;
+            itemRequests.postItem(tempItem)
+              .then((itemKey) => {
+                const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
+                orderItemRequests.postOrderItem(orderItem)
+                  .then(() => {
+                    this.props.redirectToMyOrderAfterPost();
+                  });
+              });
+          });
+        })
+        .catch((err) => {
+          console.error('Errot with posting order to database:', err);
         });
-      })
-      .catch((err) => {
-        console.error('Errot with posting order to database:', err);
-      });
+    };
   };
 
   // the reason to have tempItem is because when post to orderItem
