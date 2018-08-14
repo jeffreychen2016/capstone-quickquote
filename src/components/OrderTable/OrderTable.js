@@ -356,7 +356,7 @@ class OrderTable extends React.Component {
 
     return (
       <div className="OrderTable">
-        <h2>Order Table</h2>
+        {/* <h2>Order Table</h2> */}
         <Table responsive id="order-table">
           <thead>
             <tr>

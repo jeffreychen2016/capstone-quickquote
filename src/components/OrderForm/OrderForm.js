@@ -6,7 +6,6 @@ import OrderTable from '../../components/OrderTable/OrderTable';
 import authRequests from '../../firebaseRequests/auth';
 import buyerProfileRequests from '../../firebaseRequests/buyerProfile';
 import companyRequests from '../../firebaseRequests/company';
-import OrderDetail from '../../components/OrderDetail/OrderDetail';
 
 class OrderForm extends React.Component {
   state = {

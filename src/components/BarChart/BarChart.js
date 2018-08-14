@@ -16,7 +16,7 @@ class BarChart extends React.Component {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
       datasets: [
         {
-          label: 'Total-Purchase-Of-The-Year',
+          label: 'monthly purchase',
           backgroundColor: 'rgba(255,99,132,0.2)',
           borderColor: 'rgba(255,99,132,1)',
           borderWidth: 1,
@@ -181,7 +181,7 @@ class BarChart extends React.Component {
   render () {
     return (
       <div className='BarChart'>
-        <h2>Bar Chart</h2>
+        <h2>Monthly Purchase Chart</h2>
         <label htmlFor="input-year">Year:</label>
         <input
           type="text"
