@@ -1,6 +1,6 @@
 import React from 'react';
 import './OrderForm.css';
-import SupplierProfile from '../../components/SupplierProfile/SupplierProfile';
+// import SupplierProfile from '../../components/SupplierProfile/SupplierProfile';
 import BuyerProfile from '../../components/BuyerProfile/BuyerProfile';
 import OrderTable from '../../components/OrderTable/OrderTable';
 import authRequests from '../../firebaseRequests/auth';
@@ -132,9 +132,9 @@ class OrderForm extends React.Component {
   render () {
     return (
       <div className="OrderForm container-fluid ">
-        <h2>OrderForm</h2>
+        <h2>Order Form</h2>
         <div className="row">
-          <SupplierProfile />
+          {/* <SupplierProfile /> */}
           <BuyerProfile
             buyerProfiles={this.state.buyerProfiles}
             companies={this.state.companies}
