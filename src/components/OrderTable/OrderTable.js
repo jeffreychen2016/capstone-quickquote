@@ -25,6 +25,7 @@ class OrderTable extends React.Component {
       // },
     ],
     show: false,
+    invalidInput: '',
   }
 
   componentDidMount () {
@@ -34,6 +35,7 @@ class OrderTable extends React.Component {
 
   handleClose = () => {
     this.setState({ show: false });
+    this.setState({ invalidInput: ''});
   }
 
   handleShow = () => {
@@ -175,7 +177,7 @@ class OrderTable extends React.Component {
     return so;
   };
 
-  invalidShipToAlert = () => {
+  validateShipToAlert = () => {
     const shipTo = this.props.shipTo;
     if (shipTo.address === ''
         || shipTo.city === ''
@@ -192,11 +194,22 @@ class OrderTable extends React.Component {
     }
   };
 
+  validateSOLineAlert = () => {
+    const tempOnOrder = [...this.state.onOrder];
+    for (let i = 0; i < tempOnOrder.length; i++) {
+      if (tempOnOrder[i].code === '' || tempOnOrder[i].quantity === 0) {
+        return false;
+      } else {
+        return true;
+      }
+    };
+  };
+
   // update the isOrder to either 1 or 0
   // merge order with shipping address and user id
   // post to database
   saveAsOrder = () => {
-    if (this.invalidShipToAlert()) {
+    if (this.validateShipToAlert() && this.validateSOLineAlert()) {
       const soData = this.constructSOData(1);
       orderRequests.postOrder(soData)
         .then((soKey) => {
@@ -219,7 +232,13 @@ class OrderTable extends React.Component {
           console.error('Errot with posting order to database:', err);
         });
     } else {
-      this.handleShow();
+      if (!this.validateShipToAlert()) {
+        this.setState({invalidInput: 'shipTo'},() => this.handleShow());
+        // this.handleShow();
+      } else if (!this.validateSOLineAlert()) {
+        this.setState({invalidInput: 'orderLine'},() => this.handleShow());
+        // this.handleShow();
+      }
     };
   };
 
@@ -228,7 +247,7 @@ class OrderTable extends React.Component {
   // they are in the same loop, if remove in from "item" parameter
   // then time.quantity will not have access to the quantity anymore
   saveAsEstimate = () => {
-    if (this.invalidShipToAlert()) {
+    if (this.validateShipToAlert() && this.validateSOLineAlert()) {
       const soData = this.constructSOData(0);
       orderRequests.postOrder(soData)
         .then((soKey) => {
@@ -252,7 +271,13 @@ class OrderTable extends React.Component {
           console.error('Errot with posting order to database:', err);
         });
     } else {
-      this.handleShow();
+      if (!this.validateShipToAlert()) {
+        this.setState({invalidInput: 'shipTo'},() => this.handleShow());
+        // this.handleShow();
+      } else if (!this.validateSOLineAlert()) {
+        this.setState({invalidInput: 'orderLine'},() => this.handleShow());
+        // this.handleShow();
+      }
     }
   };
 
@@ -423,7 +448,9 @@ class OrderTable extends React.Component {
             <Modal.Title>Missing Info:</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>Please complete ship to address!</p>
+            {
+              this.state.invalidInput === 'shipTo' ? (<p>Please complete ship to address!</p>) : (<p>Please pick your item and quantity</p>)
+            }
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.handleClose}>Close</Button>
