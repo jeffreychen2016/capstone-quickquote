@@ -197,7 +197,7 @@ class OrderTable extends React.Component {
   validateSOLineAlert = () => {
     const tempOnOrder = [...this.state.onOrder];
     for (let i = 0; i < tempOnOrder.length; i++) {
-      if (tempOnOrder[i].code === '' || tempOnOrder[i].quantity === 0) {
+      if (tempOnOrder[i].code === '' || (tempOnOrder[i].quantity * 1) === 0) {
         return false;
       } else {
         return true;
@@ -282,62 +282,72 @@ class OrderTable extends React.Component {
   };
 
   saveChanges = () => {
-    const orderId = this.props.orderId;
-    // delete all this so related records in soitem and item collection
-    orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
-      .then((soitems) => {
-        soitems.map((soitem) => {
-          orderItemRequests.deleteOrderItems(soitem.id)
-            .then(() => {
-              itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
-                .then((items) => {
-                  items.map((item) => {
-                    itemRequests.deleteItems(item.id)
-                      .then(() => {
-                      });
+    if (this.validateShipToAlert() && this.validateSOLineAlert()) {
+      const orderId = this.props.orderId;
+      // delete all this so related records in soitem and item collection
+      orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
+        .then((soitems) => {
+          soitems.map((soitem) => {
+            orderItemRequests.deleteOrderItems(soitem.id)
+              .then(() => {
+                itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+                  .then((items) => {
+                    items.map((item) => {
+                      itemRequests.deleteItems(item.id)
+                        .then(() => {
+                        });
+                    });
                   });
-                });
-            });
+              });
+          });
+        })
+        .catch((err) => {
+          console.error('Error deleting order:', err);
         });
-      })
-      .catch((err) => {
-        console.error('Error deleting order:', err);
+
+      // post order table changes
+      const itemsToPost = this.cleanOrderObjectForPosting();
+      itemsToPost.map((item) => {
+        const tempItem = { ...item };
+        delete tempItem.amount;
+        delete tempItem.quantity;
+        delete tempItem.id;
+        itemRequests.postItem(tempItem)
+          .then((itemKey) => {
+            const orderItem = { soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
+            orderItemRequests.postOrderItem(orderItem)
+              .then(() => {
+                this.props.redirectToMyOrderAfterPost();
+              });
+          })
+          .catch((err) => {
+            console.error('Error posting changed order:', err);
+          });;
       });
 
-    // post order table changes
-    const itemsToPost = this.cleanOrderObjectForPosting();
-    itemsToPost.map((item) => {
-      const tempItem = { ...item };
-      delete tempItem.amount;
-      delete tempItem.quantity;
-      delete tempItem.id;
-      itemRequests.postItem(tempItem)
-        .then((itemKey) => {
-          const orderItem = { soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
-          orderItemRequests.postOrderItem(orderItem)
+      // post update ship to address
+      const newShipTo = { ...this.props.shipTo };
+      orderRequests.getSigngeOrder(orderId)
+        .then((order) => {
+          const tempOrder = { ...order };
+          tempOrder.shipTo = newShipTo;
+          orderRequests.updateOrderShipTo(orderId, tempOrder)
             .then(() => {
-              this.props.redirectToMyOrderAfterPost();
+              // console.error('updated!');
             });
         })
         .catch((err) => {
-          console.error('Error posting changed order:', err);
-        });;
-    });
-
-    // post update ship to address
-    const newShipTo = { ...this.props.shipTo };
-    orderRequests.getSigngeOrder(orderId)
-      .then((order) => {
-        const tempOrder = { ...order };
-        tempOrder.shipTo = newShipTo;
-        orderRequests.updateOrderShipTo(orderId, tempOrder)
-          .then(() => {
-            // console.error('updated!');
-          });
-      })
-      .catch((err) => {
-        console.error('Eorr updating ship to address:',err);
-      });
+          console.error('Eorr updating ship to address:',err);
+        });
+    } else {
+      if (!this.validateShipToAlert()) {
+        this.setState({invalidInput: 'shipTo'},() => this.handleShow());
+        // this.handleShow();
+      } else if (!this.validateSOLineAlert()) {
+        this.setState({invalidInput: 'orderLine'},() => this.handleShow());
+        // this.handleShow();
+      }
+    };
   }
 
   cleanOrderObjectForPosting = () => {
