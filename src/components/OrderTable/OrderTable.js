@@ -195,19 +195,6 @@ class OrderTable extends React.Component {
   };
 
   validateSOLineAlert = () => {
-    // const tempOnOrder = [...this.state.onOrder];
-    // let counter = 0;
-    // for (let i = 0; i < tempOnOrder.length; i++) {
-    //   if (tempOnOrder[i].code === '' || (tempOnOrder[i].quantity * 1) === 0) {
-    //     counter ++;
-    //     console.error(counter);
-    //   };
-    // };
-    // if (counter > 0) {
-    //   return false;
-    // } else {
-    //   return true;
-    // }
     const cleanOrder = this.cleanOrderObjectForPosting();
     let counter = 0;
     if (!cleanOrder[0]) {
