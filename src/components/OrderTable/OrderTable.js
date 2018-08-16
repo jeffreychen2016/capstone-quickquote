@@ -195,14 +195,35 @@ class OrderTable extends React.Component {
   };
 
   validateSOLineAlert = () => {
-    const tempOnOrder = [...this.state.onOrder];
-    for (let i = 0; i < tempOnOrder.length; i++) {
-      if (tempOnOrder[i].code === '' || (tempOnOrder[i].quantity * 1) === 0) {
-        return false;
-      } else {
-        return true;
-      }
-    };
+    // const tempOnOrder = [...this.state.onOrder];
+    // let counter = 0;
+    // for (let i = 0; i < tempOnOrder.length; i++) {
+    //   if (tempOnOrder[i].code === '' || (tempOnOrder[i].quantity * 1) === 0) {
+    //     counter ++;
+    //     console.error(counter);
+    //   };
+    // };
+    // if (counter > 0) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    const cleanOrder = this.cleanOrderObjectForPosting();
+    let counter = 0;
+    if (!cleanOrder[0]) {
+      return false;
+    } else {
+      cleanOrder.map((line) => {
+        if (line.description === '' || (line.quantity * 1) === 0) {
+          counter ++;
+        };
+      });
+    }
+    if (counter > 0) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   // update the isOrder to either 1 or 0
@@ -234,10 +255,8 @@ class OrderTable extends React.Component {
     } else {
       if (!this.validateShipToAlert()) {
         this.setState({invalidInput: 'shipTo'},() => this.handleShow());
-        // this.handleShow();
       } else if (!this.validateSOLineAlert()) {
         this.setState({invalidInput: 'orderLine'},() => this.handleShow());
-        // this.handleShow();
       }
     };
   };
@@ -273,10 +292,8 @@ class OrderTable extends React.Component {
     } else {
       if (!this.validateShipToAlert()) {
         this.setState({invalidInput: 'shipTo'},() => this.handleShow());
-        // this.handleShow();
       } else if (!this.validateSOLineAlert()) {
         this.setState({invalidInput: 'orderLine'},() => this.handleShow());
-        // this.handleShow();
       }
     }
   };
