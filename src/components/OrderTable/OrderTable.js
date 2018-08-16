@@ -9,6 +9,7 @@ import itemRequests from '../../firebaseRequests/item';
 import orderItemRequests from '../../firebaseRequests/orderItem';
 import formatPrice from '../../helpers';
 import moment from 'moment';
+import { Modal, Button } from 'react-bootstrap';
 
 // Note: state should be only used to store varibales
 class OrderTable extends React.Component {
@@ -23,13 +24,23 @@ class OrderTable extends React.Component {
       //   amount: 0,
       // },
     ],
-    soNumber: '',
+    show: false,
+    invalidInput: '',
   }
 
   componentDidMount () {
     this.getAllProducts();
     this.initializeStateOnOrder();
   };
+
+  handleClose = () => {
+    this.setState({ show: false });
+    this.setState({ invalidInput: ''});
+  }
+
+  handleShow = () => {
+    this.setState({ show: true });
+  }
 
   getAllProducts = () => {
     productRequests.getProductsRequest()
@@ -166,31 +177,75 @@ class OrderTable extends React.Component {
     return so;
   };
 
+  validateShipToAlert = () => {
+    const shipTo = this.props.shipTo;
+    if (shipTo.address === ''
+        || shipTo.city === ''
+        || shipTo.companyName === ''
+        || shipTo.contact === ''
+        || shipTo.faxNumber === ''
+        || shipTo.phoneNumber === ''
+        || shipTo.state === ''
+        || shipTo.zip === ''
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  validateSOLineAlert = () => {
+    const cleanOrder = this.cleanOrderObjectForPosting();
+    let counter = 0;
+    if (!cleanOrder[0]) {
+      return false;
+    } else {
+      cleanOrder.map((line) => {
+        if (line.description === '' || (line.quantity * 1) === 0) {
+          counter ++;
+        };
+      });
+    }
+    if (counter > 0) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   // update the isOrder to either 1 or 0
   // merge order with shipping address and user id
   // post to database
   saveAsOrder = () => {
-    const soData = this.constructSOData(1);
-    orderRequests.postOrder(soData)
-      .then((soKey) => {
-        const itemsToPost = this.cleanOrderObjectForPosting();
-        itemsToPost.map((item) => {
-          const tempItem = { ...item };
-          delete tempItem.amount;
-          delete tempItem.quantity;
-          itemRequests.postItem(tempItem)
-            .then((itemKey) => {
-              const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
-              orderItemRequests.postOrderItem(orderItem)
-                .then(() => {
-                  this.props.redirectToMyOrderAfterPost();
-                });
-            });
+    if (this.validateShipToAlert() && this.validateSOLineAlert()) {
+      const soData = this.constructSOData(1);
+      orderRequests.postOrder(soData)
+        .then((soKey) => {
+          const itemsToPost = this.cleanOrderObjectForPosting();
+          itemsToPost.map((item) => {
+            const tempItem = { ...item };
+            delete tempItem.amount;
+            delete tempItem.quantity;
+            itemRequests.postItem(tempItem)
+              .then((itemKey) => {
+                const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
+                orderItemRequests.postOrderItem(orderItem)
+                  .then(() => {
+                    this.props.redirectToMyOrderAfterPost();
+                  });
+              });
+          });
+        })
+        .catch((err) => {
+          console.error('Errot with posting order to database:', err);
         });
-      })
-      .catch((err) => {
-        console.error('Errot with posting order to database:', err);
-      });
+    } else {
+      if (!this.validateShipToAlert()) {
+        this.setState({invalidInput: 'shipTo'},() => this.handleShow());
+      } else if (!this.validateSOLineAlert()) {
+        this.setState({invalidInput: 'orderLine'},() => this.handleShow());
+      }
+    };
   };
 
   // the reason to have tempItem is because when post to orderItem
@@ -198,87 +253,105 @@ class OrderTable extends React.Component {
   // they are in the same loop, if remove in from "item" parameter
   // then time.quantity will not have access to the quantity anymore
   saveAsEstimate = () => {
-    const soData = this.constructSOData(0);
-    orderRequests.postOrder(soData)
-      .then((soKey) => {
-        const itemsToPost = this.cleanOrderObjectForPosting();
-        itemsToPost.map((item) => {
-          const tempItem = { ...item };
+    if (this.validateShipToAlert() && this.validateSOLineAlert()) {
+      const soData = this.constructSOData(0);
+      orderRequests.postOrder(soData)
+        .then((soKey) => {
+          const itemsToPost = this.cleanOrderObjectForPosting();
+          itemsToPost.map((item) => {
+            const tempItem = { ...item };
 
-          delete tempItem.amount;
-          delete tempItem.quantity;
-          itemRequests.postItem(tempItem)
-            .then((itemKey) => {
-              const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
-              orderItemRequests.postOrderItem(orderItem)
-                .then(() => {
-                  this.props.redirectToMyOrderAfterPost();
-                });
-            });
+            delete tempItem.amount;
+            delete tempItem.quantity;
+            itemRequests.postItem(tempItem)
+              .then((itemKey) => {
+                const orderItem = { soid: soKey.data.name, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
+                orderItemRequests.postOrderItem(orderItem)
+                  .then(() => {
+                    this.props.redirectToMyOrderAfterPost();
+                  });
+              });
+          });
+        })
+        .catch((err) => {
+          console.error('Errot with posting order to database:', err);
         });
-      })
-      .catch((err) => {
-        console.error('Errot with posting order to database:', err);
-      });
+    } else {
+      if (!this.validateShipToAlert()) {
+        this.setState({invalidInput: 'shipTo'},() => this.handleShow());
+      } else if (!this.validateSOLineAlert()) {
+        this.setState({invalidInput: 'orderLine'},() => this.handleShow());
+      }
+    }
   };
 
   saveChanges = () => {
-    const orderId = this.props.orderId;
-    // delete all this so related records in soitem and item collection
-    orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
-      .then((soitems) => {
-        soitems.map((soitem) => {
-          orderItemRequests.deleteOrderItems(soitem.id)
-            .then(() => {
-              itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
-                .then((items) => {
-                  items.map((item) => {
-                    itemRequests.deleteItems(item.id)
-                      .then(() => {
-                      });
+    if (this.validateShipToAlert() && this.validateSOLineAlert()) {
+      const orderId = this.props.orderId;
+      // delete all this so related records in soitem and item collection
+      orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
+        .then((soitems) => {
+          soitems.map((soitem) => {
+            orderItemRequests.deleteOrderItems(soitem.id)
+              .then(() => {
+                itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
+                  .then((items) => {
+                    items.map((item) => {
+                      itemRequests.deleteItems(item.id)
+                        .then(() => {
+                        });
+                    });
                   });
-                });
-            });
+              });
+          });
+        })
+        .catch((err) => {
+          console.error('Error deleting order:', err);
         });
-      })
-      .catch((err) => {
-        console.error('Error deleting order:', err);
+
+      // post order table changes
+      const itemsToPost = this.cleanOrderObjectForPosting();
+      itemsToPost.map((item) => {
+        const tempItem = { ...item };
+        delete tempItem.amount;
+        delete tempItem.quantity;
+        delete tempItem.id;
+        itemRequests.postItem(tempItem)
+          .then((itemKey) => {
+            const orderItem = { soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
+            orderItemRequests.postOrderItem(orderItem)
+              .then(() => {
+                this.props.redirectToMyOrderAfterPost();
+              });
+          })
+          .catch((err) => {
+            console.error('Error posting changed order:', err);
+          });;
       });
 
-    // post order table changes
-    const itemsToPost = this.cleanOrderObjectForPosting();
-    itemsToPost.map((item) => {
-      const tempItem = { ...item };
-      delete tempItem.amount;
-      delete tempItem.quantity;
-      delete tempItem.id;
-      itemRequests.postItem(tempItem)
-        .then((itemKey) => {
-          const orderItem = { soid: orderId, itemid: itemKey.data.name, quantity: item.quantity, amount: item.amount };
-          orderItemRequests.postOrderItem(orderItem)
+      // post update ship to address
+      const newShipTo = { ...this.props.shipTo };
+      orderRequests.getSigngeOrder(orderId)
+        .then((order) => {
+          const tempOrder = { ...order };
+          tempOrder.shipTo = newShipTo;
+          orderRequests.updateOrderShipTo(orderId, tempOrder)
             .then(() => {
-              this.props.redirectToMyOrderAfterPost();
+              // console.error('updated!');
             });
         })
         .catch((err) => {
-          console.error('Error posting changed order:', err);
-        });;
-    });
-
-    // post update ship to address
-    const newShipTo = { ...this.props.shipTo };
-    orderRequests.getSigngeOrder(orderId)
-      .then((order) => {
-        const tempOrder = { ...order };
-        tempOrder.shipTo = newShipTo;
-        orderRequests.updateOrderShipTo(orderId, tempOrder)
-          .then(() => {
-            // console.error('updated!');
-          });
-      })
-      .catch((err) => {
-        console.error('Eorr updating ship to address:',err);
-      });
+          console.error('Eorr updating ship to address:',err);
+        });
+    } else {
+      if (!this.validateShipToAlert()) {
+        this.setState({invalidInput: 'shipTo'},() => this.handleShow());
+        // this.handleShow();
+      } else if (!this.validateSOLineAlert()) {
+        this.setState({invalidInput: 'orderLine'},() => this.handleShow());
+        // this.handleShow();
+      }
+    };
   }
 
   cleanOrderObjectForPosting = () => {
@@ -384,6 +457,19 @@ class OrderTable extends React.Component {
             </tr>
           </tfoot>
         </Table>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Missing Info:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              this.state.invalidInput === 'shipTo' ? (<p>Please complete ship to address!</p>) : (<p>Please pick your item and quantity</p>)
+            }
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleClose}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
