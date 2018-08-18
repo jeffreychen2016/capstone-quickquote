@@ -7,8 +7,8 @@
     "state": "TN",
     "zip": "37211",
     "authCode": "AC123",
-    "phoneNumber": "336-986-2510",
-    "faxNumber": "336-986-2510",
+    "phoneNumber": "(615)123-456",
+    "faxNumber": "(615)123-456",
     "isSupplier": 1
   },
   "company2": {
@@ -19,8 +19,8 @@
     "state": "TN",
     "zip": "37211",
     "authCode": "AC123",
-    "phoneNumber": "336-986-2510",
-    "faxNumber": "336-986-2510",
+    "phoneNumber": "(615)123-456",
+    "faxNumber": "(615)123-4560",
     "isSupplier": 0
 	}
 }
