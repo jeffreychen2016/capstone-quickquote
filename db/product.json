@@ -8,67 +8,67 @@
 	"product2": {
     "id": 2,
     "code": "B15",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
+    "description": "Base Cabinet 15W x 24D X 34.5H",
     "price": 14
   },
   "product3": {
     "id": 3,
     "code": "B18",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "description": "Base Cabinet 18W x 24D X 34.5H",
+    "price": 16
   },
 	"product4": {
     "id": 4,
     "code": "B21",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "description": "Base Cabinet 21W x 24D X 34.5H",
+    "price": 18
   },
 	"product5": {
     "id": 5,
     "code": "B24",
     "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "price": 20
   },
 	"product6": {
     "id": 6,
     "code": "B27",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "description": "Base Cabinet 27W x 24D X 34.5H",
+    "price": 22
   },
   "product7": {
     "id": 7,
     "code": "W1230",
-    "description": "Base Cabinet 12W x 24D X 34.5H",
+    "description": "Wall Cabinet 12W x 12D X 30H",
     "price": 15
   },
 	"product8": {
     "id": 8,
     "code": "W1236",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "description": "Wall Cabinet 12W x 12D X 36H",
+    "price": 17
   },
   "product9": {
     "id": 9,
     "code": "W1530",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "description": "Wall Cabinet 15W x 12D X 30H",
+    "price": 20
   },
 	"product10": {
     "id": 10,
     "code": "W1536",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "description": "Wall Cabinet 15W x 12D X 36H",
+    "price": 22
   },
 	"product11": {
     "id": 11,
     "code": "W2130",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
-    "price": 14
+    "description": "Wall Cabinet 21W x 12D X 36H",
+    "price": 24
   },
 	"product12": {
     "id": 12,
     "code": "W2136",
-    "description": "Base Cabinet 24W x 24D X 34.5H",
+    "description": "Wall Cabinet 21W x 12D X 36H",
     "price": 30
   }
 }
