@@ -29,9 +29,9 @@ class Navbar extends React.Component {
               {
                 authed ? (
                   <ul className="nav navbar-nav navbar-right">
-                    <li>
+                    {/* <li>
                       <Link to="/home">Home</Link>
-                    </li>
+                    </li> */}
                     <li>
                       <Link to="/orderform">Order Form</Link>
                     </li>
