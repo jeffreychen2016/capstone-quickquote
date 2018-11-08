@@ -18,7 +18,7 @@ class MyOrder extends React.Component {
   };
 
   getAllEstimates = () => {
-    const orderFlag = authRequests.getUserId() + '-' + '0';
+    const orderFlag = `${authRequests.getUserId()}-0`;
     orderRequests.getAllOrders(orderFlag)
       .then((allEstimates) => {
         this.setState({ orders: allEstimates });
@@ -30,7 +30,7 @@ class MyOrder extends React.Component {
   };
 
   getAllSalesOrders = () => {
-    const orderFlag = authRequests.getUserId() + '-' + '1';
+    const orderFlag = `${authRequests.getUserId()}-1`;
     orderRequests.getAllOrders(orderFlag)
       .then((allSalesOrders) => {
         this.setState({ orders: allSalesOrders });
@@ -42,12 +42,12 @@ class MyOrder extends React.Component {
   };
 
   calculateOrderTotal = () => {
-    this.state.orders.map((order, i) => {
+    this.state.orders.forEach((order, i) => {
       const rowTotals = [];
       let orderTotal = 0;
       orderItemRequests.getAllOrderItemsForGivenOrderNumber(order.id)
         .then((soitems) => {
-          soitems.map((soitem) => {
+          soitems.forEach((soitem) => {
             itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
               .then((item) => {
                 const rowTotal = item[0].price * (soitem.quantity * 1);
@@ -128,12 +128,12 @@ class MyOrder extends React.Component {
       .then(() => {
         orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
           .then((soitems) => {
-            soitems.map((soitem) => {
+            soitems.forEach((soitem) => {
               orderItemRequests.deleteOrderItems(soitem.id)
                 .then(() => {
                   itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
                     .then((items) => {
-                      items.map((item) => {
+                      items.forEach((item) => {
                         itemRequests.deleteItems(item.id)
                           .then(() => {
                             this.getAllEstimates();
@@ -153,7 +153,7 @@ class MyOrder extends React.Component {
   // have tup update isOrder key as well as orderFlag
   // becuase firebase does not take in two order by parameters
   placeOrder = (e) => {
-    this.state.orders.map((order, i) => {
+    this.state.orders.forEach((order, i) => {
       const orderId = e.target.dataset.updateorder;
       if (order.id === orderId) {
         const tempOrder = { ...order };
