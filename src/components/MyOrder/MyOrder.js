@@ -99,7 +99,10 @@ class MyOrder extends React.Component {
               </td>
             ) : (
               <td>
-                <button onClick={viewDetailClickEvent}>View</button>
+                <button 
+                  onClick={viewDetailClickEvent}
+                  className="btn btn-info"
+                >View</button>
               </td>
             )
           }
