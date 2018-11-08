@@ -40,6 +40,11 @@
     cursor: pointer;
   }
 
+  tfoot tr:first-child {
+    background-color: #555;
+    color: #fff;
+  }
+
   button span {
     pointer-events:none;
   }

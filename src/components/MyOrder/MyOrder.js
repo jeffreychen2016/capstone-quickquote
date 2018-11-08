@@ -85,11 +85,16 @@ class MyOrder extends React.Component {
                 <button
                   data-deleteorder={order.id}
                   onClick={this.deleteOrder}
+                  className="btn btn-danger"
                 >Delete</button>
-                <button onClick={viewDetailClickEvent}>View</button>
+                <button 
+                  onClick={viewDetailClickEvent}
+                  className="btn btn-info"
+                >View</button>
                 <button
                   data-updateorder={order.id}
                   onClick={this.placeOrder}
+                  className="btn btn-success"
                 >Place Order</button>
               </td>
             ) : (
