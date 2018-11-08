@@ -29,18 +29,18 @@ class BarChart extends React.Component {
   }
 
   componentDidMount () {
-    const orderFlag = authRequests.getUserId() + '-' + '1';
+    const orderFlag = `${authRequests.getUserId()}-1`;
     orderRequests.getAllOrders(orderFlag)
       .then((allSalesOrders) => {
-        allSalesOrders.map((order) => {
+        allSalesOrders.forEach((order) => {
           const year = moment(order.date).year();
           const month = moment(order.date).month() + 1;
           orderItemRequests.getAllOrderItemsForGivenOrderNumber(order.id)
             .then((soitems) => {
-              soitems.map((soitem) => {
+              soitems.forEach((soitem) => {
                 itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
                   .then((items) => {
-                    items.map((item) => {
+                    items.forEach((item) => {
                       const mergedData = {
                         year,
                         month,
@@ -94,7 +94,7 @@ class BarChart extends React.Component {
       let octTotal = 0;
       let novTotal = 0;
       let decTotal = 0;
-      this.state.mergedData.map((data) => {
+      this.state.mergedData.forEach((data) => {
         if (data.year  === e.target.value * 1 && data.month === 1) {
           janData.push(data.total);
           janTotal = janData.reduce((a,b) => {
