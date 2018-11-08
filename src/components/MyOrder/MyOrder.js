@@ -85,16 +85,24 @@ class MyOrder extends React.Component {
                 <button
                   data-deleteorder={order.id}
                   onClick={this.deleteOrder}
+                  className="btn btn-danger"
                 >Delete</button>
-                <button onClick={viewDetailClickEvent}>View</button>
+                <button 
+                  onClick={viewDetailClickEvent}
+                  className="btn btn-info"
+                >View</button>
                 <button
                   data-updateorder={order.id}
                   onClick={this.placeOrder}
+                  className="btn btn-success"
                 >Place Order</button>
               </td>
             ) : (
               <td>
-                <button onClick={viewDetailClickEvent}>View</button>
+                <button 
+                  onClick={viewDetailClickEvent}
+                  className="btn btn-info"
+                >View</button>
               </td>
             )
           }
@@ -165,7 +173,7 @@ class MyOrder extends React.Component {
   render () {
     return (
       <div className="MyOrder container-fluid">
-        <h2>My Order</h2>
+        <h1>My Order</h1>
         <div className="row">
           <div className="col-sm-6">
             <div className="input-group">

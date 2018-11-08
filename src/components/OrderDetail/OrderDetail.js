@@ -96,7 +96,7 @@ class OrderDetail extends React.Component {
     return (
       <div className="OrderDetail container-fluid">
         <div className="row">
-          <h2>Order Detail</h2>
+          <h1>Order Detail</h1>
           <div>
             <span className="col-sm-5">Order Number:{orderNumber}</span>
             <span className="col-sm-2">Status:{

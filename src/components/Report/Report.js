@@ -23,7 +23,7 @@ class Chart extends React.Component {
   render () {
     return (
       <div className="Report container-fluid">
-        <h2>Report</h2>
+        <h1>Report</h1>
         <div className="row">
           <div className="col-sm-4">
             <ReportList
