@@ -61,7 +61,7 @@ class OrderTable extends React.Component {
           this.setState({ so });
           orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderNumber)
             .then((soitems) => {
-              soitems.map((soitem) => {
+              soitems.forEach((soitem) => {
                 itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
                   .then((item) => {
                     item[0].quantity = soitem.quantity;
@@ -91,7 +91,7 @@ class OrderTable extends React.Component {
 
   matchProductDescription = (selectedOption, id) => {
     const products = this.state.products;
-    products.map((product, i) => {
+    products.forEach((product, i) => {
       if (selectedOption.label === product.code) {
         const tempOnOrder = [...this.state.onOrder];
         tempOnOrder[id].description = product.description;
@@ -102,7 +102,7 @@ class OrderTable extends React.Component {
 
   matchProductPrice = (selectedOption, id) => {
     const products = this.state.products;
-    products.map((product) => {
+    products.forEach((product) => {
       if (selectedOption.label === product.code) {
         const tempOnOrder = [...this.state.onOrder];
         tempOnOrder[id].price = product.price;
@@ -141,7 +141,7 @@ class OrderTable extends React.Component {
   deleteRow = (e) => {
     const id = e.target.id.split('-').pop() - 1;
     const tempOnOrder = [...this.state.onOrder];
-    tempOnOrder.map((row, i) => {
+    tempOnOrder.forEach((row, i) => {
       i === id ? tempOnOrder.splice(i, 1) : null;
     });
     this.setState({ onOrder: tempOnOrder });
@@ -200,7 +200,7 @@ class OrderTable extends React.Component {
     if (!cleanOrder[0]) {
       return false;
     } else {
-      cleanOrder.map((line) => {
+      cleanOrder.forEach((line) => {
         if (line.description === '' || (line.quantity * 1) === 0) {
           counter ++;
         };
@@ -222,7 +222,7 @@ class OrderTable extends React.Component {
       orderRequests.postOrder(soData)
         .then((soKey) => {
           const itemsToPost = this.cleanOrderObjectForPosting();
-          itemsToPost.map((item) => {
+          itemsToPost.forEach((item) => {
             const tempItem = { ...item };
             delete tempItem.amount;
             delete tempItem.quantity;
@@ -258,7 +258,7 @@ class OrderTable extends React.Component {
       orderRequests.postOrder(soData)
         .then((soKey) => {
           const itemsToPost = this.cleanOrderObjectForPosting();
-          itemsToPost.map((item) => {
+          itemsToPost.forEach((item) => {
             const tempItem = { ...item };
 
             delete tempItem.amount;
@@ -291,12 +291,12 @@ class OrderTable extends React.Component {
       // delete all this so related records in soitem and item collection
       orderItemRequests.getAllOrderItemsForGivenOrderNumber(orderId)
         .then((soitems) => {
-          soitems.map((soitem) => {
+          soitems.forEach((soitem) => {
             orderItemRequests.deleteOrderItems(soitem.id)
               .then(() => {
                 itemRequests.getAllItemsBasedOnItemId(soitem.itemid)
                   .then((items) => {
-                    items.map((item) => {
+                    items.forEach((item) => {
                       itemRequests.deleteItems(item.id)
                         .then(() => {
                         });
@@ -311,7 +311,7 @@ class OrderTable extends React.Component {
 
       // post order table changes
       const itemsToPost = this.cleanOrderObjectForPosting();
-      itemsToPost.map((item) => {
+      itemsToPost.forEach((item) => {
         const tempItem = { ...item };
         delete tempItem.amount;
         delete tempItem.quantity;
