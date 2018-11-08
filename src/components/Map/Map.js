@@ -40,6 +40,7 @@ export class MapContainer extends React.Component {
   };
 
   getCoordinate = () => {
+    Geocode.setApiKey(constants.googleGeocode.apiKey);
     if (Object.keys(this.state.address).length > 0) {
       const address = this.state.address;
       Geocode.fromAddress(address).then(
@@ -52,7 +53,7 @@ export class MapContainer extends React.Component {
           this.setState({coordinate: tempCoordinate});
         },
         error => {
-          console.error(error);
+          console.error('something broken with getCoordinate(): ', error);
         }
       );
     }
@@ -64,6 +65,7 @@ export class MapContainer extends React.Component {
   render () {
     this.getCoordinate();
     const coordinate = this.state.coordinate;
+    // const coordinate = {lat: 30.8756862, lng:-87.9131511};
     if (Object.keys(coordinate).length === 0) { return null; }
     return (
       <div className="col-sm-6">
