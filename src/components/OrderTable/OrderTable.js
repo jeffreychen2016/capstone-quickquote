@@ -409,16 +409,23 @@ class OrderTable extends React.Component {
               onClick={this.deleteRow}
               id={'actionRow-' + (i + 1)}
               disabled={this.state.onOrder.length === 1 || this.props.isEstimate === '1' ? true : false}
+              className="btn btn-danger"
             >
-              <span className="glyphicon glyphicon-trash"></span>Delete
+              <span className="glyphicon glyphicon-trash"></span>
             </button>
+            {
+              // Logic: add an 'add' button to the last row of table
+              this.props.isEstimate !== '1' ? (
+                i === (this.state.onOrder.length - 1) ? (<button onClick={this.addRow} className="btn btn-primary"><span className="glyphicon glyphicon-plus"></span></button>) : (null)
+              ) : (null)
+            }
           </td>
-          {
+          {/* {
             // Logic: add an 'add' button to the last row of table
             this.props.isEstimate !== '1' ? (
               i === (this.state.onOrder.length - 1) ? (<td onClick={this.addRow} className="td-vertical-align-center no-border"><span className="glyphicon glyphicon-plus"></span></td>) : (null)
             ) : (null)
-          }
+          } */}
         </tr>
       );
     });

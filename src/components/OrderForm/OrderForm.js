@@ -132,7 +132,7 @@ class OrderForm extends React.Component {
   render () {
     return (
       <div className="OrderForm container-fluid ">
-        <h2>Order Form</h2>
+        <h1>Order Form</h1>
         <div className="row">
           {/* <SupplierProfile /> */}
           <BuyerProfile

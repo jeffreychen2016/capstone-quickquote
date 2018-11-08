@@ -1,13 +1,14 @@
 .OrderTable {
 
   #order-table {
-    width: 80%;
+    width: 1140px;
     margin: auto;
   }
 
   th {
     text-align: center;
-
+    background-color: #555;
+    color: #fff;
   }
 
   .th-item {
@@ -21,11 +22,7 @@
   .th-quantity {
     width: 10%;
   }
-
-  thead tr {
-    border-bottom: 4px solid white;
-  }
-
+  
   tbody tr {
     border-bottom: 2px solid white;
   }
@@ -41,6 +38,10 @@
 
   tr td:last-child {
     cursor: pointer;
+  }
+
+  button span {
+    pointer-events:none;
   }
 
   .button-group{
