@@ -53,7 +53,7 @@ When click on "view" button in an estimate, you can see the details about the es
 
 When click on "view" button in an order, you can see the details about the order. However, you will not be able to modify the order.
 
-![Order Form](https://raw.githubusercontent.com/jeffreychen2016/capstone-quickquote/master/imgs/screencapture-localhost-3000-orderform-2018-08-17-20_57_52.png)
+![Order Form](https://raw.githubusercontent.com/jeffreychen2016/capstone-quickquote/master/imgs/11.PNG)
 
 When you click on the Order Form in the Navbar, you will be redirected to the Order Form page
 
